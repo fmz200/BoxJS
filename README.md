@@ -1,10 +1,10 @@
 # Chavy Scripts
 
 ![](https://img.shields.io/badge/license-GPL-blueviolet.svg)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/chavyleung/scripts?color=%23c694ff)
-![](https://badgen.net/github/stars/chavyleung/scripts)
-![](https://tokei.rs/b1/github/chavyleung/scripts?category=code)
-![GitHub contributors](https://img.shields.io/github/contributors/chavyleung/scripts)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/fmz200/BoxJS?color=%23c694ff)
+![](https://badgen.net/github/stars/fmz200/BoxJS)
+![](https://tokei.rs/b1/github/fmz200/BoxJS?category=code)
+![GitHub contributors](https://img.shields.io/github/contributors/fmz200/BoxJS)
 
 Telegram讨论组:[Chavy Scripts Group](https://t.me/chavyscripts)
 
@@ -29,7 +29,7 @@ Telegram讨论组:[Chavy Scripts Group](https://t.me/chavyscripts)
 ---
 
 # 🧰BoxJs
-<image src="https://github.com/chavyleung/scripts/blob/master/BoxJS.gif" width="30%" height="55%">
+<image src="https://github.com/fmz200/BoxJS/blob/master/BoxJS.gif" width="30%" height="55%">
 
 ## 简介
 A SPA Appliction be used for scripts utils
@@ -38,11 +38,11 @@ A SPA Appliction be used for scripts utils
 安装对应模块/插件后，浏览器访问: [boxjs.com](http://boxjs.com "BoxJs")
 
 ## 安装链接
-  * Shadowrocket: [boxjs.rewrite.surge.sgmodule](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.surge.sgmodule "BoxJs")
-  * Loon: [boxjs.rewrite.loon.plugin](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.loon.plugin "BoxJs")
-  * Quantumult X: [boxjs.rewrite.quanx.conf](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.quanx.conf "BoxJs")
-  * Surge: [boxjs.rewrite.surge.sgmodule](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.surge.sgmodule "BoxJs")
-  * Stash: [boxjs.rewrite.stash.stoverride](https://github.com/chavyleung/scripts/raw/master/box/rewrite/boxjs.rewrite.stash.stoverride "BoxJs")
+  * Shadowrocket: [boxjs.rewrite.surge.sgmodule](https://github.com/fmz200/BoxJS/raw/master/box/rewrite/boxjs.rewrite.surge.sgmodule "BoxJs")
+  * Loon: [boxjs.rewrite.loon.plugin](https://github.com/fmz200/BoxJS/raw/master/box/rewrite/boxjs.rewrite.loon.plugin "BoxJs")
+  * Quantumult X: [boxjs.rewrite.quanx.conf](https://github.com/fmz200/BoxJS/raw/master/box/rewrite/boxjs.rewrite.quanx.conf "BoxJs")
+  * Surge: [boxjs.rewrite.surge.sgmodule](https://github.com/fmz200/BoxJS/raw/master/box/rewrite/boxjs.rewrite.surge.sgmodule "BoxJs")
+  * Stash: [boxjs.rewrite.stash.stoverride](https://github.com/fmz200/BoxJS/raw/master/box/rewrite/boxjs.rewrite.stash.stoverride "BoxJs")
 
 ---
 
@@ -104,4 +104,4 @@ A SPA Appliction be used for scripts utils
 1. [CloudFlare](https://www.cloudflare.com/)
 
 # 📃LICENSE
-Copyright © 2019-present chavyleung. This project is [GPL](https://github.com/chavyleung/scripts/blob/master/LICENSE) licensed.
+Copyright © 2019-present chavyleung. This project is [GPL](https://github.com/fmz200/BoxJS/blob/master/LICENSE) licensed.

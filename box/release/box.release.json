@@ -750,7 +750,7 @@
             "点击链接就可以自动添加订阅, 免去手动添加的麻烦",
             "制作一键订阅地址: ",
             "http://boxjs.com/#/sub/add/经过encodeURIComponent()订阅地址",
-            "如: http://boxjs.com/#/sub/add/https%3A%2F%2Fraw.githubusercontent.com%2Fchavyleung%2Fscripts%2Fmaster%2Fbox%2Fchavy.boxjs.json"
+            "如: http://boxjs.com/#/sub/add/https%3A%2F%2Fraw.githubusercontent.com%2Ffmz200%2FBoxJS%2Fmaster%2Fbox%2Fchavy.boxjs.json"
           ]
         },
         {
@@ -2062,9 +2062,9 @@
         {
           "name": "新的重写订阅",
           "descs": [
-            "Surge: https://raw.githubusercontent.com/chavyleung/scripts/master/box/rewrite/boxjs.rewrite.surge.sgmodule",
-            "QuanX: https://raw.githubusercontent.com/chavyleung/scripts/master/box/rewrite/boxjs.rewrite.quanx.conf",
-            "Loon: https://raw.githubusercontent.com/chavyleung/scripts/master/box/rewrite/boxjs.rewrite.loon.conf"
+            "Surge: https://raw.githubusercontent.com/fmz200/BoxJS/master/box/rewrite/boxjs.rewrite.surge.sgmodule",
+            "QuanX: https://raw.githubusercontent.com/fmz200/BoxJS/master/box/rewrite/boxjs.rewrite.quanx.conf",
+            "Loon: https://raw.githubusercontent.com/fmz200/BoxJS/master/box/rewrite/boxjs.rewrite.loon.conf"
           ]
         },
         {
@@ -2423,7 +2423,7 @@
         {
           "name": "调整",
           "descs": [
-            "迁移内置应用至订阅: https://raw.githubusercontent.com/chavyleung/scripts/master/box/chavy.boxjs.json (需要手动更新订阅)"
+            "迁移内置应用至订阅: https://raw.githubusercontent.com/fmz200/BoxJS/master/box/chavy.boxjs.json (需要手动更新订阅)"
           ]
         }
       ]
