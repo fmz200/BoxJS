@@ -6,12 +6,12 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-  <link rel="Bookmark" href="https://raw.githubusercontent.com/chavyleung/scripts/master/box/icons/BoxJs.light.png" media="(prefers-color-scheme: light)" />
-  <link rel="shortcut icon" href="https://raw.githubusercontent.com/chavyleung/scripts/master/box/icons/BoxJs.light.png" media="(prefers-color-scheme: light)" />
-  <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/chavyleung/scripts/master/box/icons/BoxJs.light.png" media="(prefers-color-scheme: light)" />
-  <link rel="Bookmark" href="https://raw.githubusercontent.com/chavyleung/scripts/master/box/icons/BoxJs.dark.png" media="(prefers-color-scheme: dark)" />
-  <link rel="shortcut icon" href="https://raw.githubusercontent.com/chavyleung/scripts/master/box/icons/BoxJs.dark.png" media="(prefers-color-scheme: dark)" />
-  <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/chavyleung/scripts/master/box/icons/BoxJs.dark.png" media="(prefers-color-scheme: dark)" />
+  <link rel="Bookmark" href="https://raw.githubusercontent.com/fmz200/BoxJS/master/box/icons/BoxJs.light.png" media="(prefers-color-scheme: light)" />
+  <link rel="shortcut icon" href="https://raw.githubusercontent.com/fmz200/BoxJS/master/box/icons/BoxJs.light.png" media="(prefers-color-scheme: light)" />
+  <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/fmz200/BoxJS/master/box/icons/BoxJs.light.png" media="(prefers-color-scheme: light)" />
+  <link rel="Bookmark" href="https://raw.githubusercontent.com/fmz200/BoxJS/master/box/icons/BoxJs.dark.png" media="(prefers-color-scheme: dark)" />
+  <link rel="shortcut icon" href="https://raw.githubusercontent.com/fmz200/BoxJS/master/box/icons/BoxJs.dark.png" media="(prefers-color-scheme: dark)" />
+  <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/fmz200/BoxJS/master/box/icons/BoxJs.dark.png" media="(prefers-color-scheme: dark)" />
   <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/vuetify@2.4.x/dist/vuetify.min.css" rel="stylesheet" />
@@ -1403,7 +1403,7 @@
                     text
                     small
                     v-else-if="env.id === 'QuanX'"
-                    @click="update('quantumult-x:///add-resource?remote-resource=%7B%22rewrite_remote%22%3A%5B%22https%3A%2F%2Fgithub.com%2Fchavyleung%2Fscripts%2Fraw%2Fmaster%2Fbox%2Frewrite%2Fboxjs.rewrite.quanx.conf%2Ctag%3Dboxjs%22%5D%7D')"
+                    @click="update('quantumult-x:///add-resource?remote-resource=%7B%22rewrite_remote%22%3A%5B%22https%3A%2F%2Fgithub.com%2Ffmz200%2FBoxJS%2Fraw%2Fmaster%2Fbox%2Frewrite%2Fboxjs.rewrite.quanx.conf%2Ctag%3Dboxjs%22%5D%7D')"
             >{{ $t('versionSheet.updateButton') }}</v-btn
             >
           </template>
@@ -1535,7 +1535,7 @@
               title: 'Add Subscription',
               name: 'Session Name',
               url: 'Subscription url',
-              urlDesc: 'https://raw.githubusercontent.com/chavyleung/scripts/master/box/chavy.boxjs.json'
+              urlDesc: ''
             },
 
             sessionEditor: {
@@ -1699,7 +1699,7 @@
               title: '添加订阅',
               name: 'Session Name',
               url: '订阅地址',
-              urlDesc: 'https://raw.githubusercontent.com/chavyleung/scripts/master/box/chavy.boxjs.json'
+              urlDesc: ''
             },
 
             sessionEditor: {
@@ -3069,7 +3069,7 @@
       },
       // 获取仓库贡献者
       getContributors() {
-        const url = 'https://api.github.com/repos/chavyleung/scripts/contributors'
+        const url = 'https://api.github.com/repos/fmz200/BoxJS/contributors'
         axios.get(url).then((resp) => {
           if (!resp) return
           resp.data.forEach((contributor) => {
