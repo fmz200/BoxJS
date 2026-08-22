@@ -2,6 +2,7 @@
 
 ![](https://img.shields.io/badge/license-GPL-blueviolet.svg)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/fmz200/BoxJS?color=%23c694ff)
+![CI](https://github.com/fmz200/BoxJS/actions/workflows/ci.yml/badge.svg)
 ![](https://badgen.net/github/stars/fmz200/BoxJS)
 ![](https://tokei.rs/b1/github/fmz200/BoxJS?category=code)
 ![GitHub contributors](https://img.shields.io/github/contributors/fmz200/BoxJS)
@@ -17,6 +18,9 @@ Telegram讨论组:[Chavy Scripts Group](https://t.me/chavyscripts)
   - [安装链接](#安装链接)
     - [正式版](#正式版)
     - [🧪测试版](#测试版)
+    - [🔒版本锁定](#版本锁定)
+  - [🔐安全机制](#安全机制)
+  - [🧑‍💻开发与发布](#开发与发布)
 - [🛠️Env.js](#️envjs)
   - [调用方式](#调用方式)
   - [功能列表](#功能列表)
@@ -29,10 +33,11 @@ Telegram讨论组:[Chavy Scripts Group](https://t.me/chavyscripts)
 ---
 
 # 🧰BoxJs
-<image src="https://github.com/fmz200/BoxJS/blob/master/BoxJS.gif" width="30%" height="55%">
+
+<video src="https://github.com/fmz200/BoxJS/raw/master/BoxJS.mp4" width="30%" height="55%" controls></video>
 
 ## 简介
-A SPA Appliction be used for scripts utils
+A SPA Application for scripts utils
 
 ## 使用方式
 安装对应模块/插件后，浏览器访问: [boxjs.com](http://boxjs.com "BoxJs")
@@ -43,6 +48,35 @@ A SPA Appliction be used for scripts utils
   * Quantumult X: [boxjs.rewrite.quanx.conf](https://github.com/fmz200/BoxJS/raw/master/box/rewrite/boxjs.rewrite.quanx.conf "BoxJs")
   * Surge: [boxjs.rewrite.surge.sgmodule](https://github.com/fmz200/BoxJS/raw/master/box/rewrite/boxjs.rewrite.surge.sgmodule "BoxJs")
   * Stash: [boxjs.rewrite.stash.stoverride](https://github.com/fmz200/BoxJS/raw/master/box/rewrite/boxjs.rewrite.stash.stoverride "BoxJs")
+
+### 🧪测试版
+  * Shadowrocket: [boxjs.rewrite.surge.tf.sgmodule](https://github.com/fmz200/BoxJS/raw/master/box/rewrite/boxjs.rewrite.surge.tf.sgmodule "BoxJs")
+  * Loon: [boxjs.rewrite.loon.tf.plugin](https://github.com/fmz200/BoxJS/raw/master/box/rewrite/boxjs.rewrite.loon.tf.plugin "BoxJs")
+  * Quantumult X: [boxjs.rewrite.quanx.tf.conf](https://github.com/fmz200/BoxJS/raw/master/box/rewrite/boxjs.rewrite.quanx.tf.conf "BoxJs")
+  * Surge: [boxjs.rewrite.surge.tf.sgmodule](https://github.com/fmz200/BoxJS/raw/master/box/rewrite/boxjs.rewrite.surge.tf.sgmodule "BoxJs")
+  * Stash: [boxjs.rewrite.stash.tf.stoverride](https://github.com/fmz200/BoxJS/raw/master/box/rewrite/boxjs.rewrite.stash.tf.stoverride "BoxJs")
+
+### 🔒版本锁定
+每次 Release 会附带锁定到对应版本号的 rewrite 模块（`master` 已替换为 `@版本号`），
+适合追求稳定的用户；更新需手动安装新版本资产。
+
+  * [最新 Release 资产](https://github.com/fmz200/BoxJS/releases/latest)
+  * 资产内含 `SHA256SUMS.txt`，可校验下载文件完整性。
+
+## 🔐安全机制
+* BoxJs 页面通过 `jsDelivr` 按版本加载，`box/chavy.boxjs.js` 内置该页面源码的
+  SHA-256 哈希（SRI）。加载后先校验哈希，失败自动回退到 GitHub 同版本源再验一次，
+  仍不匹配则拒绝渲染并告警，防止 CDN 或上游内容被篡改。
+* 仓库 CI 会校验 `Env.min.js`、内嵌 Env、`chavy.box.js` 与 SRI 哈希的一致性，
+  并运行 gitleaks 秘密扫描。
+* 如需报告安全问题，请参阅 [SECURITY.md](./SECURITY.md)。
+
+## 🧑‍💻开发与发布
+参见 [CONTRIBUTING.md](./CONTRIBUTING.md)。核心命令：
+* `npm run build` — 重建 Env.min.js / box/chavy.boxjs.js / chavy.box.js 并注入 SRI 哈希
+* `npm run check` — 一致性校验
+* `npm run check:release` — 版本与 release notes 一致性校验
+* `npm test` — 单元测试
 
 ---
 
