@@ -6,6 +6,11 @@ node_modules/*
 
 dist/*
 
+# AI 对话与分析文档（公开仓库，请勿提交）
+IMPLEMENTATION_PLAN.md
+ai-conversation*.md
+ai-analysis*.md
+
 test/*
 tncj/*
 */unblock/*
