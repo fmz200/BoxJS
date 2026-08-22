@@ -24,6 +24,7 @@ if (!entry) {
 const lines = [
   `## v${entry.version}${entry.tags && entry.tags.length ? ` (${entry.tags.join('/')})` : ''}`
 ]
+if (process.env.GITHUB_SHA) lines.unshift(`<!-- head: ${process.env.GITHUB_SHA} -->`)
 if (entry.author) {
   lines.push('', entry.author.startsWith('@') ? `> ${entry.author}` : `> @${entry.author}`)
 }
