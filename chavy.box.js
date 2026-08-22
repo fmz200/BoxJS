@@ -4,7 +4,7 @@ const $ = new Env('BoxJs')
 // 为 eval 准备的上下文环境
 const $eval_env = {}
 
-$.version = '0.19.30'
+$.version = '0.19.31'
 $.versionType = 'beta'
 // SRI_BEGIN
 $.htmlHash = '81d22fe18a35ff15e56b42844655dd2df21a5f4125489e3edb2b97d472c32c1a'

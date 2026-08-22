@@ -1,6 +1,37 @@
 {
   "releases": [
     {
+      "version": "0.19.31",
+      "tags": ["beta"],
+      "author": "@king",
+      "msg": "chore: 引入 CI/发布管线与 SRI 完整性校验, 仓库历史瘦身",
+      "notes": [
+        {
+          "name": "安全",
+          "descs": [
+            "BoxJs 页面加载前校验 SHA-256 (SRI)，失败自动回退同版本源，仍不匹配则拒绝渲染并告警",
+            "Release 附带锁定到版本号的 rewrite 模块与 SHA256SUMS.txt，可校验下载完整性"
+          ]
+        },
+        {
+          "name": "工程",
+          "descs": [
+            "新增 CI：Env 三副本一致性、版本一致性、语法检查、单元测试、gitleaks 秘密扫描",
+            "新增自动发布管线：tag 推送后校验通过即生成 Release 与锁定版模块",
+            "Env.min.js 现可由 terser 完全复现（npm run build），消除手工同步漂移",
+            "演示 GIF（27MB）替换为 MP4（约 1MB）"
+          ]
+        },
+        {
+          "name": "仓库",
+          "descs": [
+            "重写 git 历史移除 .yarn/neteasenews/achived 与大文件，全新克隆体积 137MB→约 4MB",
+            "清理废弃分支 next/boxjs/boxjs.dev/dependabot"
+          ]
+        }
+      ]
+    },
+    {
       "version": "0.19.30",
       "tags": ["beta"],
       "author": "@GideonSenku",
