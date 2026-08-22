@@ -5,6 +5,16 @@ const $eval_env = {}
 
 $.version = '0.19.30'
 $.versionType = 'beta'
+// SRI_BEGIN
+$.htmlHash = '81d22fe18a35ff15e56b42844655dd2df21a5f4125489e3edb2b97d472c32c1a'
+// SRI_SHA256_BEGIN
+function sha256hex(t){const e=[];for(let o=0;o<t.length;o++){let s=t.charCodeAt(o);if(s<128)e.push(s);else if(s<2048)e.push(192|s>>6,128|63&s);else if(s>=55296&&s<56320&&o+1<t.length){s=65536+((1023&s)<<10)+(1023&t.charCodeAt(++o)),e.push(240|s>>18,128|s>>12&63,128|s>>6&63,128|63&s)}else s>=56320&&s<57344?e.push(239,191,189):e.push(224|s>>12,128|s>>6&63,128|63&s)}const o=8*e.length;for(e.push(128);e.length%64!=56;)e.push(0);e.push(0,0,0,0);for(let t=3;t>=0;t--)e.push(o/Math.pow(2,8*t)&255);const s=[1116352408,1899447441,3049323471,3921009573,961987163,1508970993,2453635748,2870763221,3624381080,310598401,607225278,1426881987,1925078388,2162078206,2614888103,3248222580,3835390401,4022224774,264347078,604807628,770255983,1249150122,1555081692,1996064986,2554220882,2821834349,2952996808,3210313671,3336571891,3584528711,113926993,338241895,666307205,773529912,1294757372,1396182291,1695183700,1986661051,2177026350,2456956037,2730485921,2820302411,3259730800,3345764771,3516065817,3600352804,4094571909,275423344,430227734,506948616,659060556,883997877,958139571,1322822218,1537002063,1747873779,1955562222,2024104815,2227730452,2361852424,2428436474,2756734187,3204031479,3329325298];let h=[1779033703,3144134277,1013904242,2773480762,1359893119,2600822924,528734635,1541459225];const n=(t,e)=>t>>>e|t<<32-e;for(let t=0;t<e.length;t+=64){const o=new Array(64);for(let s=0;s<16;s++)o[s]=e[t+4*s]<<24|e[t+4*s+1]<<16|e[t+4*s+2]<<8|e[t+4*s+3];for(let t=16;t<64;t++){const e=n(o[t-15],7)^n(o[t-15],18)^o[t-15]>>>3,s=n(o[t-2],17)^n(o[t-2],19)^o[t-2]>>>10;o[t]=o[t-16]+e+o[t-7]+s|0}let l=h[0],r=h[1],p=h[2],f=h[3],u=h[4],c=h[5],a=h[6],g=h[7];for(let t=0;t<64;t++){const e=g+(n(u,6)^n(u,11)^n(u,25))+(u&c^~u&a)+s[t]+o[t]|0,h=l&r^l&p^r&p;g=a,a=c,c=u,u=f+e|0,f=p,p=r,r=l,l=e+((n(l,2)^n(l,13)^n(l,22))+h|0)|0}h=[h[0]+l|0,h[1]+r|0,h[2]+p|0,h[3]+f|0,h[4]+u|0,h[5]+c|0,h[6]+a|0,h[7]+g|0]}return h.map(t=>(t>>>0).toString(16).padStart(8,"0")).join("")}
+// SRI_SHA256_END
+// SRI_END
+
+// SRI_SHA256_BEGIN
+function sha256hex(t){const e=[];for(let o=0;o<t.length;o++){let s=t.charCodeAt(o);if(s<128)e.push(s);else if(s<2048)e.push(192|s>>6,128|63&s);else if(s>=55296&&s<56320&&o+1<t.length){s=65536+((1023&s)<<10)+(1023&t.charCodeAt(++o)),e.push(240|s>>18,128|s>>12&63,128|s>>6&63,128|63&s)}else s>=56320&&s<57344?e.push(239,191,189):e.push(224|s>>12,128|s>>6&63,128|63&s)}const o=8*e.length;for(e.push(128);e.length%64!=56;)e.push(0);e.push(0,0,0,0);for(let t=3;t>=0;t--)e.push(o/Math.pow(2,8*t)&255);const s=[1116352408,1899447441,3049323471,3921009573,961987163,1508970993,2453635748,2870763221,3624381080,310598401,607225278,1426881987,1925078388,2162078206,2614888103,3248222580,3835390401,4022224774,264347078,604807628,770255983,1249150122,1555081692,1996064986,2554220882,2821834349,2952996808,3210313671,3336571891,3584528711,113926993,338241895,666307205,773529912,1294757372,1396182291,1695183700,1986661051,2177026350,2456956037,2730485921,2820302411,3259730800,3345764771,3516065817,3600352804,4094571909,275423344,430227734,506948616,659060556,883997877,958139571,1322822218,1537002063,1747873779,1955562222,2024104815,2227730452,2361852424,2428436474,2756734187,3204031479,3329325298];let h=[1779033703,3144134277,1013904242,2773480762,1359893119,2600822924,528734635,1541459225];const n=(t,e)=>t>>>e|t<<32-e;for(let t=0;t<e.length;t+=64){const o=new Array(64);for(let s=0;s<16;s++)o[s]=e[t+4*s]<<24|e[t+4*s+1]<<16|e[t+4*s+2]<<8|e[t+4*s+3];for(let t=16;t<64;t++){const e=n(o[t-15],7)^n(o[t-15],18)^o[t-15]>>>3,s=n(o[t-2],17)^n(o[t-2],19)^o[t-2]>>>10;o[t]=o[t-16]+e+o[t-7]+s|0}let l=h[0],r=h[1],p=h[2],f=h[3],u=h[4],c=h[5],a=h[6],g=h[7];for(let t=0;t<64;t++){const e=g+(n(u,6)^n(u,11)^n(u,25))+(u&c^~u&a)+s[t]+o[t]|0,h=l&r^l&p^r&p;g=a,a=c,c=u,u=f+e|0,f=p,p=r,r=l,l=e+((n(l,2)^n(l,13)^n(l,22))+h|0)|0}h=[h[0]+l|0,h[1]+r|0,h[2]+p|0,h[3]+f|0,h[4]+u|0,h[5]+c|0,h[6]+a|0,h[7]+g|0]}return h.map(t=>(t>>>0).toString(16).padStart(8,"0")).join("")}
+// SRI_SHA256_END
 
 // 发出的请求需要需要 Surge、QuanX 的 rewrite
 $.isNeedRewrite = true
@@ -174,21 +184,41 @@ async function handlePage() {
       boxdata.syscfgs.isDebugMode = false
       return $.getjson($.KEY_web_cache).cache
     }
-    await $.http.get($.web).then(
-      (resp) => {
-        if (/<title>BoxJs<\/title>/.test(resp.body)) {
-          // 返回页面源码, 并马上存储到持久化仓库
-          $.html = resp.body
-          const cache = { version: $.version, cache: $.html }
-          $.setjson(cache, $.KEY_web_cache)
-        } else {
-          // 如果返回的页面源码不是预期的, 则从持久化仓库中获取
-          $.html = getcache()
+    // SRI: 校验页面 SHA-256, 防止 CDN/上游被篡改; 自定义调试地址无法预知哈希, 跳过校验
+    const verify = !(isDebugWeb && debugger_web)
+    const fetchVerified = async (url) => {
+      try {
+        const resp = await $.http.get(url)
+        if (resp && /<title>BoxJs<\/title>/.test(resp.body)) {
+          if (!verify || !$.htmlHash || sha256hex(resp.body) === $.htmlHash) {
+            return resp.body
+          }
+          $.log(`[SRI] 页面哈希校验失败, 已拒绝: ${url}`)
         }
-      },
-      // 如果获取页面源码失败, 则从持久化仓库中获取
-      () => ($.html = getcache())
-    )
+      } catch (e) {
+        $.logErr(`[SRI] 获取页面失败: ${url}`, e)
+      }
+      return null
+    }
+    const urls = [$.web]
+    if (!isDebugWeb || !debugger_web) {
+      urls.push(
+        `https://raw.githubusercontent.com/fmz200/BoxJS/${$.version}/box/chavy.boxjs.html`
+      )
+    }
+    let html = null
+    for (const url of urls) {
+      html = await fetchVerified(url)
+      if (html) break
+    }
+    if (html) {
+      // 仅缓存通过校验的页面源码
+      $.html = html
+      const cache = { version: $.version, cache: $.html }
+      $.setjson(cache, $.KEY_web_cache)
+    } else {
+      $.html = getcache()
+    }
   }
   // 根据偏好设置, 替换首屏颜色 (如果是`auto`则交由页面自适应)
   const theme = $.getdata('@chavy_boxjs_userCfgs.theme')
