@@ -24,7 +24,9 @@ if (!entry) {
 const lines = [
   `## v${entry.version}${entry.tags && entry.tags.length ? ` (${entry.tags.join('/')})` : ''}`
 ]
-if (entry.author) lines.push('', `> @${entry.author}`)
+if (entry.author) {
+  lines.push('', entry.author.startsWith('@') ? `> ${entry.author}` : `> @${entry.author}`)
+}
 if (entry.msg) lines.push('', entry.msg)
 for (const note of entry.notes || []) {
   lines.push('', `### ${note.name}`)
