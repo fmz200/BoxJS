@@ -3,7 +3,7 @@
     {
       "version": "0.19.31",
       "tags": ["beta"],
-      "author": "@king",
+      "author": "@fmz200",
       "msg": "chore: 引入 CI/发布管线与 SRI 完整性校验, 仓库历史瘦身",
       "notes": [
         {

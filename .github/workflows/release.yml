@@ -36,6 +36,10 @@ jobs:
         run: |
           node scripts/build-pinned-modules.mjs "$VERSION"
           node scripts/release-notes.mjs "$VERSION"
+      - name: 清理已存在的同名 Release（支持重新发布）
+        run: gh release delete "${{ github.ref_name || inputs.version }}" --yes || true
+        env:
+          GH_TOKEN: ${{ github.GITHUB_TOKEN }}
       - name: 创建 GitHub Release
         uses: softprops/action-gh-release@v2
         with:
