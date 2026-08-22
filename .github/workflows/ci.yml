@@ -33,7 +33,5 @@ jobs:
         run: npm test
       - name: 秘密扫描 (gitleaks)
         uses: gitleaks/gitleaks-action@v3
-        with:
-          scan-mode: changes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
