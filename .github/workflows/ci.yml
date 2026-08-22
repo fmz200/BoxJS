@@ -13,10 +13,10 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
       - name: 安装依赖
         run: npm ci
@@ -32,7 +32,7 @@ jobs:
       - name: 单元测试 (sha256 / 一致性 / Env 冒烟)
         run: npm test
       - name: 秘密扫描 (gitleaks)
-        uses: gitleaks/gitleaks-action@v2
+        uses: gitleaks/gitleaks-action@v3
         with:
           scan-mode: changes
         env:
