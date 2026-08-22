@@ -32,14 +32,20 @@ jobs:
         run: npm run check:release
       - name: 生成锁定版模块与 Release notes
         env:
-          VERSION: ${{ github.ref_name || inputs.version }}
+          VERSION: ${{ inputs.version || github.ref_name }}
         run: |
           node scripts/build-pinned-modules.mjs "$VERSION"
           node scripts/release-notes.mjs "$VERSION"
-      - name: 清理已存在的同名 Release（支持重新发布）
-        run: gh release delete "${{ github.ref_name || inputs.version }}" --yes || true
+      - name: 校验发布署名与目标提交
         env:
-          GH_TOKEN: ${{ github.GITHUB_TOKEN }}
+          VERSION: ${{ inputs.version || github.ref_name }}
+        run: |
+          node -e "const r=require('./box/release/box.release.json');const e=r.releases.find(x=>x.version===process.env.VERSION);if(!e||!e.author||!String(e.author).includes('fmz200')){console.error('署名校验失败:',e&&e.author);process.exit(1)}"
+          echo "生成 Release 的提交: ${GITHUB_SHA}"
+      - name: 清理已存在的同名 Release（支持重新发布）
+        run: gh release delete "${{ inputs.version || github.ref_name }}" --yes || true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 创建 GitHub Release
         uses: softprops/action-gh-release@v2
         with:
