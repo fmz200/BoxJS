@@ -293,7 +293,46 @@ function Env(name, opts) {
       return issuc
     }
 
+    boxjsKeySeen(key) {
+      // 自动登记脚本使用的持久化 key，供 BoxJS 收集未订阅数据并同步到 Gist。
+      // 仅登记 key 名，不读取值；可通过 chavy_boxjs_key_capture = 'false' 关闭。
+      try {
+        if (!key || typeof key !== 'string') return
+        if (
+          /^(chavy_boxjs_|#)/.test(key) ||
+          key === 'gist' ||
+          key === 'chavy_boxjs_known_keys'
+        ) {
+          return
+        }
+        if (this._boxjsCaptureEnabled === undefined) {
+          this._boxjsCaptureEnabled =
+            this.getval('chavy_boxjs_key_capture') !== 'false'
+          this._boxjsKeySet = null
+        }
+        if (!this._boxjsCaptureEnabled) return
+        if (!this._boxjsKeySet) {
+          try {
+            const raw = this.getval('chavy_boxjs_known_keys')
+            const arr = typeof raw === 'string' ? JSON.parse(raw) : raw
+            this._boxjsKeySet = new Set(Array.isArray(arr) ? arr : [])
+          } catch (e) {
+            this._boxjsKeySet = new Set()
+          }
+        }
+        if (this._boxjsKeySet.has(key) || this._boxjsKeySet.size >= 1000) {
+          return
+        }
+        this._boxjsKeySet.add(key)
+        this.setval(
+          JSON.stringify(Array.from(this._boxjsKeySet)),
+          'chavy_boxjs_known_keys'
+        )
+      } catch (e) {}
+    }
+
     getval(key) {
+      this.boxjsKeySeen(key)
       switch (this.getEnv()) {
         case 'Surge':
         case 'Loon':
@@ -312,6 +351,7 @@ function Env(name, opts) {
     }
 
     setval(val, key) {
+      this.boxjsKeySeen(key)
       switch (this.getEnv()) {
         case 'Surge':
         case 'Loon':
