@@ -934,6 +934,62 @@
 
         <v-card class="mb-4">
           <v-subheader>
+            {{ $t('gistSync.title') }}
+            <v-spacer></v-spacer>
+            <v-chip x-small>{{ $t('gistSync.collected') }} {{ knownKeysCount }}</v-chip>
+          </v-subheader>
+          <v-card-text>
+            <p class="mb-2 text-pre-wrap">{{ $t('gistSync.desc') }}</p>
+            <v-btn small color="primary" class="mr-2" @click="openGistBackupDialog()" :loading="isLoading">
+              {{ $t('gistSync.backup') }}
+            </v-btn>
+            <v-btn small text color="primary" @click="openGistRestoreDialog()" :loading="isLoading">
+              {{ $t('gistSync.restore') }}
+            </v-btn>
+          </v-card-text>
+        </v-card>
+
+        <v-dialog v-model="ui.gistBackupDialog.show" max-width="560">
+          <v-card>
+            <v-card-title>{{ $t('gistSync.confirmTitle') }}</v-card-title>
+            <v-divider></v-divider>
+            <v-card-text style="max-height: 50vh; overflow-y: auto">
+              <p class="mb-2">{{ $t('gistSync.confirmDesc') }}</p>
+              <v-checkbox
+                v-for="key in box.extraDatas"
+                :key="key"
+                dense
+                class="mt-0"
+                :label="key"
+                v-model="ui.gistBackupDialog.include[key]"
+              ></v-checkbox>
+              <p v-if="extraDatasKeys.length === 0" class="mt-2">{{ $t('gistSync.noExtra') }}</p>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn text small color="grey" @click="ui.gistBackupDialog.show = false">{{ $t('base.dialog.close') }}</v-btn>
+              <v-btn text small color="primary" :loading="isLoading" @click="gistBackup()">{{ $t('gistSync.confirmBackup') }}</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+
+        <v-dialog v-model="ui.gistRestoreDialog.show" max-width="420">
+          <v-card>
+            <v-card-title>{{ $t('gistSync.restoreTitle') }}</v-card-title>
+            <v-divider></v-divider>
+            <v-card-text>{{ $t('gistSync.restoreDesc') }}</v-card-text>
+            <v-divider></v-divider>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn text small color="grey" @click="ui.gistRestoreDialog.show = false">{{ $t('base.dialog.close') }}</v-btn>
+              <v-btn text small color="primary" :loading="isLoading" @click="gistRestore()">{{ $t('gistSync.confirmRestore') }}</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+
+        <v-card class="mb-4">
+          <v-subheader>
             {{ $t('viewer.dataViewer') }}
             <v-spacer></v-spacer>
             <v-btn color="primary" small @click="copy(ui.viewer.key)"> {{ $t('base.cmd.cp') }} </v-btn>
@@ -1636,6 +1692,20 @@
             dataRecentlyViewed: 'Recently viewed',
             dataUnsubscribed:"Unsubscribed data"
           },
+          gistSync: {
+            title: 'Gist Sync (Official)',
+            collected: 'Collected',
+            desc: 'Script keys are auto-collected. Review before backing up to your private Gist.',
+            backup: 'Backup to Gist',
+            restore: 'Restore from Gist',
+            confirmTitle: 'Confirm Sync',
+            confirmDesc: 'The following unsubscribed data will be synced to your private Gist:',
+            noExtra: 'No extra data collected yet.',
+            confirmBackup: 'Confirm & Backup',
+            restoreTitle: 'Restore from Gist',
+            restoreDesc: 'This will overwrite current BoxJS data with the Gist backup. Continue?',
+            confirmRestore: 'Confirm Restore'
+          },
           reloadDialog: {
             title: 'Next',
             text: 'Reload page?',
@@ -1796,6 +1866,20 @@
             dataRecentlyViewed: '近期查看',
             dataUnsubscribed: '非订阅数据'
           },
+          gistSync: {
+            title: 'Gist 同步（官方内置）',
+            collected: '已收集',
+            desc: '脚本使用的持久化 key 会自动登记；同步前请确认要上传的未订阅数据。',
+            backup: '备份到 Gist',
+            restore: '从 Gist 恢复',
+            confirmTitle: '同步前确认',
+            confirmDesc: '以下未订阅数据将同步到你的私有 Gist：',
+            noExtra: '暂无自动收集的额外数据',
+            confirmBackup: '确认备份',
+            restoreTitle: '从 Gist 恢复',
+            restoreDesc: '将用 Gist 备份覆盖当前 BoxJS 数据，继续吗？',
+            confirmRestore: '确认恢复'
+          },
           reloadDialog: {
             title: '接下来',
             text: '更新完成, 需要刷新页面吗?',
@@ -1828,6 +1912,8 @@
           scrollY: {}, //记录每个界面的滚动值
           overlay: { show: false, val: 60 },
           snackbar: { show: false, color: 'primary', msg: '' },
+          gistBackupDialog: { show: false, include: {} },
+          gistRestoreDialog: { show: false },
           showRelayTip: localStorage.getItem('boxjs_relay_tip_dismissed') !== '1',
           searchBar: {
             isActive: true,
@@ -2306,6 +2392,12 @@
       },
       gistkeys() {
         return Array.from(new Set(this.box.usercfgs.gist_cache_key)).filter((k) => k)
+      },
+      knownKeysCount() {
+        return Array.isArray(this.box.knownKeys) ? this.box.knownKeys.length : 0
+      },
+      extraDatasKeys() {
+        return this.box.extraDatas || []
       },
       debuggerWebs() {
         const items = []
@@ -3126,6 +3218,49 @@
             this.ui.viewer.val = resp.data.val
           })
         }
+      },
+      // Gist 官方同步
+      openGistBackupDialog() {
+        const include = {}
+        const excluded =
+          (this.box.usercfgs && this.box.usercfgs.gist_exclude_keys) || []
+        Object.keys(this.box.extraDatas || {}).forEach((k) => {
+          include[k] = !excluded.includes(k)
+        })
+        this.ui.gistBackupDialog = { show: true, include }
+      },
+      async gistBackup() {
+        const include = this.ui.gistBackupDialog.include || {}
+        const excludeKeys = Object.keys(include).filter((k) => !include[k])
+        try {
+          const resp = await axios.post('/api/gistBackup/', { excludeKeys })
+          const data = resp.data || {}
+          this.ui.snackbar.color = data.code === 0 ? 'success' : 'error'
+          this.ui.snackbar.msg = data.message || 'Gist 备份完成'
+          this.ui.snackbar.show = true
+        } catch (e) {
+          this.ui.snackbar.color = 'error'
+          this.ui.snackbar.msg = 'Gist 备份请求失败'
+          this.ui.snackbar.show = true
+        }
+        this.ui.gistBackupDialog.show = false
+      },
+      openGistRestoreDialog() {
+        this.ui.gistRestoreDialog.show = true
+      },
+      async gistRestore() {
+        try {
+          const resp = await axios.post('/api/gistRestore/')
+          const data = resp.data || {}
+          this.ui.snackbar.color = data.code === 0 ? 'success' : 'error'
+          this.ui.snackbar.msg = data.message || 'Gist 恢复完成'
+          this.ui.snackbar.show = true
+        } catch (e) {
+          this.ui.snackbar.color = 'error'
+          this.ui.snackbar.msg = 'Gist 恢复请求失败'
+          this.ui.snackbar.show = true
+        }
+        this.ui.gistRestoreDialog.show = false
       },
       // 对比版本号
       compareVersion(v1, v2) {
