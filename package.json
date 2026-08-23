@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "Env.js",
   "scripts": {
-    "dev": "http-server .",
+    "dev": "node scripts/dev-server.mjs",
     "build": "node scripts/build.mjs",
     "check": "node scripts/build.mjs --check",
     "check:release": "node scripts/check-release.mjs",
