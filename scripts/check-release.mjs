@@ -32,8 +32,46 @@ if (process.env.GITHUB_REF_TYPE === 'tag' && process.env.GITHUB_REF_NAME) {
   }
 }
 
+// 校验正式版 rewrite 模板已锁定到 $.version
+const rewriteDir = path.join(ROOT, 'box', 'rewrite')
+const stableModules = [
+  'boxjs.rewrite.surge.sgmodule',
+  'boxjs.rewrite.loon.plugin',
+  'boxjs.rewrite.quanx.conf',
+  'boxjs.rewrite.stash.stoverride'
+]
+const betaModules = [
+  'boxjs.rewrite.surge.beta.sgmodule',
+  'boxjs.rewrite.loon.beta.plugin',
+  'boxjs.rewrite.quanx.beta.conf',
+  'boxjs.rewrite.stash.beta.stoverride'
+]
+const refRe = /fmz200\/BoxJS\/([^/]+)\//g
+
+for (const f of stableModules) {
+  const p = path.join(rewriteDir, f)
+  const src = fs.readFileSync(p, 'utf8')
+  const refs = [...src.matchAll(refRe)].map((x) => x[1])
+  const bad = refs.filter((r) => r !== `@${version}`)
+  if (!refs.length) errors.push(`${f} 中未找到 fmz200/BoxJS 引用`)
+  else if (bad.length) errors.push(`${f} 引用 ${bad.join(',')}，应与 $.version(@${version}) 一致`)
+}
+
+for (const f of betaModules) {
+  const p = path.join(rewriteDir, f)
+  if (!fs.existsSync(p)) {
+    errors.push(`缺少测试版模块 ${f}`)
+    continue
+  }
+  const src = fs.readFileSync(p, 'utf8')
+  const refs = [...src.matchAll(refRe)].map((x) => x[1])
+  const bad = refs.filter((r) => r !== 'master')
+  if (!refs.length) errors.push(`${f} 中未找到 fmz200/BoxJS 引用`)
+  else if (bad.length) errors.push(`${f} 引用 ${bad.join(',')}，测试版模块应指向 master`)
+}
+
 if (errors.length) {
   console.error('check-release 失败:\n' + errors.join('\n'))
   process.exit(1)
 }
-console.log(`OK: $.version=${version} 与 release.json 一致`)
+console.log(`OK: $.version=${version}，正式模板已锁定，测试版模块指向 master`)

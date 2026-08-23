@@ -7,6 +7,7 @@
     "build": "node scripts/build.mjs",
     "check": "node scripts/build.mjs --check",
     "check:release": "node scripts/check-release.mjs",
+    "lock:modules": "node scripts/build-pinned-modules.mjs --lock",
     "test": "node --test tests/*.test.mjs"
   },
   "dependencies": {
