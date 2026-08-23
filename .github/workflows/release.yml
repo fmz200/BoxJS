@@ -51,8 +51,8 @@ jobs:
         with:
           body_path: dist/release-body.md
           files: |
-            dist/*.sgmodule
-            dist/*.plugin
-            dist/*.conf
-            dist/*.stoverride
+            dist/boxjs.rewrite.surge.sgmodule
+            dist/boxjs.rewrite.loon.plugin
+            dist/boxjs.rewrite.quanx.conf
+            dist/boxjs.rewrite.stash.stoverride
             dist/SHA256SUMS.txt
