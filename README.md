@@ -1,4 +1,10 @@
-# Chavy Scripts
+<p align="center">
+  <a href="https://github.com/fmz200/BoxJS">
+    <img src="BOXJS.png" alt="Logo" width="400" height="400">
+  </a>
+</p>
+
+# BoxJS
 
 ![](https://img.shields.io/badge/license-GPL-blueviolet.svg)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/fmz200/BoxJS?color=%23c694ff)
@@ -7,11 +13,12 @@
 ![](https://tokei.rs/b1/github/fmz200/BoxJS?category=code)
 ![GitHub contributors](https://img.shields.io/github/contributors/fmz200/BoxJS)
 
-Telegram讨论组:[Chavy Scripts Group](https://t.me/chavyscripts)
+Telegram频道：[奶思🍒资源分享|群组](https://t.me/inaisi_chat)\
+Telegram群组：[奶思🍒资源分享|频道](https://t.me/inaisi)
 
 ---
 
-- [Chavy Scripts](#chavy-scripts)
+
 - [🧰BoxJs](#boxjs)
   - [简介](#简介)
   - [使用方式](#使用方式)
@@ -50,20 +57,21 @@ A SPA Application for scripts utils
   * Stash: [boxjs.rewrite.stash.stoverride](https://github.com/fmz200/BoxJS/raw/master/box/rewrite/boxjs.rewrite.stash.stoverride "BoxJs")
 
 ### 🧪测试版
+目前已经不再区分正式版和测试版
   * Shadowrocket: [boxjs.rewrite.surge.tf.sgmodule](https://github.com/fmz200/BoxJS/raw/master/box/rewrite/boxjs.rewrite.surge.tf.sgmodule "BoxJs")
   * Loon: [boxjs.rewrite.loon.tf.plugin](https://github.com/fmz200/BoxJS/raw/master/box/rewrite/boxjs.rewrite.loon.tf.plugin "BoxJs")
   * Quantumult X: [boxjs.rewrite.quanx.tf.conf](https://github.com/fmz200/BoxJS/raw/master/box/rewrite/boxjs.rewrite.quanx.tf.conf "BoxJs")
   * Surge: [boxjs.rewrite.surge.tf.sgmodule](https://github.com/fmz200/BoxJS/raw/master/box/rewrite/boxjs.rewrite.surge.tf.sgmodule "BoxJs")
   * Stash: [boxjs.rewrite.stash.tf.stoverride](https://github.com/fmz200/BoxJS/raw/master/box/rewrite/boxjs.rewrite.stash.tf.stoverride "BoxJs")
 
-### 🔒版本锁定
+### 🔒 版本锁定
 每次 Release 会附带锁定到对应版本号的 rewrite 模块（`master` 已替换为 `@版本号`），
 适合追求稳定的用户；更新需手动安装新版本资产。
 
   * [最新 Release 资产](https://github.com/fmz200/BoxJS/releases/latest)
   * 资产内含 `SHA256SUMS.txt`，可校验下载文件完整性。
 
-## 🔐安全机制
+## 🔐 安全机制
 * BoxJs 页面通过 `jsDelivr` 按版本加载，`box/chavy.boxjs.js` 内置该页面源码的
   SHA-256 哈希（SRI）。加载后先校验哈希，失败自动回退到 GitHub 同版本源再验一次，
   仍不匹配则拒绝渲染并告警，防止 CDN 或上游内容被篡改。
@@ -71,7 +79,7 @@ A SPA Application for scripts utils
   并运行 gitleaks 秘密扫描。
 * 如需报告安全问题，请参阅 [SECURITY.md](./SECURITY.md)。
 
-## 🧑‍💻开发与发布
+## 🧑‍💻 开发与发布
 参见 [CONTRIBUTING.md](./CONTRIBUTING.md)。核心命令：
 * `npm run build` — 重建 Env.min.js / box/chavy.boxjs.js / chavy.box.js 并注入 SRI 哈希
 * `npm run check` — 一致性校验
