@@ -12,7 +12,6 @@
   <link rel="Bookmark" href="https://raw.githubusercontent.com/fmz200/BoxJS/master/box/icons/BoxJs.dark.png" media="(prefers-color-scheme: dark)" />
   <link rel="shortcut icon" href="https://raw.githubusercontent.com/fmz200/BoxJS/master/box/icons/BoxJs.dark.png" media="(prefers-color-scheme: dark)" />
   <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/fmz200/BoxJS/master/box/icons/BoxJs.dark.png" media="(prefers-color-scheme: dark)" />
-  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/vuetify@2.4.x/dist/vuetify.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
@@ -31,13 +30,78 @@
     }
     @media (prefers-color-scheme: light) {
       body {
-        background-color: #fff;
+        background-color: #f2f2f7;
       }
     }
     @media (prefers-color-scheme: dark) {
       body {
-        background-color: #121212;
+        background-color: #000;
       }
+    }
+    /* 系统字体栈: iOS/macOS 使用 SF Pro + PingFang SC, 其余平台回退到系统字体 */
+    html,
+    body,
+    .v-application {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "PingFang SC", "Helvetica Neue", "Segoe UI", "Microsoft YaHei", sans-serif !important;
+      letter-spacing: 0 !important;
+    }
+    .v-application .headline,
+    .v-application .title,
+    .v-application .subheading,
+    .v-application .body-2 {
+      letter-spacing: 0 !important;
+    }
+    /* 毛玻璃: 顶栏 / 搜索栏 / 抽屉 / 底部导航 */
+    .v-app-bar,
+    .v-toolbar,
+    .v-navigation-drawer,
+    .v-bottom-navigation {
+      -webkit-backdrop-filter: saturate(180%) blur(24px);
+      backdrop-filter: saturate(180%) blur(24px);
+    }
+    .theme--light.v-app-bar,
+    .theme--light.v-toolbar,
+    .theme--light.v-navigation-drawer,
+    .theme--light.v-bottom-navigation {
+      background-color: rgba(246, 246, 248, 0.72) !important;
+    }
+    .theme--dark.v-app-bar,
+    .theme--dark.v-toolbar,
+    .theme--dark.v-navigation-drawer,
+    .theme--dark.v-bottom-navigation {
+      background-color: rgba(14, 14, 16, 0.68) !important;
+    }
+    .v-navigation-drawer {
+      border-left: 0.5px solid rgba(0, 0, 0, 0.08) !important;
+    }
+    .theme--dark.v-navigation-drawer {
+      border-left: 0.5px solid rgba(255, 255, 255, 0.1) !important;
+    }
+    .v-bottom-navigation {
+      border-top: 0.5px solid rgba(0, 0, 0, 0.08);
+    }
+    .theme--dark.v-bottom-navigation {
+      border-top: 0.5px solid rgba(255, 255, 255, 0.1);
+    }
+    .v-bottom-navigation .v-btn.v-btn--active {
+      color: var(--v-primary-base) !important;
+      font-weight: 600;
+    }
+    /* 分层背景: 深色模式卡片提升一级 */
+    .theme--dark.v-card,
+    .theme--dark .v-dialog > .v-card,
+    .theme--dark .v-bottom-sheet > .v-card,
+    .theme--dark.v-expansion-panels .v-expansion-panel {
+      background-color: #1c1c1e !important;
+    }
+    /* 悬浮球按钮统一为中性玻璃质感 */
+    .v-speed-dial__list .glass-fab {
+      background-color: rgba(120, 120, 128, 0.3) !important;
+      -webkit-backdrop-filter: saturate(180%) blur(12px);
+      backdrop-filter: saturate(180%) blur(12px);
+    }
+    .v-speed-dial__list .glass-fab .v-icon {
+      color: #fff;
     }
     [v-cloak] {
       display: none;
@@ -98,6 +162,397 @@
       user-select: none;
       -webkit-user-select: none;
       cursor: pointer;
+    }
+    /* ---------- 新版 UI: 大标题 / 分组 / 内嵌卡片 ---------- */
+    .page-title {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.4px;
+      line-height: 1.25;
+    }
+    .group-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 22px 4px 10px;
+    }
+    .group-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(0, 0, 0, 0.55);
+    }
+    .theme--dark .group-title {
+      color: rgba(255, 255, 255, 0.58);
+    }
+    .group-count {
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(0, 0, 0, 0.35);
+    }
+    .theme--dark .group-count {
+      color: rgba(255, 255, 255, 0.4);
+    }
+    .inset-card.v-card {
+      border-radius: 18px !important;
+      box-shadow: none;
+      border: 0.5px solid rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+    }
+    .theme--dark .inset-card.v-card {
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    .v-card {
+      border-radius: 18px;
+    }
+    .v-btn:not(.v-btn--icon):not(.v-btn--fab):not(.v-btn--text) {
+      border-radius: 999px;
+    }
+    /* 主页: 问候 + 最近使用 + 应用网格 + 订阅状态 */
+    .home-greeting {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin: 6px 4px 4px;
+    }
+    .home-date {
+      font-size: 12px;
+      font-weight: 500;
+      color: rgba(0, 0, 0, 0.5);
+      margin-bottom: 2px;
+    }
+    .theme--dark .home-date {
+      color: rgba(255, 255, 255, 0.5);
+    }
+    .recent-scroll {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      margin: 14px -18px 0;
+      padding: 0 18px 2px;
+    }
+    .recent-scroll::-webkit-scrollbar {
+      display: none;
+    }
+    .recent-chip {
+      flex: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 13px 7px 7px;
+      border-radius: 999px;
+      border: 0.5px solid rgba(0, 0, 0, 0.08);
+      background: rgba(255, 255, 255, 0.78);
+      font-size: 12px;
+      font-weight: 500;
+      color: #1c1c1e;
+      cursor: pointer;
+    }
+    .theme--dark .recent-chip {
+      background: rgba(44, 44, 46, 0.8);
+      border-color: rgba(255, 255, 255, 0.1);
+      color: #f5f5f7;
+    }
+    .recent-chip img {
+      width: 22px;
+      height: 22px;
+      border-radius: 7px;
+      object-fit: contain;
+    }
+    .home-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 16px;
+      object-fit: contain;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.14);
+    }
+    .home-icon.solid {
+      background: rgba(255, 255, 255, 0.12);
+    }
+    .home-label {
+      display: inline-block;
+      max-width: 68px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 12px;
+      font-weight: 600;
+      color: #1c1c1e;
+    }
+    .theme--dark .home-label {
+      color: #f5f5f7;
+    }
+    .status-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      margin-top: 24px;
+      cursor: pointer;
+    }
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      flex: none;
+    }
+    .status-dot.ok {
+      background: #34c759;
+      box-shadow: 0 0 0 4px rgba(52, 199, 89, 0.16);
+    }
+    .status-dot.warn {
+      background: #ff9500;
+      box-shadow: 0 0 0 4px rgba(255, 149, 0, 0.16);
+    }
+    .status-card b {
+      display: block;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #1c1c1e;
+    }
+    .theme--dark .status-card b {
+      color: #f5f5f7;
+    }
+    .status-card p {
+      font-size: 11.5px;
+      color: rgba(0, 0, 0, 0.5);
+      margin-top: 2px;
+    }
+    .theme--dark .status-card p {
+      color: rgba(255, 255, 255, 0.5);
+    }
+    .status-card .v-icon {
+      margin-left: auto;
+      color: rgba(0, 0, 0, 0.35);
+    }
+    .theme--dark .status-card .v-icon {
+      color: rgba(255, 255, 255, 0.4);
+    }
+    /* 应用详情 */
+    .detail-nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin: 4px -12px 12px;
+    }
+    .detail-nav-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+    .app-hero {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 16px;
+    }
+    .app-hero-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 18px;
+      flex: none;
+    }
+    .app-hero-icon img {
+      border-radius: 18px;
+    }
+    .app-name {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      line-height: 1.2;
+    }
+    .app-hero p {
+      font-size: 12px;
+      color: rgba(0, 0, 0, 0.5);
+      margin: 3px 0 10px;
+    }
+    .theme--dark .app-hero p {
+      color: rgba(255, 255, 255, 0.5);
+    }
+    .app-hero-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .section-header {
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(0, 0, 0, 0.55);
+      padding: 16px 4px 8px;
+    }
+    .theme--dark .section-header {
+      color: rgba(255, 255, 255, 0.58);
+    }
+    .settings-form {
+      padding: 4px 16px 8px;
+    }
+    .settings-form .v-input__slot {
+      margin-bottom: 4px;
+    }
+    /* 订阅状态徽标 */
+    .sub-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 999px;
+      flex: none;
+    }
+    .sub-status.ok {
+      color: #34c759;
+      background: rgba(52, 199, 89, 0.14);
+    }
+    .sub-status.warn {
+      color: #ff9500;
+      background: rgba(255, 149, 0, 0.14);
+    }
+    .sub-status .status-dot {
+      width: 6px;
+      height: 6px;
+      box-shadow: none;
+    }
+    /* 我的 */
+    .profile-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 16px 14px;
+    }
+    .profile-head h2 {
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+    .profile-head p {
+      font-size: 12px;
+      color: rgba(0, 0, 0, 0.5);
+      margin-top: 2px;
+    }
+    .theme--dark .profile-head p {
+      color: rgba(255, 255, 255, 0.5);
+    }
+    .profile-stats {
+      display: flex;
+      border-top: 0.5px solid rgba(0, 0, 0, 0.08);
+    }
+    .theme--dark .profile-stats {
+      border-top-color: rgba(255, 255, 255, 0.1);
+    }
+    .profile-stat {
+      flex: 1;
+      text-align: center;
+      padding: 13px 0 12px;
+    }
+    .profile-stat + .profile-stat {
+      border-left: 0.5px solid rgba(0, 0, 0, 0.08);
+    }
+    .theme--dark .profile-stat + .profile-stat {
+      border-left-color: rgba(255, 255, 255, 0.1);
+    }
+    .profile-stat b {
+      display: block;
+      font-size: 19px;
+      font-weight: 700;
+    }
+    .profile-stat small {
+      font-size: 11px;
+      color: rgba(0, 0, 0, 0.5);
+    }
+    .theme--dark .profile-stat small {
+      color: rgba(255, 255, 255, 0.5);
+    }
+    /* 首次引导 */
+    .welcome-card.v-card {
+      padding: 40px 22px 30px;
+      text-align: center;
+    }
+    .welcome-logo {
+      width: 78px;
+      height: 78px;
+      border-radius: 22px;
+      margin: 0 auto 18px;
+    }
+    .welcome-card .page-title {
+      font-size: 23px;
+    }
+    .welcome-card .welcome-desc {
+      font-size: 13px;
+      line-height: 1.6;
+      color: rgba(0, 0, 0, 0.55);
+      max-width: 280px;
+      margin: 8px auto 0;
+    }
+    .theme--dark .welcome-card .welcome-desc {
+      color: rgba(255, 255, 255, 0.55);
+    }
+    .welcome-feature {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-align: left;
+      margin: 18px auto 0;
+      max-width: 280px;
+    }
+    .welcome-feature b {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .welcome-feature small {
+      display: block;
+      font-size: 12px;
+      color: rgba(0, 0, 0, 0.5);
+      margin-top: 2px;
+    }
+    .theme--dark .welcome-feature small {
+      color: rgba(255, 255, 255, 0.5);
+    }
+    .inset-card .v-list {
+      background: transparent;
+    }
+    .inset-card .v-list-item__avatar {
+      border-radius: 13px;
+      overflow: hidden;
+    }
+    .sub-notebox {
+      display: flex;
+      align-items: center;
+      padding: 12px 14px;
+      margin-top: 14px;
+      color: rgba(0, 0, 0, 0.5);
+    }
+    .theme--dark .sub-notebox {
+      color: rgba(255, 255, 255, 0.5);
+    }
+    .sub-count {
+      font-size: 12px;
+      color: rgba(0, 0, 0, 0.45);
+    }
+    .theme--dark .sub-count {
+      color: rgba(255, 255, 255, 0.45);
+    }
+    /* 订阅分组: 折叠面板伪装成分组标题 + 内嵌卡片 */
+    .sub-groups .v-expansion-panel {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+    .sub-groups .v-expansion-panel:not(:first-child)::after {
+      display: none;
+    }
+    .sub-groups .v-expansion-panel-header {
+      min-height: 34px;
+      padding: 6px 2px;
+    }
+    .sub-groups .v-expansion-panel-header .group-count {
+      margin-left: auto;
+      margin-right: 6px;
+    }
+    .sub-groups .v-expansion-panel-header__icon {
+      margin-left: 0;
+    }
+    .sub-groups .v-expansion-panel-content {
+      padding: 0 0 8px;
     }
   </style>
 </head>
@@ -239,6 +694,8 @@
             </v-text-field>
           </v-list-item-content>
         </v-list-item>
+        <!-- 外观 -->
+        <v-subheader class="px-2 text-caption font-weight-bold">{{ $t('drawer.appearance') }}</v-subheader>
         <v-list-item>
           <v-list-item-content>
             <v-select
@@ -261,7 +718,7 @@
             </v-select>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item class="mt-4" v-show="box.usercfgs.bgimgs">
+        <v-list-item v-show="box.usercfgs.bgimgs">
           <v-list-item-content>
             <v-select
                     :items="bgimgs"
@@ -275,9 +732,8 @@
             </v-select>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item class="mt-4">
+        <v-list-item>
           <v-switch
-                  :hide-details="isDarkMode"
                   :hint="$t('prefs.iconDesc')"
                   :label="$t('prefs.icon')"
                   :persistent-hint="true"
@@ -285,14 +741,9 @@
                   class="mt-0"
                   dense
                   v-model="box.usercfgs.isTransparentIcons"
-          >
-          </v-switch>
-          <v-spacer></v-spacer>
-          <v-btn fab small text @click="open(box.syscfgs.orz3.repo)">
-            <v-avatar size="32"><img :src="box.syscfgs.orz3.icon" /></v-avatar>
-          </v-btn>
+          ></v-switch>
         </v-list-item>
-        <v-list-item class="mt-4">
+        <v-list-item>
           <v-switch
                   :hint="$t('prefs.bgModeDesc')"
                   :label="$t('prefs.bgMode')"
@@ -301,14 +752,34 @@
                   class="mt-0"
                   dense
                   v-model="isWallpaperMode"
-          >
-          </v-switch>
-          <v-spacer></v-spacer>
-          <v-btn fab small text>
-            <v-avatar size="32"><v-icon>mdi-image</v-icon></v-avatar>
-          </v-btn>
+          ></v-switch>
         </v-list-item>
-        <v-list-item class="mt-4">
+        <v-list-item>
+          <v-switch
+                  :hint="$t('drawer.ballLeftDesc')"
+                  :label="$t('drawer.ballLeft')"
+                  :persistent-hint="true"
+                  @change="saveUserCfgs"
+                  class="mt-0"
+                  dense
+                  v-model="box.usercfgs.isLeftBoxIcon"
+          ></v-switch>
+        </v-list-item>
+        <!-- 主页 -->
+        <v-subheader class="px-2 text-caption font-weight-bold">{{ $t('drawer.home') }}</v-subheader>
+        <v-list-item v-if="view === ''">
+          <v-switch
+                  :hint="$t('drawer.editFavDesc')"
+                  :label="$t('drawer.editFav')"
+                  :persistent-hint="true"
+                  class="mt-0"
+                  dense
+                  v-model="box.usercfgs.isEditFavApp"
+          ></v-switch>
+        </v-list-item>
+        <!-- 导航 -->
+        <v-subheader class="px-2 text-caption font-weight-bold">{{ $t('drawer.navigation') }}</v-subheader>
+        <v-list-item>
           <v-switch
                   :hint="$t('prefs.hideTopBarDesc')"
                   :label="$t('prefs.hideTopBar')"
@@ -317,14 +788,9 @@
                   class="mt-0"
                   dense
                   v-model="box.usercfgs.isHidedSearchBar"
-          >
-          </v-switch>
-          <v-spacer></v-spacer>
-          <v-btn fab small text>
-            <v-avatar size="32"><v-icon>mdi-dock-top</v-icon></v-avatar>
-          </v-btn>
+          ></v-switch>
         </v-list-item>
-        <v-list-item class="mt-4">
+        <v-list-item>
           <v-switch
                   :hint="$t('prefs.autoTopBarDesc')"
                   :label="$t('prefs.autoTopBar')"
@@ -333,14 +799,9 @@
                   class="mt-0"
                   dense
                   v-model="isAutoSearchBar"
-          >
-          </v-switch>
-          <v-spacer></v-spacer>
-          <v-btn fab small text>
-            <v-avatar size="32"><v-icon>mdi-format-align-top</v-icon></v-avatar>
-          </v-btn>
+          ></v-switch>
         </v-list-item>
-        <v-list-item class="mt-4">
+        <v-list-item>
           <v-switch
                   :hint="$t('prefs.hideBottomBarDesc')"
                   :label="$t('prefs.hideBottomBar')"
@@ -349,14 +810,9 @@
                   class="mt-0"
                   dense
                   v-model="box.usercfgs.isHidedNaviBottom"
-          >
-          </v-switch>
-          <v-spacer></v-spacer>
-          <v-btn fab small text>
-            <v-avatar size="32"><v-icon>mdi-dock-bottom</v-icon></v-avatar>
-          </v-btn>
+          ></v-switch>
         </v-list-item>
-        <v-list-item class="mt-4">
+        <v-list-item>
           <v-switch
                   :hint="$t('prefs.autoBottomBarDesc')"
                   :label="$t('prefs.autoBottomBar')"
@@ -365,14 +821,11 @@
                   class="mt-0"
                   dense
                   v-model="isAutoNaviBottom"
-          >
-          </v-switch>
-          <v-spacer></v-spacer>
-          <v-btn fab small text>
-            <v-avatar size="32"><v-icon>mdi-format-align-bottom</v-icon></v-avatar>
-          </v-btn>
+          ></v-switch>
         </v-list-item>
-        <v-list-item class="mt-4">
+        <!-- 通知 -->
+        <v-subheader class="px-2 text-caption font-weight-bold">{{ $t('drawer.notifications') }}</v-subheader>
+        <v-list-item>
           <v-switch
                   :hint="$t('prefs.muteModeDesc')"
                   :label="$t('prefs.muteMode')"
@@ -382,12 +835,8 @@
                   persistent-hint
                   v-model="box.usercfgs.isMute"
           ></v-switch>
-          <v-spacer></v-spacer>
-          <v-btn fab small text>
-            <v-avatar size="32"><v-icon>mdi-volume-off</v-icon></v-avatar>
-          </v-btn>
         </v-list-item>
-        <v-list-item class="mt-4">
+        <v-list-item>
           <v-switch
                   :hint="$t('prefs.muteQueryAlertDesc')"
                   :label="$t('prefs.muteQueryAlert')"
@@ -397,27 +846,10 @@
                   persistent-hint
                   v-model="box.usercfgs.isMuteQueryAlert"
           ></v-switch>
-          <v-spacer></v-spacer>
-          <v-btn fab small text>
-            <v-avatar size="32"><v-icon>mdi-volume-off</v-icon></v-avatar>
-          </v-btn>
         </v-list-item>
-        <v-list-item class="mt-4">
-          <v-switch
-                  :hint="$t('prefs.hideHelpDesc')"
-                  :label="$t('prefs.hideHelp')"
-                  @change="saveUserCfgs"
-                  class="mt-0"
-                  dense
-                  persistent-hint
-                  v-model="box.usercfgs.isHideHelp"
-          ></v-switch>
-          <v-spacer></v-spacer>
-          <v-btn fab small text @click="open(box.syscfgs.boxjs.repo)">
-            <v-avatar size="32"><v-icon>mdi-help</v-icon></v-avatar>
-          </v-btn>
-        </v-list-item>
-        <v-list-item class="mt-4">
+        <!-- 显示 -->
+        <v-subheader class="px-2 text-caption font-weight-bold">{{ $t('drawer.display') }}</v-subheader>
+        <v-list-item>
           <v-switch
                   :hint="$t('prefs.hideBoxJsDesc')"
                   :label="$t('prefs.hideBoxJs')"
@@ -427,14 +859,8 @@
                   persistent-hint
                   v-model="box.usercfgs.isHideBoxIcon"
           ></v-switch>
-          <v-spacer></v-spacer>
-          <v-btn fab small text @click="open(box.syscfgs.boxjs.repo)">
-            <v-avatar size="32">
-              <img :src="box.syscfgs.boxjs.icons[iconThemeIdx]" />
-            </v-avatar>
-          </v-btn>
         </v-list-item>
-        <v-list-item class="mt-4">
+        <v-list-item>
           <v-switch
                   :hint="$t('prefs.hideProfileTitleDesc')"
                   :label="$t('prefs.hideProfileTitle')"
@@ -444,30 +870,8 @@
                   persistent-hint
                   v-model="box.usercfgs.isHideMyTitle"
           ></v-switch>
-          <v-spacer></v-spacer>
-          <v-btn fab small text>
-            <v-avatar v-if="box.usercfgs.icon" size="32">
-              <img :src="box.usercfgs.icon" />
-            </v-avatar>
-            <v-icon v-else size="32">mdi-face-profile</v-icon>
-          </v-btn>
         </v-list-item>
-        <v-list-item class="mt-4">
-          <v-switch
-                  :hint="$t('prefs.hideCoddingDesc')"
-                  :label="$t('prefs.hideCodding')"
-                  dense
-                  class="mt-0"
-                  persistent-hint
-                  v-model="box.usercfgs.isHideCoding"
-                  @change="saveUserCfgs"
-          ></v-switch>
-          <v-spacer></v-spacer>
-          <v-btn fab small text>
-            <v-avatar size="32"><v-icon>mdi-code-tags</v-icon></v-avatar>
-          </v-btn>
-        </v-list-item>
-        <v-list-item class="mt-4">
+        <v-list-item>
           <v-switch
                   :hint="$t('prefs.hideReloadDesc')"
                   :label="$t('prefs.hideReload')"
@@ -477,12 +881,14 @@
                   persistent-hint
                   v-model="box.usercfgs.isHideRefresh"
           ></v-switch>
-          <v-spacer></v-spacer>
-          <v-btn fab small text>
-            <v-avatar size="32"><v-icon>mdi-refresh</v-icon></v-avatar>
-          </v-btn>
         </v-list-item>
-        <v-list-item class="mt-4">
+        <!-- 工具 -->
+        <v-subheader class="px-2 text-caption font-weight-bold">{{ $t('drawer.tools') }}</v-subheader>
+        <v-list-item @click="switchView('coding')">
+          <v-list-item-icon><v-icon>mdi-code-tags</v-icon></v-list-item-icon>
+          <v-list-item-title>{{ $t('drawer.scriptEditor') }}</v-list-item-title>
+        </v-list-item>
+        <v-list-item>
           <v-switch
                   :hint="$t('prefs.debugModeDesc')"
                   :label="$t('prefs.debugMode')"
@@ -492,10 +898,6 @@
                   persistent-hint
                   v-model="box.usercfgs.isDebugWeb"
           ></v-switch>
-          <v-spacer></v-spacer>
-          <v-btn fab small text>
-            <v-avatar size="32"><v-icon>mdi-language-html5</v-icon></v-avatar>
-          </v-btn>
         </v-list-item>
         <v-list-item v-if="box.usercfgs.isDebugWeb">
           <v-list-item-content>
@@ -526,8 +928,16 @@
             </v-select>
           </v-list-item-content>
         </v-list-item>
-
-        <v-list-item class="mt-4"></v-list-item>
+        <!-- 关于 -->
+        <v-subheader class="px-2 text-caption font-weight-bold">{{ $t('drawer.about') }}</v-subheader>
+        <v-list-item @click="ui.versionSheet.show = true">
+          <v-list-item-icon><v-icon>mdi-new-box</v-icon></v-list-item-icon>
+          <v-list-item-title>{{ $t('drawer.update') }} · v{{version}}</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="open('https://chavyleung.gitbook.io/boxjs')">
+          <v-list-item-icon><v-icon>mdi-help-circle-outline</v-icon></v-list-item-icon>
+          <v-list-item-title>{{ $t('drawer.help') }}</v-list-item-title>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
     <!-- 主页 -->
@@ -571,202 +981,296 @@
               }
             }"
       >
-        <v-row no-gutters v-show="!isHidedAppIcons" class="align-self-start" id="appList">
-          <v-col cols="3" md="2" v-for="(app, appIdx) in favApps" :key="app.id" class="d-flex justify-space-around">
-            <div class="ma-2 appicon" style="position: relative;" @click="switchAppView(app.id)">
-              <v-icon style="position: absolute; right: -10px; top: -10px; z-index: 100;" v-if="box.usercfgs.isEditFavApp" @click="favApp(app.id)">mdi-close-circle-outline</v-icon>
-              <v-card v-if="isDarkMode" style="border-radius: 12px">
-                <v-img style="border-radius: 12px" :aspect-ratio="1" width="54" height="54" contain v-ripple :src="app.icon"></v-img>
-              </v-card>
-              <v-img
-                      v-else
-                      style="border-radius: 12px"
-                      :aspect-ratio="1"
-                      width="54"
-                      height="54"
-                      contain
-                      v-ripple
-                      class="elevation-3"
-                      :src="app.icon"
-              ></v-img>
-              <p class="text-center ma-0">
-                <span class="d-inline-block text-truncate font-weight-bold" :style="appIconFontStyle"> {{app.name}} </span>
-              </p>
-            </div>
-          </v-col>
-        </v-row>
+        <!-- 问候语 -->
+        <div class="home-greeting">
+          <div>
+            <div class="home-date">{{todayLabel}}</div>
+            <h1 class="page-title">{{greetingText}}</h1>
+          </div>
+        </div>
+        <!-- 最近使用 -->
+        <div class="recent-scroll" v-if="recentApps.length > 0">
+          <button
+                  type="button"
+                  class="recent-chip"
+                  v-for="app in recentApps"
+                  :key="app.id"
+                  @click="switchAppView(app.id)"
+          >
+            <img :src="app.icon" alt="" />
+            <span>{{app.name}}</span>
+          </button>
+        </div>
+        <!-- 应用网格 -->
+        <div v-show="!isHidedAppIcons">
+          <div class="group-title-row">
+            <span class="group-title">{{ $t('home.myApps') }}</span>
+            <button
+                    type="button"
+                    class="group-title"
+                    style="background: none; border: none; cursor: pointer; font-weight: 600; color: var(--v-primary-base, #0a84ff);"
+                    @click="box.usercfgs.isEditFavApp = !box.usercfgs.isEditFavApp"
+            >
+              {{ box.usercfgs.isEditFavApp ? $t('home.done') : $t('home.edit') }}
+            </button>
+          </div>
+          <v-row no-gutters class="align-self-start" id="appList">
+            <v-col cols="3" md="2" v-for="(app, appIdx) in favApps" :key="app.id" class="d-flex justify-space-around">
+              <div class="ma-2 appicon" style="position: relative;" @click="switchAppView(app.id)">
+                <v-icon
+                        style="position: absolute; right: -8px; top: -8px; z-index: 100;"
+                        v-if="box.usercfgs.isEditFavApp"
+                        @click.stop="favApp(app.id)"
+                >mdi-close-circle</v-icon>
+                <img class="home-icon" :class="isDarkMode ? 'solid' : undefined" :src="app.icon" alt="" />
+                <p class="text-center ma-0 mt-1">
+                  <span class="home-label">{{ app.name }}</span>
+                </p>
+              </div>
+            </v-col>
+          </v-row>
+        </div>
+        <!-- 订阅状态 -->
+        <div class="inset-card v-card status-card" v-if="appSubs.length > 0" @click="switchView('sub')">
+          <span class="status-dot" :class="subsAllOk ? 'ok' : 'warn'"></span>
+          <div>
+            <b>{{ subsStatusText }}</b>
+            <p>{{ $t('home.lastSync') }}: {{ lastSubUpdateText }}</p>
+          </div>
+          <v-icon>mdi-chevron-right</v-icon>
+        </div>
       </v-container>
       <!-- 应用列表 -->
       <v-container fluid v-show="view === 'app' && !curapp">
+        <!-- 首次引导: 无订阅时展示产品价值 -->
+        <v-card class="inset-card welcome-card mb-4" v-if="appSubs.length === 0">
+          <v-avatar class="welcome-logo" tile size="78"><img :src="box.syscfgs.boxjs.icon" /></v-avatar>
+          <h2 class="page-title">{{ $t('welcome.title') }}</h2>
+          <p class="welcome-desc">{{ $t('welcome.desc') }}</p>
+          <div class="welcome-feature">
+            <v-avatar size="40" tile color="primary"><v-icon dark>mdi-apps</v-icon></v-avatar>
+            <div><b>{{ $t('welcome.f1') }}</b><small>{{ $t('welcome.f1d') }}</small></div>
+          </div>
+          <div class="welcome-feature">
+            <v-avatar size="40" tile color="primary"><v-icon dark>mdi-tune-variant</v-icon></v-avatar>
+            <div><b>{{ $t('welcome.f2') }}</b><small>{{ $t('welcome.f2d') }}</small></div>
+          </div>
+          <div class="welcome-feature">
+            <v-avatar size="40" tile color="primary"><v-icon dark>mdi-cloud-upload-outline</v-icon></v-avatar>
+            <div><b>{{ $t('welcome.f3') }}</b><small>{{ $t('welcome.f3d') }}</small></div>
+          </div>
+          <v-btn color="primary" rounded large block class="mt-6" @click="addAppSubDialog = true">
+            <v-icon class="mr-2">mdi-plus</v-icon>{{ $t('welcome.addSub') }}
+          </v-btn>
+          <v-btn text rounded block class="mt-2" @click="open('https://chavyleung.gitbook.io/boxjs/awesome/subscriptions')">
+            {{ $t('welcome.browse') }}
+          </v-btn>
+        </v-card>
         <!-- 收藏应用 -->
-        <v-expansion-panels multiple class="mb-4" v-if="favApps.length > 0" v-model="box.usercfgs.favapppanel">
-          <v-expansion-panel>
-            <v-expansion-panel-header> {{ $t('apps.fav') }} ({{favApps.length}}) </v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <v-list dense nav class="ma-n4">
-                <template v-for="(app, appIdx) in favApps">
-                  <v-list-item dense @click="switchAppView(app.id)" :key="app.id">
-                    <v-list-item-avatar class="elevation-3"><v-img :src="app.icon" /></v-list-item-avatar>
-                    <v-list-item-content>
-                      <v-list-item-title>{{app.name}} ({{app.id}})</v-list-item-title>
-                      <v-list-item-subtitle>{{app.repo}}</v-list-item-subtitle>
-                      <v-list-item-subtitle>{{app.author}}</v-list-item-subtitle>
-                    </v-list-item-content>
-                    <v-list-item-action>
-                      <v-menu bottom left>
-                        <template #activator="{ on }">
-                          <v-btn icon v-on="on"><v-icon>mdi-dots-vertical</v-icon></v-btn>
-                        </template>
-                        <v-list>
-                          <v-list-item dense v-if="appIdx > 0" @click="moveFav(appIdx, -1)">
-                            <v-list-item-title>{{ $t('base.sort.up') }}</v-list-item-title>
-                          </v-list-item>
-                          <v-list-item dense v-if="appIdx + 1 < favApps.length" @click="moveFav(appIdx, 1)">
-                            <v-list-item-title>{{ $t('base.sort.dn') }}</v-list-item-title>
-                          </v-list-item>
-                          <v-divider v-if="favApps.length > 1"></v-divider>
-                          <v-list-item dense @click="favApp(app.id)">
-                            <v-list-item-title>{{ $t('apps.unStar') }}</v-list-item-title>
-                          </v-list-item>
-                        </v-list>
-                      </v-menu>
-                    </v-list-item-action>
-                  </v-list-item>
-                  <!-- <v-divider inset v-if="favApps.length !== appIdx + 1"></v-divider> -->
-                </template>
-              </v-list>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-        </v-expansion-panels>
-        <!-- 订阅应用 -->
-        <v-expansion-panels multiple class="mb-4" v-if="appSubs.length > 0" v-model="box.usercfgs.subapppanel">
-          <v-expansion-panel v-for="(sub, subIdx) in appSubs" :key="sub.id" v-if="!sub.isErr">
-            <v-expansion-panel-header> {{sub.name}} ({{sub.apps.length}}) </v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <v-list dense nav class="ma-n4">
-                <template v-for="(app, appIdx) in sub.apps">
-                  <v-list-item dense @click="switchAppView(app.id)" :key="app.id">
-                    <v-list-item-avatar class="elevation-3"><v-img :src="app.icon" /></v-list-item-avatar>
-                    <v-list-item-content>
-                      <v-list-item-title>{{app.name}} ({{app.id}})</v-list-item-title>
-                      <v-list-item-subtitle>{{app.repo}}</v-list-item-subtitle>
-                      <v-list-item-subtitle>{{app.author}}</v-list-item-subtitle>
-                    </v-list-item-content>
-                    <v-list-item-action>
-                      <v-btn icon @click.stop="favApp(app.id)">
-                        <v-icon :color="app.favIconColor" v-text="app.favIcon" />
-                      </v-btn>
-                    </v-list-item-action>
-                  </v-list-item>
-                </template>
-              </v-list>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-        </v-expansion-panels>
+        <template v-if="favApps.length > 0">
+          <div class="group-title-row">
+            <span class="group-title">{{ $t('apps.fav') }}</span>
+            <span class="group-count">{{favApps.length}}</span>
+          </div>
+          <v-card class="inset-card">
+            <v-list dense nav class="pa-0">
+              <template v-for="(app, appIdx) in favApps">
+                <v-list-item dense @click="switchAppView(app.id)" :key="app.id">
+                  <v-list-item-avatar class="elevation-2" size="42"><v-img :src="app.icon" /></v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>{{app.name}}</v-list-item-title>
+                    <v-list-item-subtitle>{{app.author}}</v-list-item-subtitle>
+                  </v-list-item-content>
+                  <v-list-item-action>
+                    <v-menu bottom left>
+                      <template #activator="{ on }">
+                        <v-btn icon v-on="on"><v-icon>mdi-dots-vertical</v-icon></v-btn>
+                      </template>
+                      <v-list>
+                        <v-list-item dense v-if="appIdx > 0" @click="moveFav(appIdx, -1)">
+                          <v-list-item-title>{{ $t('base.sort.up') }}</v-list-item-title>
+                        </v-list-item>
+                        <v-list-item dense v-if="appIdx + 1 < favApps.length" @click="moveFav(appIdx, 1)">
+                          <v-list-item-title>{{ $t('base.sort.dn') }}</v-list-item-title>
+                        </v-list-item>
+                        <v-divider v-if="favApps.length > 1"></v-divider>
+                        <v-list-item dense @click="favApp(app.id)">
+                          <v-list-item-title>{{ $t('apps.unStar') }}</v-list-item-title>
+                        </v-list-item>
+                      </v-list>
+                    </v-menu>
+                  </v-list-item-action>
+                </v-list-item>
+              </template>
+            </v-list>
+          </v-card>
+        </template>
+        <!-- 订阅应用 (可折叠分组) -->
+        <template v-if="appSubs.length > 0">
+          <div class="group-title-row">
+            <span class="group-title">{{ $t('apps.subGroups') }}</span>
+            <span class="group-count">{{appSubs.filter(s => !s.isErr).length}}</span>
+          </div>
+          <v-expansion-panels multiple flat class="sub-groups" v-model="box.usercfgs.subapppanel">
+            <v-expansion-panel v-for="(sub, subIdx) in appSubs" :key="sub.id" v-if="!sub.isErr">
+              <v-expansion-panel-header class="px-1">
+                <span class="group-title">{{sub.name}}</span>
+                <span class="group-count ml-2">{{sub.apps.length}}</span>
+              </v-expansion-panel-header>
+              <v-expansion-panel-content class="pb-1">
+                <v-card class="inset-card">
+                  <v-list dense nav class="pa-0">
+                    <template v-for="(app, appIdx) in sub.apps">
+                      <v-list-item dense @click="switchAppView(app.id)" :key="app.id">
+                        <v-list-item-avatar class="elevation-2" size="42"><v-img :src="app.icon" /></v-list-item-avatar>
+                        <v-list-item-content>
+                          <v-list-item-title>{{app.name}}</v-list-item-title>
+                          <v-list-item-subtitle>{{app.author}}</v-list-item-subtitle>
+                        </v-list-item-content>
+                        <v-list-item-action>
+                          <v-btn icon @click.stop="favApp(app.id)">
+                            <v-icon :color="app.favIconColor" v-text="app.favIcon" />
+                          </v-btn>
+                        </v-list-item-action>
+                      </v-list-item>
+                    </template>
+                  </v-list>
+                </v-card>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+        </template>
         <!-- 内置应用 -->
-        <v-expansion-panels multiplev-if="sysApps.length > 0" v-model="box.usercfgs.sysapppanel">
-          <v-expansion-panel>
-            <v-expansion-panel-header> {{ $t('apps.sysApps') }} ({{sysApps.length}}) </v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <v-list dense nav class="ma-n4">
-                <template v-for="(app, appIdx) in sysApps">
-                  <v-list-item dense @click="switchAppView(app.id)" :key="app.id">
-                    <v-list-item-avatar class="elevation-3"><v-img :src="app.icon" /></v-list-item-avatar>
-                    <v-list-item-content>
-                      <v-list-item-title>{{app.name}} ({{app.id}})</v-list-item-title>
-                      <v-list-item-subtitle>{{app.repo}}</v-list-item-subtitle>
-                      <v-list-item-subtitle>{{app.author}}</v-list-item-subtitle>
-                    </v-list-item-content>
-                    <v-list-item-action>
-                      <v-btn icon @click.stop="favApp(app.id)">
-                        <v-icon :color="app.favIconColor" v-text="app.favIcon" />
-                      </v-btn>
-                    </v-list-item-action>
-                  </v-list-item>
-                  <!-- <v-divider inset v-if="sysApps.length !== appIdx + 1"></v-divider> -->
-                </template>
-              </v-list>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-        </v-expansion-panels>
+        <template v-if="sysApps.length > 0">
+          <div class="group-title-row">
+            <span class="group-title">{{ $t('apps.sysApps') }}</span>
+            <span class="group-count">{{sysApps.length}}</span>
+          </div>
+          <v-card class="inset-card">
+            <v-list dense nav class="pa-0">
+              <template v-for="(app, appIdx) in sysApps">
+                <v-list-item dense @click="switchAppView(app.id)" :key="app.id">
+                  <v-list-item-avatar class="elevation-2" size="42"><v-img :src="app.icon" /></v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>{{app.name}}</v-list-item-title>
+                    <v-list-item-subtitle>{{app.author}}</v-list-item-subtitle>
+                  </v-list-item-content>
+                  <v-list-item-action>
+                    <v-btn icon @click.stop="favApp(app.id)">
+                      <v-icon :color="app.favIconColor" v-text="app.favIcon" />
+                    </v-btn>
+                  </v-list-item-action>
+                </v-list-item>
+              </template>
+            </v-list>
+          </v-card>
+        </template>
       </v-container>
       <!-- 订阅列表 -->
       <v-container fluid v-show="view === 'sub'">
+        <!-- 标题栏 -->
+        <div class="group-title-row" style="margin-top: 6px;">
+          <h1 class="page-title" style="font-size: 26px;">{{ $t('menus.subs') }}</h1>
+          <div class="d-flex align-center">
+            <v-btn icon @click="open('https://chavyleung.gitbook.io/boxjs/awesome/subscriptions')">
+              <v-icon>mdi-cloud-circle</v-icon>
+            </v-btn>
+            <v-btn icon @click="reloadAppSub()">
+              <v-icon>mdi-refresh</v-icon>
+            </v-btn>
+            <v-btn color="primary" rounded small class="ml-1 px-4" @click="addAppSubDialog = true">
+              <v-icon small class="mr-1">mdi-plus</v-icon>{{ $t('subs.add') }}
+            </v-btn>
+          </div>
+        </div>
+        <!-- 空状态 -->
         <template v-if="appSubs.length === 0">
-          <v-btn block class="primary" @click="addAppSubDialog = true">{{ $t('subs.add') }}</v-btn>
-          <v-btn block class="primary" @click="open('https://chavyleung.gitbook.io/boxjs/awesome/subscriptions')">
-            <v-icon class="mr-2">mdi-cloud</v-icon>{{ $t('subs.moreSubs') }}
-          </v-btn>
+          <v-card class="inset-card welcome-card mt-4">
+            <v-avatar class="welcome-logo" tile size="72"><img :src="box.syscfgs.boxjs.icon" /></v-avatar>
+            <h2 class="page-title">{{ $t('subs.emptyTitle') }}</h2>
+            <p class="welcome-desc">{{ $t('subs.emptyDesc') }}</p>
+            <v-btn color="primary" rounded large block class="mt-6" @click="addAppSubDialog = true">
+              <v-icon class="mr-2">mdi-plus</v-icon>{{ $t('subs.add') }}
+            </v-btn>
+            <v-btn text rounded block class="mt-2" @click="open('https://chavyleung.gitbook.io/boxjs/awesome/subscriptions')">
+              <v-icon class="mr-2">mdi-cloud</v-icon>{{ $t('subs.moreSubs') }}
+            </v-btn>
+          </v-card>
         </template>
-        <v-card v-else>
-          <v-list dense nav>
-            <v-subheader inset dense>
-              {{ $t('subs.appSubs') }} ({{appSubs.length}})
-              <v-spacer></v-spacer>
-              <v-btn icon @click="open('https://chavyleung.gitbook.io/boxjs/awesome/subscriptions')">
-                <v-icon>mdi-cloud-circle</v-icon>
-              </v-btn>
-              <v-btn icon @click="reloadAppSub()">
-                <v-icon>mdi-refresh-circle</v-icon>
-              </v-btn>
-              <v-btn icon>
-                <v-icon color="primary" @click="addAppSubDialog = true">mdi-plus-circle</v-icon>
-              </v-btn>
-            </v-subheader>
-            <template v-for="(sub, subIdx) in appSubs">
-              <v-list-item dense two-line @click="reloadAppSub(sub)" :key="sub.id">
-                <v-list-item-avatar v-if="sub.icon"><v-img :src="sub.icon" /></v-list-item-avatar>
-                <v-list-item-avatar v-else color="primary"><v-icon dark>mdi-account</v-icon></v-list-item-avatar>
-                <v-list-item-content>
-                  <v-list-item-title>
-                    {{sub.name}} ({{sub.apps.length}})
-                    <v-chip v-if="sub.isErr" color="pink" dark x-small class="ml-1 mb-1">{{ $t('subs.errData') }}</v-chip>
-                  </v-list-item-title>
-                  <v-list-item-subtitle>{{sub.repo ? sub.repo : sub.url}}</v-list-item-subtitle>
-                  <v-list-item-subtitle>{{sub.author ? sub.author : '@anonymous'}}</v-list-item-subtitle>
-                  <v-list-item-subtitle>
-                    {{ $t('subs.updated') }}: {{ timeago.format(sub.updateTime, timeagoLang.replace('-', '_')) }}
-                  </v-list-item-subtitle>
-                </v-list-item-content>
-                <v-list-item-action>
-                  <v-menu bottom left>
-                    <template #activator="{ on }">
-                      <v-btn icon v-on="on"><v-icon>mdi-dots-vertical</v-icon></v-btn>
-                    </template>
-                    <v-list dense>
-                      <template v-if="sub.onInstall">
-                        <v-list-item @click="openInstall(sub.raw.id)">
-                          <v-list-item-title>{{ $t('subs.install') }}</v-list-item-title>
+        <!-- 订阅卡片 -->
+        <template v-else>
+          <div class="group-title-row">
+            <span class="group-title">{{ $t('subs.appSubs') }}</span>
+            <span class="group-count">{{appSubs.length}}</span>
+          </div>
+          <v-card class="inset-card">
+            <v-list dense nav class="pa-0">
+              <template v-for="(sub, subIdx) in appSubs">
+                <v-list-item dense two-line @click="reloadAppSub(sub)" :key="sub.id" class="sub-row">
+                  <v-list-item-avatar tile size="44" class="elevation-2" style="border-radius: 13px;">
+                    <v-img v-if="sub.icon" :src="sub.icon" />
+                    <v-icon v-else dark color="primary">mdi-account</v-icon>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title class="d-flex align-center">
+                      <span class="font-weight-medium">{{sub.name}}</span>
+                      <span class="sub-count mx-1">· {{sub.apps.length}} {{ $t('profile.apps') }}</span>
+                    </v-list-item-title>
+                    <v-list-item-subtitle>{{sub.repo ? sub.repo : sub.url}}</v-list-item-subtitle>
+                    <v-list-item-subtitle>
+                      {{ $t('subs.updated') }}: {{ timeago.format(sub.updateTime, timeagoLang.replace('-', '_')) }}
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+                  <v-list-item-action class="flex-column align-end">
+                    <span class="sub-status mb-2" :class="sub.isErr ? 'warn' : 'ok'">
+                      <span class="status-dot"></span>{{ sub.isErr ? $t('subs.statusWarn') : $t('subs.statusOk') }}
+                    </span>
+                    <v-menu bottom left>
+                      <template #activator="{ on }">
+                        <v-btn icon v-on="on" @click.stop><v-icon>mdi-dots-vertical</v-icon></v-btn>
+                      </template>
+                      <v-list dense>
+                        <template v-if="sub.onInstall">
+                          <v-list-item @click="openInstall(sub.raw.id)">
+                            <v-list-item-title>{{ $t('subs.install') }}</v-list-item-title>
+                          </v-list-item>
+                          <v-divider></v-divider>
+                        </template>
+                        <v-list-item @click="open(sub.repo)">
+                          <v-list-item-title>{{ $t('subs.repo') }}</v-list-item-title>
+                        </v-list-item>
+                        <v-list-item @click="copy(sub.url)">
+                          <v-list-item-title>{{ $t('base.cmd.cp') }}</v-list-item-title>
+                        </v-list-item>
+                        <v-list-item @click="share(sub.url)">
+                          <v-list-item-title>{{ $t('base.cmd.share') }}</v-list-item-title>
                         </v-list-item>
                         <v-divider></v-divider>
-                      </template>
-                      <v-list-item @click="open(sub.repo)">
-                        <v-list-item-title>{{ $t('subs.repo') }}</v-list-item-title>
-                      </v-list-item>
-                      <v-list-item @click="copy(sub.url)">
-                        <v-list-item-title>{{ $t('base.cmd.cp') }}</v-list-item-title>
-                      </v-list-item>
-                      <v-list-item @click="share(sub.url)">
-                        <v-list-item-title>{{ $t('base.cmd.share') }}</v-list-item-title>
-                      </v-list-item>
-                      <v-divider></v-divider>
-                      <v-list-item v-if="subIdx > 0" @click="moveSub(subIdx, -1)">
-                        <v-list-item-title>{{ $t('base.sort.up') }}</v-list-item-title>
-                      </v-list-item>
-                      <v-list-item v-if="subIdx + 1 < appSubs.length" @click="moveSub(subIdx, 1)">
-                        <v-list-item-title>{{ $t('base.sort.dn') }}</v-list-item-title>
-                      </v-list-item>
-                      <v-divider></v-divider>
-                      <v-list-item @click="delSub(subIdx)">
-                        <v-list-item-title class="text-uppercase red--text">{{ $t('base.cmd.del') }}</v-list-item-title>
-                      </v-list-item>
-                    </v-list>
-                  </v-menu>
-                </v-list-item-action>
-              </v-list-item>
-            </template>
-          </v-list>
-        </v-card>
+                        <v-list-item v-if="subIdx > 0" @click="moveSub(subIdx, -1)">
+                          <v-list-item-title>{{ $t('base.sort.up') }}</v-list-item-title>
+                        </v-list-item>
+                        <v-list-item v-if="subIdx + 1 < appSubs.length" @click="moveSub(subIdx, 1)">
+                          <v-list-item-title>{{ $t('base.sort.dn') }}</v-list-item-title>
+                        </v-list-item>
+                        <v-divider></v-divider>
+                        <v-list-item @click="delSub(subIdx)">
+                          <v-list-item-title class="text-uppercase red--text">{{ $t('base.cmd.del') }}</v-list-item-title>
+                        </v-list-item>
+                      </v-list>
+                    </v-menu>
+                  </v-list-item-action>
+                </v-list-item>
+              </template>
+            </v-list>
+          </v-card>
+          <div class="inset-card v-card sub-notebox">
+            <v-icon small class="mr-2" color="primary">mdi-shield-check-outline</v-icon>
+            <span class="text-caption">{{ $t('subs.trustHint') }}</span>
+          </div>
+          <v-btn text rounded block color="primary" class="mt-2" @click="reloadAppSub()">
+            <v-icon small class="mr-1">mdi-refresh</v-icon>{{ $t('subs.reloadAll') }}
+          </v-btn>
+        </template>
         <v-dialog v-model="addAppSubDialog" scrollable>
           <v-card>
             <v-card-title>{{ $t('subs.addDialog.title') }}</v-card-title>
@@ -808,13 +1312,20 @@
       </v-container>
       <!-- 我的 -->
       <v-container fluid v-show="view === 'my'">
-        <v-card class="mx-auto">
-          <v-card-title class="headline">
-            {{box.usercfgs.name ? box.usercfgs.name : $t('profile.leaveName')}}
-            <v-spacer></v-spacer>
+        <!-- 个人资料 -->
+        <v-card class="inset-card mb-4">
+          <div class="profile-head">
+            <v-avatar size="58">
+              <v-img v-if="box.usercfgs.icon" :src="box.usercfgs.icon" />
+              <v-icon v-else size="30" color="primary">mdi-account</v-icon>
+            </v-avatar>
+            <div class="flex-grow-1">
+              <h2>{{box.usercfgs.name ? box.usercfgs.name : $t('profile.leaveName')}}</h2>
+              <p>{{ $t('profile.subtitle') }}</p>
+            </div>
             <v-dialog v-model="ui.editProfileDialog.show">
               <template #activator="{ on }">
-                <v-btn icon v-on="on"><v-icon>mdi-cog-outline</v-icon></v-btn>
+                <v-btn icon v-on="on" aria-label="编辑资料"><v-icon>mdi-pencil-outline</v-icon></v-btn>
               </template>
               <v-card>
                 <v-card-title>{{ $t('profile.editor.title') }}</v-card-title>
@@ -841,64 +1352,84 @@
                 </v-card-actions>
               </v-card>
             </v-dialog>
-          </v-card-title>
-          <v-divider class="mx-4"></v-divider>
-          <v-card-text>
-            <span class="subheading">{{ $t('profile.datas') }}</span>
-            <v-chip-group>
-              <v-chip small>{{ $t('profile.apps') }}: {{this.apps.length}}</v-chip>
-              <v-chip small>{{ $t('profile.subs') }}: {{this.appSubs.length}}</v-chip>
-              <v-chip small>{{ $t('profile.sessions') }}: {{this.sessions.length}}</v-chip>
-            </v-chip-group>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn small class="mr-2" @click="switchView('viewer')"> {{ $t('profile.dataviewer')}} </v-btn>
-            <v-dialog v-model="ui.impGlobalBakDialog.show">
-              <template #activator="{ on }">
-                <v-btn small v-on="on">{{ $t('profile.imp') }}</v-btn>
-              </template>
-              <v-card>
-                <v-card-title> {{ $t('profile.impDialog.title') }} </v-card-title>
-                <v-divider></v-divider>
-                <v-card-text>
-                  <v-textarea
-                          :hint="$t('profile.impDialog.impDataDesc')"
-                          :label="$t('profile.impDialog.impData')"
-                          autofocus
-                          clearable
-                          rows="3"
-                          v-model="ui.impGlobalBakDialog.impval"
-                  ></v-textarea>
-                </v-card-text>
-                <v-divider></v-divider>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn text small color="grey" text @click="ui.impGlobalBakDialog.show = false">{{ $t('base.dialog.close') }}</v-btn>
-                  <v-btn text small color="primary" text @click="impGlobalBak" :loading="isLoading">{{ $t('profile.imp') }}</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-            <v-btn small @click="saveGlobalBak">{{ $t('profile.bak') }}</v-btn>
-          </v-card-actions>
+          </div>
+          <div class="profile-stats">
+            <div class="profile-stat"><b>{{apps.length}}</b><small>{{ $t('profile.apps') }}</small></div>
+            <div class="profile-stat"><b>{{appSubs.length}}</b><small>{{ $t('profile.subs') }}</small></div>
+            <div class="profile-stat"><b>{{sessions.length}}</b><small>{{ $t('profile.sessions') }}</small></div>
+          </div>
         </v-card>
-        <v-card class="mt-4" v-if="box.globalbaks">
-          <template v-for="(bak, bakIdx) in box.globalbaks">
-            <v-divider v-if="bakIdx>0"></v-divider>
-            <v-list-item dense @click="switchBakView(bak.id)">
+        <!-- 数据 -->
+        <div class="section-header">{{ $t('profile.data') }}</div>
+        <v-card class="inset-card">
+          <v-list dense nav class="pa-0">
+            <v-list-item dense @click="switchView('viewer')">
+              <v-list-item-avatar tile size="38" color="primary" class="elevation-1"><v-icon dark small>mdi-database</v-icon></v-list-item-avatar>
               <v-list-item-content>
-                <v-list-item-title>{{bak.name}}</v-list-item-title>
-                <v-list-item-subtitle>{{dayjs(bak.createTime).format('YYYY-MM-DD HH:mm:ss')}}</v-list-item-subtitle>
-                <v-list-item-subtitle>
-                  <v-chip x-small class="mr-2" v-for="(tag, tagIdx) in bak.tags" :key="tagIdx">{{tag}}</v-chip>
-                </v-list-item-subtitle>
+                <v-list-item-title>{{ $t('profile.dataviewer') }}</v-list-item-title>
+              </v-list-item-content>
+              <v-list-item-action><v-icon>mdi-chevron-right</v-icon></v-list-item-action>
+            </v-list-item>
+            <v-list-item dense>
+              <v-list-item-avatar tile size="38" color="primary" class="elevation-1"><v-icon dark small>mdi-download</v-icon></v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>{{ $t('profile.imp') }}</v-list-item-title>
               </v-list-item-content>
               <v-list-item-action>
-                <v-btn icon><v-icon>mdi-chevron-right</v-icon></v-btn>
+                <v-dialog v-model="ui.impGlobalBakDialog.show">
+                  <template #activator="{ on }">
+                    <v-btn icon v-on="on"><v-icon>mdi-chevron-right</v-icon></v-btn>
+                  </template>
+                  <v-card>
+                    <v-card-title> {{ $t('profile.impDialog.title') }} </v-card-title>
+                    <v-divider></v-divider>
+                    <v-card-text>
+                      <v-textarea
+                              :hint="$t('profile.impDialog.impDataDesc')"
+                              :label="$t('profile.impDialog.impData')"
+                              autofocus
+                              clearable
+                              rows="3"
+                              v-model="ui.impGlobalBakDialog.impval"
+                      ></v-textarea>
+                    </v-card-text>
+                    <v-divider></v-divider>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn text small color="grey" text @click="ui.impGlobalBakDialog.show = false">{{ $t('base.dialog.close') }}</v-btn>
+                      <v-btn text small color="primary" text @click="impGlobalBak" :loading="isLoading">{{ $t('profile.imp') }}</v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
               </v-list-item-action>
             </v-list-item>
-          </template>
+            <v-list-item dense @click="saveGlobalBak">
+              <v-list-item-avatar tile size="38" color="primary" class="elevation-1"><v-icon dark small>mdi-upload</v-icon></v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>{{ $t('profile.bak') }}</v-list-item-title>
+              </v-list-item-content>
+              <v-list-item-action><v-icon>mdi-chevron-right</v-icon></v-list-item-action>
+            </v-list-item>
+          </v-list>
         </v-card>
+        <!-- 全局备份 -->
+        <template v-if="box.globalbaks && box.globalbaks.length > 0">
+          <div class="section-header">{{ $t('profile.baks') }} ({{box.globalbaks.length}})</div>
+          <v-card class="inset-card">
+            <v-list dense nav class="pa-0">
+              <template v-for="(bak, bakIdx) in box.globalbaks">
+                <v-list-item dense @click="switchBakView(bak.id)" :key="bak.id">
+                  <v-list-item-avatar tile size="38" class="elevation-1"><v-icon color="primary">mdi-archive</v-icon></v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>{{bak.name}}</v-list-item-title>
+                    <v-list-item-subtitle>{{dayjs(bak.createTime).format('YYYY-MM-DD HH:mm:ss')}}</v-list-item-subtitle>
+                  </v-list-item-content>
+                  <v-list-item-action><v-icon>mdi-chevron-right</v-icon></v-list-item-action>
+                </v-list-item>
+              </template>
+            </v-list>
+          </v-card>
+        </template>
       </v-container>
       <!-- 数据查看 -->
       <v-container fluid v-show="view === 'viewer'">
@@ -1046,14 +1577,34 @@
       </v-container>
       <!-- 应用详情 -->
       <v-container fluid v-if="view === 'app' && !!curapp">
-        <v-subheader>
-          <h2 :style="appTitleStyle">{{curapp.name}}</h2>
-          <v-spacer></v-spacer>
-          <v-btn v-if="curapp.script" icon :loading="isLoading" @click="runRemoteScript(curapp.script, curapp.script_timeout)">
-            <v-icon color="primary">mdi-play-circle</v-icon>
-          </v-btn>
-        </v-subheader>
-        <v-card class="mb-4" v-if="curapp.desc || curapp.descs || curapp.desc_html || curapp.descs_html">
+        <!-- 返回导航 -->
+        <div class="detail-nav">
+          <v-btn icon @click="back"><v-icon>mdi-chevron-left</v-icon></v-btn>
+          <span class="detail-nav-title">{{ $t('appDetail.title') }}</span>
+        </div>
+        <!-- 应用 Hero -->
+        <v-card class="inset-card app-hero mb-4">
+          <v-avatar tile size="64" class="app-hero-icon elevation-2"><img :src="curapp.icon" alt="" /></v-avatar>
+          <div class="flex-grow-1">
+            <h2 class="app-name" :style="appTitleStyle">{{curapp.name}}</h2>
+            <p>{{curapp.author || '@anonymous'}}</p>
+            <div class="app-hero-actions">
+              <v-btn
+                      v-if="curapp.script"
+                      color="primary"
+                      rounded
+                      small
+                      class="px-6"
+                      :loading="isLoading"
+                      @click="runRemoteScript(curapp.script, curapp.script_timeout)"
+              >
+                <v-icon small class="mr-1">mdi-play</v-icon>{{ $t('appDetail.run') }}
+              </v-btn>
+            </div>
+          </div>
+        </v-card>
+        <!-- 应用说明 -->
+        <v-card class="inset-card mb-4" v-if="curapp.desc || curapp.descs || curapp.desc_html || curapp.descs_html">
           <v-card-subtitle>
             <p v-if="curapp.desc" v-text="curapp.desc" class="text-pre-wrap"></p>
             <p
@@ -1065,12 +1616,16 @@
             <div v-for="(desc_html, desc_htmlIdx) in curapp.descs_html" v-html="desc_html"></div>
           </v-card-subtitle>
         </v-card>
-        <v-card class="mb-4">
+        <!-- 应用脚本 -->
+        <div class="section-header" v-if="curapp.scripts && curapp.scripts.length > 0">{{ $t('appDetail.scripts') }} ({{curapp.scripts.length}})</div>
+        <v-card class="inset-card mb-4" v-if="curapp.scripts && curapp.scripts.length > 0">
           <template v-if="curapp.scripts">
-            <v-subheader> {{ $t('appDetail.scripts') }} ({{curapp.scripts.length}}) </v-subheader>
-            <v-list dense>
+            <v-list dense class="pa-0">
               <v-list-item v-for="(script, scriptIdx) in curapp.scripts" :key="scriptIdx">
-                <v-list-item-title> {{scriptIdx + 1}}. {{script.name}} </v-list-item-title>
+                <v-list-item-avatar tile size="38" color="primary" class="elevation-1"><v-icon dark small>mdi-script-text</v-icon></v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title>{{script.name}}</v-list-item-title>
+                </v-list-item-content>
                 <v-btn icon :loading="isLoading" @click.stop="runRemoteScript(script.script, script.script_timeout)">
                   <v-icon>mdi-play-circle</v-icon>
                 </v-btn>
@@ -1078,10 +1633,11 @@
             </v-list>
           </template>
         </v-card>
-        <v-card class="mb-4">
+        <!-- 应用设置 -->
+        <div class="section-header" v-if="curapp.settings && curapp.settings.length > 0">{{ $t('appDetail.settings') }} ({{curapp.settings.length}})</div>
+        <v-card class="inset-card mb-4" v-if="curapp.settings && curapp.settings.length > 0">
           <template v-if="curapp.settings">
-            <v-subheader> {{ $t('appDetail.settings') }} ({{curapp.settings.length}}) </v-subheader>
-            <v-form class="pl-4 pr-4 pb-4">
+            <v-form class="settings-form">
               <template v-for="(setting, settingIdx) in curapp.settings">
                 <v-slider
                         v-model="setting.val"
@@ -1190,11 +1746,14 @@
             <v-divider></v-divider>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn small text color="primary" @click="saveAppSettings">{{ $t('base.dialog.save') }}</v-btn>
+              <v-btn color="primary" rounded small class="px-8" :loading="isLoading" @click="saveAppSettings">
+                <v-icon small class="mr-1">mdi-content-save</v-icon>{{ $t('base.dialog.save') }}
+              </v-btn>
             </v-card-actions>
           </template>
         </v-card>
-        <v-card class="mx-auto" v-if="curapp.datas && curapp.datas.length > 0">
+        <div class="section-header" v-if="curapp.datas && curapp.datas.length > 0">{{ $t('appDetail.sessions') }}</div>
+        <v-card class="inset-card mb-4" v-if="curapp.datas && curapp.datas.length > 0">
           <v-subheader>
             {{ $t('appDetail.curSession') }}
             <a class="ml-2">{{curapp.curSession ? curapp.curSession.name : ''}}</a>
@@ -1265,7 +1824,7 @@
             <v-btn small text color="primary" @click="saveAppSession">{{ $t('base.cmd.duplicate') }}</v-btn>
           </v-card-actions>
         </v-card>
-        <v-card :id="session.id" class="ml-10 mt-4" v-for="(session, sessionIdx) in curapp.sessions" :key="session.id">
+        <v-card :id="session.id" class="inset-card mb-4" v-for="(session, sessionIdx) in curapp.sessions" :key="session.id">
           <v-subheader>
             <a v-if="curapp.curSession && curapp.curSession.id === session.id">#{{sessionIdx + 1}} {{session.name}}</a>
             <template v-else>#{{sessionIdx + 1}} {{session.name}}</template>
@@ -1421,25 +1980,10 @@
             <v-avatar><img :src="box.syscfgs.boxjs.icons[iconThemeIdx]" /></v-avatar>
           </v-btn>
         </template>
-        <v-btn dark v-if="view === ''" fab small color="blue" @click="box.usercfgs.isEditFavApp = !box.usercfgs.isEditFavApp">
-          <v-icon>mdi-delete-circle-outline</v-icon>
-        </v-btn>
-        <v-btn dark v-if="!box.usercfgs.isHideHelp" fab small color="grey" @click="open('https://chavyleung.gitbook.io/boxjs')">
-          <v-icon>mdi-help</v-icon>
-        </v-btn>
-        <v-btn dark v-if="!box.usercfgs.isHideHelp" fab small color="purple" @click="ui.versionSheet.show = true">
-          <v-icon>mdi-new-box</v-icon>
-        </v-btn>
-        <v-btn dark fab small color="pink" @click="box.usercfgs.isLeftBoxIcon = !box.usercfgs.isLeftBoxIcon">
-          <v-icon> {{box.usercfgs.isLeftBoxIcon ? 'mdi-format-horizontal-align-right' : 'mdi-format-horizontal-align-left'}} </v-icon>
-        </v-btn>
-        <v-btn dark v-if="!box.usercfgs.isHideRefresh" fab small color="orange" @click="reload()">
+        <v-btn v-if="!box.usercfgs.isHideRefresh" class="glass-fab" fab small @click="reload()">
           <v-icon>mdi-refresh</v-icon>
         </v-btn>
-        <v-btn dark v-if="!box.usercfgs.isHideCoding" fab small @click="switchView('coding')">
-          <v-icon>mdi-code-tags</v-icon>
-        </v-btn>
-        <v-btn dark v-if="!box.usercfgs.isHidedSearch" fab small color="green" @click="ui.searchDialog.show = true">
+        <v-btn v-if="!box.usercfgs.isHidedSearch" class="glass-fab" fab small @click="ui.searchDialog.show = true">
           <v-icon>mdi-magnify</v-icon>
         </v-btn>
       </v-speed-dial>
@@ -1568,14 +2112,61 @@
             subs: 'Subscriptions',
             profile: 'Profile'
           },
+          drawer: {
+            appearance: 'Appearance',
+            home: 'Home',
+            navigation: 'Navigation',
+            notifications: 'Notifications',
+            display: 'Display',
+            tools: 'Tools',
+            about: 'About',
+            editFav: 'Edit Favorites',
+            editFavDesc: 'Tap the badge on icons to remove',
+            ballLeft: 'Floating Ball on Left',
+            ballLeftDesc: 'Move the floating ball to the left edge',
+            scriptEditor: 'Script Editor',
+            update: 'Version & Update',
+            help: 'Help & Docs'
+          },
+          home: {
+            myApps: 'My Apps',
+            edit: 'Edit',
+            done: 'Done',
+            subs: 'subscriptions',
+            allOk: 'All healthy',
+            needAttention: 'Needs attention',
+            lastSync: 'Last sync',
+            greetings: {
+              morning: 'Good morning',
+              afternoon: 'Good afternoon',
+              evening: 'Good evening',
+              night: 'Good night'
+            }
+          },
+          welcome: {
+            title: 'Welcome to BoxJS',
+            desc: 'Manage subscriptions, configure script parameters, and back up your data — all from your phone.',
+            f1: 'Unified subscription management',
+            f1d: 'Add apps from trusted sources with one tap',
+            f2: 'Visual script configuration',
+            f2d: 'Switches, sliders and options in one screen',
+            f3: 'Automatic data backup',
+            f3d: 'Stored locally, sync to your private Gist',
+            addSub: 'Add Your First Subscription',
+            browse: 'Browse App Marketplace'
+          },
           apps: {
             fav: 'Favorites',
             unStar: 'Unstar',
+            subGroups: 'Subscription Groups',
             sysApps: 'System Applications'
           },
           appDetail: {
+            title: 'App Detail',
+            run: 'Run Script',
             scripts: 'Scripts',
             settings: 'Settings',
+            sessions: 'Sessions',
             curSession: 'Current Session',
             copyDatas: 'Copy Datas',
             clearDatas: 'Clear Datas',
@@ -1607,7 +2198,13 @@
             appSubs: 'App Subscriptions',
             errData: 'Error Data',
             updated: 'Updated',
-            repo: 'Repository'
+            repo: 'Repository',
+            statusOk: 'Healthy',
+            statusWarn: 'Needs attention',
+            trustHint: 'Subscriptions are maintained by third parties. Only add sources you trust and review the repository first.',
+            reloadAll: 'Refresh All',
+            emptyTitle: 'No Subscriptions Yet',
+            emptyDesc: 'Add an app subscription to get started. BoxJS will fetch apps from the subscription and keep them up to date.'
           },
           prefs: {
             appearance: 'Appearance',
@@ -1652,6 +2249,9 @@
           profile: {
             leaveName: 'Leave a name',
             dataviewer: 'Data Viewer',
+            subtitle: 'Your data is safe with us',
+            data: 'Data',
+            baks: 'Backups',
             editor: {
               title: 'Profile',
               name: 'Name',
@@ -1746,14 +2346,61 @@
             subs: '订阅',
             profile: '我的'
           },
+          drawer: {
+            appearance: '外观',
+            home: '主页',
+            navigation: '导航',
+            notifications: '通知',
+            display: '显示',
+            tools: '工具',
+            about: '关于',
+            editFav: '编辑收藏',
+            editFavDesc: '点击图标角标可移除收藏',
+            ballLeft: '悬浮球靠左',
+            ballLeftDesc: '将悬浮球移动到左侧边缘',
+            scriptEditor: '脚本编辑器',
+            update: '版本与更新',
+            help: '帮助文档'
+          },
+          home: {
+            myApps: '我的应用',
+            edit: '编辑',
+            done: '完成',
+            subs: '个订阅',
+            allOk: '全部正常',
+            needAttention: '需要处理',
+            lastSync: '上次同步',
+            greetings: {
+              morning: '早上好',
+              afternoon: '下午好',
+              evening: '晚上好',
+              night: '夜深了'
+            }
+          },
+          welcome: {
+            title: '欢迎使用 BoxJS',
+            desc: '管理订阅应用、配置脚本参数、自动备份数据，全部在你的手机上完成。',
+            f1: '统一管理订阅应用',
+            f1d: '从可信渠道一键添加，随时更新',
+            f2: '可视化配置脚本参数',
+            f2d: '开关、滑块、选项一屏搞定',
+            f3: '数据自动备份',
+            f3d: '本地保存，可同步到你的私有 Gist',
+            addSub: '添加第一个订阅',
+            browse: '浏览应用市场'
+          },
           apps: {
             fav: '收藏应用',
             unStar: '取消收藏',
+            subGroups: '订阅分组',
             sysApps: '内置应用'
           },
           appDetail: {
+            title: '应用详情',
+            run: '运行脚本',
             scripts: '应用脚本',
             settings: '应用设置',
+            sessions: '会话',
             curSession: '当前会话',
             copyDatas: '复制数据',
             clearDatas: '清除数据',
@@ -1782,7 +2429,13 @@
             appSubs: '应用订阅',
             errData: '格式错误',
             updated: '更新于',
-            repo: '仓库'
+            repo: '仓库',
+            statusOk: '正常',
+            statusWarn: '需处理',
+            trustHint: '订阅源由第三方维护，请只添加你信任的来源，首次添加前建议先查看仓库说明。',
+            reloadAll: '全部刷新',
+            emptyTitle: '还没有订阅',
+            emptyDesc: '添加应用订阅后，BoxJS 会自动拉取其中的应用并保持更新。'
           },
           prefs: {
             appearance: '外观',
@@ -1827,6 +2480,9 @@
           profile: {
             leaveName: '大侠, 请留名!',
             dataviewer: '数据查看器',
+            subtitle: '你的数据，我们帮你保管好',
+            data: '数据',
+            baks: '全局备份',
             editor: {
               title: '个人资源',
               name: '昵称',
@@ -2166,9 +2822,9 @@
           this.setWallpaper()
         } else {
           this.clearWallpaper()
-          const darkBg = `background: #121212;`
+          const darkBg = `background: #000000;`
           const lightWebappBg = `background-image: linear-gradient(to bottom,rgba(0,0,0,.2) 0,transparent 76px);`
-          const lightBg = `${this.isWebApp ? lightWebappBg : 'background: #fff;'}`
+          const lightBg = `${this.isWebApp ? lightWebappBg : 'background: #f2f2f7;'}`
           document.querySelector('#BG').setAttribute('style', this.isDarkMode ? darkBg : lightBg)
         }
         if (this.isWebApp) {
@@ -2191,17 +2847,16 @@
       },
       appBarBind() {
         const app = true
-        const isEmptyLight = this.isWebApp && !this.isDarkMode && !this.isWallpaper
-        const color = isEmptyLight ? 'primary' : 'transparent'
-        const flat = color === 'transparent'
+        const color = 'transparent'
+        const flat = true
         const hideOnScroll = !this.isHidedSearchBar && this.isAutoSearchBar
         const collapseOnScroll = false
         const scrollThreshold = 20
         return { app, color, flat, hideOnScroll, collapseOnScroll, scrollThreshold }
       },
       searchBarBind() {
-        const color = this.isDarkMode ? null : 'primary'
-        return { color }
+        // 毛玻璃由 CSS 统一处理, 不再强制主题色
+        return {}
       },
       naviBarBind() {
         const app = true
@@ -2212,18 +2867,6 @@
         const hideOnScroll = !this.isHidedNaviBottom && this.isAutoNaviBottom
         const scrollThreshold = 160
         return { app, grow, color, value, inputValue, hideOnScroll, scrollThreshold }
-      },
-      appIconFontStyle() {
-        const style = {
-          'font-size': '10px',
-          'max-width': '54px'
-        }
-
-        if (this.isWallpaper) {
-          style['color'] = '#fff'
-          style['text-shadow'] = 'black 0.1em 0.1em 0.2em'
-        }
-        return style
       },
       // 是否保存用户偏好
       isSaveUserCfgs: {
@@ -2241,6 +2884,51 @@
       // 是否隐藏`我的`标题
       isHideMyTitle() {
         return this.box.usercfgs.isHideMyTitle
+      },
+      // 首页问候语
+      greetingText() {
+        const h = new Date().getHours()
+        const key = h < 6 ? 'night' : h < 12 ? 'morning' : h < 18 ? 'afternoon' : 'evening'
+        const name = this.box.usercfgs.name
+        const base = this.$t(`home.greetings.${key}`)
+        return name ? `${base}, ${name}` : base
+      },
+      // 首页日期
+      todayLabel() {
+        const d = dayjs()
+        if (this.$i18n.locale === 'zh-CN') {
+          const wd = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
+          return `${d.format('M月D日')} ${wd[d.day()]}`
+        }
+        return d.format('MMM D, dddd')
+      },
+      // 最近使用的应用
+      recentApps() {
+        const ids = this.box.usercfgs.recentapps || []
+        return ids
+          .map((id) => this.apps.find((app) => app.id === id))
+          .filter((app) => !!app)
+          .slice(0, 8)
+      },
+      // 订阅是否全部正常
+      subsAllOk() {
+        return this.appSubs.every((sub) => !sub.isErr)
+      },
+      // 订阅状态摘要
+      subsStatusText() {
+        const status = this.subsAllOk ? this.$t('home.allOk') : this.$t('home.needAttention')
+        return `${this.appSubs.length} ${this.$t('home.subs')} · ${status}`
+      },
+      // 最近一次订阅同步时间
+      lastSubUpdateText() {
+        const times = this.appSubs
+          .map((sub) => sub.updateTime)
+          .filter((t) => !!t)
+          .map((t) => (typeof t === 'number' ? t : new Date(t).getTime()))
+          .filter((n) => !isNaN(n))
+        if (times.length === 0) return '—'
+        const max = Math.max(...times)
+        return this.timeago.format(max, this.timeagoLang.replace('-', '_'))
       },
       // 添加`应用订阅`对话框
       addAppSubDialog: {
@@ -2746,6 +3434,9 @@
       },
       // 切换应用视图
       switchAppView(appId) {
+        // 记录最近使用 (最多保留 8 个)
+        const recent = Array.isArray(this.box.usercfgs.recentapps) ? this.box.usercfgs.recentapps : []
+        this.box.usercfgs.recentapps = [appId, ...recent.filter((id) => id !== appId)].slice(0, 8)
         const path = `/#/app/${appId}`
         this.path = path
         this.handleHistory(this.path)
@@ -2761,8 +3452,12 @@
       // 重载主题
       loadTheme() {
         this.$vuetify.theme.dark = this.isDarkMode
-        this.$vuetify.theme.themes.light.primary = this.box.usercfgs.color_light_primary || '#F7BB0E'
-        this.$vuetify.theme.themes.dark.primary = this.box.usercfgs.color_dark_primary || '#2196F3'
+        this.$vuetify.theme.themes.light.primary = this.box.usercfgs.color_light_primary || '#007AFF'
+        this.$vuetify.theme.themes.light.background = '#F2F2F7'
+        this.$vuetify.theme.themes.light.surface = '#FFFFFF'
+        this.$vuetify.theme.themes.dark.primary = this.box.usercfgs.color_dark_primary || '#0A84FF'
+        this.$vuetify.theme.themes.dark.background = '#000000'
+        this.$vuetify.theme.themes.dark.surface = '#1C1C1E'
       },
       // 复制文本
       copy(str) {
