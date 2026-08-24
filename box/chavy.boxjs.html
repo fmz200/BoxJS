@@ -27,6 +27,9 @@
       background-size: cover;
       background-repeat: no-repeat;
       background-color: transparent;
+      /* 细腻噪点纹理, 打破纯色扁平感; 壁纸模式由内联背景图覆盖 */
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.32'/%3E%3C/svg%3E");
+      background-blend-mode: overlay;
     }
     @media (prefers-color-scheme: light) {
       body {
@@ -35,7 +38,7 @@
     }
     @media (prefers-color-scheme: dark) {
       body {
-        background-color: #000;
+        background-color: #0a0a0c;
       }
     }
     /* 系统字体栈: iOS/macOS 使用 SF Pro + PingFang SC, 其余平台回退到系统字体 */
@@ -165,16 +168,17 @@
     }
     /* ---------- 新版 UI: 大标题 / 分组 / 内嵌卡片 ---------- */
     .page-title {
-      font-size: 26px;
+      font-size: 28px;
       font-weight: 700;
-      letter-spacing: -0.4px;
+      letter-spacing: -0.6px;
       line-height: 1.25;
+      text-wrap: balance;
     }
     .group-title-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin: 22px 4px 10px;
+      margin: 28px 4px 12px;
     }
     .group-title {
       font-size: 13px;
@@ -188,6 +192,19 @@
       font-size: 12px;
       font-weight: 600;
       color: rgba(0, 0, 0, 0.35);
+      font-variant-numeric: tabular-nums;
+    }
+    .group-action {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--v-primary-base, #0a84ff);
+    }
+    .page-head {
+      margin-top: 8px;
+      margin-bottom: 4px;
     }
     .theme--dark .group-count {
       color: rgba(255, 255, 255, 0.4);
@@ -197,6 +214,7 @@
       box-shadow: none;
       border: 0.5px solid rgba(0, 0, 0, 0.08);
       overflow: hidden;
+      transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
     .theme--dark .inset-card.v-card {
       border-color: rgba(255, 255, 255, 0.1);
@@ -206,13 +224,52 @@
     }
     .v-btn:not(.v-btn--icon):not(.v-btn--fab):not(.v-btn--text) {
       border-radius: 999px;
+      transition: transform 0.16s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.2s ease;
+    }
+    .v-btn:not(.v-btn--icon):not(.v-btn--fab):not(.v-btn--text):active {
+      transform: scale(0.96);
+    }
+    /* 桌面端悬停浮起 (触摸端不触发) */
+    @media (hover: hover) {
+      .inset-card.v-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 30px rgba(10, 132, 255, 0.1);
+      }
+      .theme--dark .inset-card.v-card:hover {
+        box-shadow: 0 14px 30px rgba(10, 132, 255, 0.14);
+      }
     }
     /* 主页: 问候 + 最近使用 + 应用网格 + 订阅状态 */
     .home-greeting {
       display: flex;
       align-items: flex-end;
       justify-content: space-between;
-      margin: 6px 4px 4px;
+      margin: 8px 4px 4px;
+      padding: 18px 14px 12px;
+      border-radius: 20px;
+      background-color: rgba(246, 246, 248, 0.55);
+      -webkit-backdrop-filter: blur(16px) saturate(160%);
+      backdrop-filter: blur(16px) saturate(160%);
+      /* 右上角环境光晕, 打破纯色平面 */
+      background-image: radial-gradient(130% 120% at 100% 0%, rgba(10, 132, 255, 0.1), transparent 62%);
+      animation: home-fade-up 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    }
+    .theme--dark .home-greeting {
+      background-color: rgba(14, 14, 16, 0.5);
+    }
+    .home-greeting .page-title {
+      font-size: 30px;
+      letter-spacing: -0.8px;
+    }
+    @keyframes home-fade-up {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
     .home-date {
       font-size: 12px;
@@ -264,7 +321,7 @@
       height: 60px;
       border-radius: 16px;
       object-fit: contain;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.14);
+      box-shadow: 0 6px 16px rgba(10, 132, 255, 0.16);
     }
     .home-icon.solid {
       background: rgba(255, 255, 255, 0.12);
@@ -289,6 +346,10 @@
       padding: 14px 16px;
       margin-top: 24px;
       cursor: pointer;
+      transition: transform 0.16s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .status-card:active {
+      transform: scale(0.98);
     }
     .status-dot {
       width: 9px;
@@ -309,6 +370,7 @@
       font-size: 13.5px;
       font-weight: 600;
       color: #1c1c1e;
+      font-variant-numeric: tabular-nums;
     }
     .theme--dark .status-card b {
       color: #f5f5f7;
@@ -350,6 +412,7 @@
       height: 64px;
       border-radius: 18px;
       flex: none;
+      box-shadow: 0 10px 26px rgba(10, 132, 255, 0.2);
     }
     .app-hero-icon img {
       border-radius: 18px;
@@ -376,7 +439,7 @@
       font-size: 13px;
       font-weight: 600;
       color: rgba(0, 0, 0, 0.55);
-      padding: 16px 4px 8px;
+      padding: 20px 4px 8px;
     }
     .theme--dark .section-header {
       color: rgba(255, 255, 255, 0.58);
@@ -453,6 +516,7 @@
       display: block;
       font-size: 19px;
       font-weight: 700;
+      font-variant-numeric: tabular-nums;
     }
     .profile-stat small {
       font-size: 11px;
@@ -956,9 +1020,9 @@
               class="ma-2"
               @input="dismissRelayTip"
       >
-        <div class="text-subtitle-2 font-weight-bold mb-1">🎉 BoxJS 已有 iOS 客户端啦</div>
+        <div class="text-subtitle-2 font-weight-bold mb-1">BoxJS 已有 iOS 客户端</div>
         <div class="text-caption">
-          推荐使用原生 iOS 客户端 <strong>Relay</strong>,体验更流畅。TestFlight 加入地址:
+          推荐使用原生 iOS 客户端 <strong>Relay</strong>，体验更流畅。TestFlight 加入地址：
           <a href="https://testflight.apple.com/join/2yES8TuF" target="_blank" rel="noopener">https://testflight.apple.com/join/2yES8TuF</a>
         </div>
       </v-alert>
@@ -1007,8 +1071,7 @@
             <span class="group-title">{{ $t('home.myApps') }}</span>
             <button
                     type="button"
-                    class="group-title"
-                    style="background: none; border: none; cursor: pointer; font-weight: 600; color: var(--v-primary-base, #0a84ff);"
+                    class="group-action"
                     @click="box.usercfgs.isEditFavApp = !box.usercfgs.isEditFavApp"
             >
               {{ box.usercfgs.isEditFavApp ? $t('home.done') : $t('home.edit') }}
@@ -1169,8 +1232,8 @@
       <!-- 订阅列表 -->
       <v-container fluid v-show="view === 'sub'">
         <!-- 标题栏 -->
-        <div class="group-title-row" style="margin-top: 6px;">
-          <h1 class="page-title" style="font-size: 26px;">{{ $t('menus.subs') }}</h1>
+        <div class="group-title-row page-head">
+          <h1 class="page-title">{{ $t('menus.subs') }}</h1>
           <div class="d-flex align-center">
             <v-btn icon @click="open('https://chavyleung.gitbook.io/boxjs/awesome/subscriptions')">
               <v-icon>mdi-cloud-circle</v-icon>
@@ -2822,9 +2885,8 @@
           this.setWallpaper()
         } else {
           this.clearWallpaper()
-          const darkBg = `background: #000000;`
-          const lightWebappBg = `background-image: linear-gradient(to bottom,rgba(0,0,0,.2) 0,transparent 76px);`
-          const lightBg = `${this.isWebApp ? lightWebappBg : 'background: #f2f2f7;'}`
+          const darkBg = `background-color: #0a0a0c;`
+          const lightBg = `background-color: #f2f2f7;`
           document.querySelector('#BG').setAttribute('style', this.isDarkMode ? darkBg : lightBg)
         }
         if (this.isWebApp) {
@@ -3459,7 +3521,7 @@
         this.$vuetify.theme.themes.light.background = '#F2F2F7'
         this.$vuetify.theme.themes.light.surface = '#FFFFFF'
         this.$vuetify.theme.themes.dark.primary = this.box.usercfgs.color_dark_primary || '#0A84FF'
-        this.$vuetify.theme.themes.dark.background = '#000000'
+        this.$vuetify.theme.themes.dark.background = '#0a0a0c'
         this.$vuetify.theme.themes.dark.surface = '#1C1C1E'
       },
       // 复制文本
