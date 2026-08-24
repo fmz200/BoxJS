@@ -53,9 +53,9 @@ $.KEY_boxjs_host = 'boxjs_host'
 $.json = $.name // `接口`类请求的响应体
 $.html = $.name // `页面`类请求的响应体
 
-// 页面源码地址
+// 页面源码地址: 测试版(beta)始终取 master 最新代码, 正式版锁定到版本 tag
 $.web = `https://cdn.jsdelivr.net/gh/fmz200/BoxJS@${
-  $.version
+  $.versionType === 'beta' ? 'master' : $.version
 }/box/chavy.boxjs.html?_=${new Date().getTime()}`
 // 版本说明地址 (Release Note)
 $.ver = `https://raw.githubusercontent.com/fmz200/BoxJS/master/box/release/box.release.json`
@@ -163,8 +163,9 @@ async function handlePage() {
   const debugger_web = $.getdata('@chavy_boxjs_userCfgs.debugger_web')
   const cache = $.getjson($.KEY_web_cache, null)
 
-  // 如果没有开启调试模式，且当前版本与缓存版本一致，且直接取缓存
-  if (!isDebugWeb && cache && cache.version === $.version) {
+  // 如果没有开启调试模式, 且版本与页面哈希都一致, 则直接取缓存
+  // 哈希不一致说明页面已更新 (如 beta 通道推送了新代码), 需要重新获取
+  if (!isDebugWeb && cache && cache.version === $.version && cache.hash === $.htmlHash) {
     $.html = cache.cache
   }
   // 如果开启了调试模式，并指定了 `debugger_web` 则从指定的地址获取页面
@@ -200,12 +201,20 @@ async function handlePage() {
       }
       return null
     }
-    const urls = [$.web]
-    if (!isDebugWeb || !debugger_web) {
-      urls.push(
-        `https://raw.githubusercontent.com/fmz200/BoxJS/${$.version}/box/chavy.boxjs.html`
-      )
-    }
+    // 测试版(beta): master 没有对应版本 tag, 必须从 master 分支实时获取
+    // 正式版(release): 优先 jsDelivr @版本, raw @版本 兜底
+    const isBeta = $.versionType === 'beta'
+    const urls = isDebugWeb && debugger_web
+      ? [$.web]
+      : isBeta
+        ? [
+            `https://raw.githubusercontent.com/fmz200/BoxJS/master/box/chavy.boxjs.html?_=${new Date().getTime()}`,
+            `https://cdn.jsdelivr.net/gh/fmz200/BoxJS@master/box/chavy.boxjs.html?_=${new Date().getTime()}`
+          ]
+        : [
+            $.web,
+            `https://raw.githubusercontent.com/fmz200/BoxJS/${$.version}/box/chavy.boxjs.html`
+          ]
     let html = null
     for (const url of urls) {
       html = await fetchVerified(url)
@@ -214,18 +223,11 @@ async function handlePage() {
     if (html) {
       // 仅缓存通过校验的页面源码
       $.html = html
-      const cache = { version: $.version, cache: $.html }
+      const cache = { version: $.version, hash: $.htmlHash, cache: $.html }
       $.setjson(cache, $.KEY_web_cache)
     } else {
       $.html = getcache()
     }
-  }
-  // 根据偏好设置, 替换首屏颜色 (如果是`auto`则交由页面自适应)
-  const theme = $.getdata('@chavy_boxjs_userCfgs.theme')
-  if (theme === 'light') {
-    $.html = $.html.replace('#121212', '#fff')
-  } else if (theme === 'dark') {
-    $.html = $.html.replace('#fff', '#121212')
   }
   /**
    * 后端渲染数据, 感谢 https://t.me/eslint 提供帮助
