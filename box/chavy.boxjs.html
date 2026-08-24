@@ -54,41 +54,26 @@
     .v-application .body-2 {
       letter-spacing: 0 !important;
     }
-    /* 毛玻璃: 顶栏 / 搜索栏 / 抽屉 / 底部导航 */
+    /* 原生控件(滚动条/输入框/选择框)跟随明暗主题 */
+    .v-application.theme--light {
+      color-scheme: light;
+    }
+    .v-application.theme--dark {
+      color-scheme: dark;
+    }
+    /* 毛玻璃: 顶栏 / 搜索栏 */
     .v-app-bar,
-    .v-toolbar,
-    .v-navigation-drawer,
-    .v-bottom-navigation {
+    .v-toolbar {
       -webkit-backdrop-filter: saturate(180%) blur(24px);
       backdrop-filter: saturate(180%) blur(24px);
     }
     .theme--light.v-app-bar,
-    .theme--light.v-toolbar,
-    .theme--light.v-navigation-drawer,
-    .theme--light.v-bottom-navigation {
+    .theme--light.v-toolbar {
       background-color: rgba(246, 246, 248, 0.72) !important;
     }
     .theme--dark.v-app-bar,
-    .theme--dark.v-toolbar,
-    .theme--dark.v-navigation-drawer,
-    .theme--dark.v-bottom-navigation {
+    .theme--dark.v-toolbar {
       background-color: rgba(14, 14, 16, 0.68) !important;
-    }
-    .v-navigation-drawer {
-      border-left: 0.5px solid rgba(0, 0, 0, 0.08) !important;
-    }
-    .theme--dark.v-navigation-drawer {
-      border-left: 0.5px solid rgba(255, 255, 255, 0.1) !important;
-    }
-    .v-bottom-navigation {
-      border-top: 0.5px solid rgba(0, 0, 0, 0.08);
-    }
-    .theme--dark.v-bottom-navigation {
-      border-top: 0.5px solid rgba(255, 255, 255, 0.1);
-    }
-    .v-bottom-navigation .v-btn.v-btn--active {
-      color: var(--v-primary-base) !important;
-      font-weight: 600;
     }
     /* 分层背景: 深色模式卡片提升一级 */
     .theme--dark.v-card,
@@ -140,26 +125,83 @@
     .v-main .container {
       height: 100%;
     }
-    .v-bottom-navigation,
     .v-bottom-sheet {
       padding-bottom: constant(safe-area-inset-bottom);
       padding-bottom: env(safe-area-inset-bottom);
     }
-    .v-bottom-navigation {
-      box-sizing: content-box;
+    /* 浮动胶囊底部导航 */
+    .footer-tool-nav {
+      position: fixed;
+      left: 50%;
+      bottom: calc(14px + constant(safe-area-inset-bottom));
+      bottom: calc(14px + env(safe-area-inset-bottom));
+      transform: translateX(-50%);
+      z-index: 8;
+      width: min(88%, 420px);
+      display: flex;
+      justify-content: space-around;
+      padding: 5px;
+      border-radius: 999px;
+      background: rgba(246, 246, 248, 0.78);
+      -webkit-backdrop-filter: saturate(180%) blur(24px);
+      backdrop-filter: saturate(180%) blur(24px);
+      border: 0.5px solid rgba(0, 0, 0, 0.08);
+      box-shadow: 0 10px 34px rgba(10, 132, 255, 0.12);
     }
-    .v-bottom-navigation button {
-      box-sizing: border-box;
+    .theme--dark .footer-tool-nav {
+      background: rgba(28, 28, 30, 0.78);
+      border-color: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 34px rgba(0, 0, 0, 0.45);
     }
-    .v-bottom-navigation button.v-btn:before {
-      background-color: transparent;
+    .footer-tab {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      padding: 7px 4px 5px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      position: relative;
+      font-family: inherit;
+      font-size: 10px;
+      font-weight: 500;
+      color: rgba(0, 0, 0, 0.45);
+      transition: color 0.25s ease;
+    }
+    .theme--dark .footer-tab {
+      color: rgba(255, 255, 255, 0.5);
+    }
+    .footer-tab .v-icon {
+      font-size: 23px;
+    }
+    .footer-tab::after {
+      content: "";
+      position: absolute;
+      top: 2px;
+      left: 50%;
+      width: 0;
+      height: 2.5px;
+      border-radius: 2px;
+      background: var(--v-primary-base, #0a84ff);
+      transform: translateX(-50%);
+      transition: width 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .footer-tab.is-active {
+      color: var(--v-primary-base, #0a84ff);
+      font-weight: 600;
+    }
+    .footer-tab.is-active::after {
+      width: 22px;
     }
     .v-speed-dial {
-      margin-bottom: calc(48px + constant(safe-area-inset-bottom));
-      margin-bottom: calc(48px + env(safe-area-inset-bottom));
+      margin-bottom: calc(80px + constant(safe-area-inset-bottom));
+      margin-bottom: calc(80px + env(safe-area-inset-bottom));
     }
     .container.container--fluid {
-      padding-bottom: 68px;
+      padding-bottom: 96px;
     }
     .appicon {
       user-select: none;
@@ -656,7 +698,7 @@
         </template>
         <template #append>
           <v-btn icon class="mr-n3" @click="ui.naviDrawer.show = true">
-            <v-avatar size="26"><v-icon>mdi-menu</v-icon></v-avatar>
+            <v-avatar size="26"><v-icon>mdi-cog-outline</v-icon></v-avatar>
           </v-btn>
         </template>
       </v-autocomplete>
@@ -698,8 +740,14 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-    <!-- 侧栏 -->
-    <v-navigation-drawer app v-model="ui.naviDrawer.show" height="100%" temporary right disable-route-watcher>
+    <!-- 设置(全屏弹窗, 由"我的"页或顶栏齿轮进入) -->
+    <v-dialog v-model="ui.naviDrawer.show" fullscreen transition="dialog-bottom-transition" scrollable>
+      <v-card class="align-self-start">
+        <v-toolbar class="safe" flat>
+          <v-btn icon @click="ui.naviDrawer.show = false"><v-icon>mdi-close</v-icon></v-btn>
+          <v-toolbar-title class="title font-weight-bold">{{ $t('drawer.settingsTitle') }}</v-toolbar-title>
+        </v-toolbar>
+        <v-card-text class="px-3 pb-10">
       <v-list dense nav>
         <v-list-item dense>
           <v-list-item-avatar @click="open(box.syscfgs.boxjs.repo)" class="elevation-3">
@@ -1003,7 +1051,9 @@
           <v-list-item-title>{{ $t('drawer.help') }}</v-list-item-title>
         </v-list-item>
       </v-list>
-    </v-navigation-drawer>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <!-- 主页 -->
     <v-main class="appBarBind.app ? 'safe' : ''" v-scroll="onScroll">
       <v-snackbar top app v-model="ui.snackbar.show" v-bind="ui.snackbar">{{ui.snackbar.msg}}</v-snackbar>
@@ -1421,6 +1471,20 @@
             <div class="profile-stat"><b>{{appSubs.length}}</b><small>{{ $t('profile.subs') }}</small></div>
             <div class="profile-stat"><b>{{sessions.length}}</b><small>{{ $t('profile.sessions') }}</small></div>
           </div>
+        </v-card>
+        <!-- 设置 -->
+        <div class="section-header">{{ $t('profile.settings') }}</div>
+        <v-card class="inset-card">
+          <v-list dense nav class="pa-0">
+            <v-list-item dense @click="ui.naviDrawer.show = true">
+              <v-list-item-avatar tile size="38" class="elevation-1"><v-icon color="primary">mdi-cog-outline</v-icon></v-list-item-avatar>
+              <v-list-item-content>
+                <v-list-item-title>{{ $t('profile.settings') }}</v-list-item-title>
+                <v-list-item-subtitle>{{ $t('profile.settingsDesc') }}</v-list-item-subtitle>
+              </v-list-item-content>
+              <v-list-item-action><v-icon>mdi-chevron-right</v-icon></v-list-item-action>
+            </v-list-item>
+          </v-list>
         </v-card>
         <!-- 数据 -->
         <div class="section-header">{{ $t('profile.data') }}</div>
@@ -1988,30 +2052,59 @@
           left
           small
           color="primary"
-          style="margin: 0 auto 60px auto; z-index: 5"
+          style="margin: 0 auto 92px auto; z-index: 5"
           @click="saveAppSettings"
         >
           <v-icon>mdi-content-save</v-icon>
         </v-btn>
       </v-fab-transition>
     </v-main>
-    <!-- 底部 -->
-    <v-bottom-navigation ref="naviBar" v-bind="naviBarBind" v-touch="{ down: () => isHidedNaviBottom = true }">
-      <v-progress-linear :active="isLoading" height="2" absolute top indeterminate></v-progress-linear>
-      <v-btn @click="switchView('')" value="">{{ $t('menus.home') }}<v-icon>mdi-home</v-icon></v-btn>
-      <v-btn @click="switchView('app')" value="app">{{ $t('menus.apps') }}<v-icon>mdi-application</v-icon></v-btn>
-      <v-btn @click="switchView('sub')" value="sub">{{ $t('menus.subs') }}<v-icon>mdi-database</v-icon></v-btn>
-      <v-btn @click="switchView('my')" value="my">
-        <template v-if="myIcon">
-          <span v-if="!isHideMyTitle">{{ $t('menus.profile') }}</span>
-          <v-avatar :size="isHideMyTitle ? 36 : 24"><v-img :src="myIcon" /></v-avatar>
-        </template>
-        <template v-else>
-          <span v-if="!isHideMyTitle">{{ $t('menus.profile') }}</span>
-          <v-icon :size="isHideMyTitle ? 36 : 24">mdi-face-profile</v-icon>
-        </template>
-      </v-btn>
-    </v-bottom-navigation>
+    <!-- 底部浮动导航 -->
+    <nav
+            class="footer-tool-nav"
+            v-show="!isHidedNaviBottom"
+            v-touch="{ down: () => isHidedNaviBottom = true }"
+            aria-label="主导航"
+    >
+      <button
+              type="button"
+              class="footer-tab"
+              :class="{ 'is-active': view === '' }"
+              @click="switchView('')"
+      >
+        <v-icon>mdi-home</v-icon>
+        <span>{{ $t('menus.home') }}</span>
+      </button>
+      <button
+              type="button"
+              class="footer-tab"
+              :class="{ 'is-active': view === 'app' }"
+              @click="switchView('app')"
+      >
+        <v-icon>mdi-apps</v-icon>
+        <span>{{ $t('menus.apps') }}</span>
+      </button>
+      <button
+              type="button"
+              class="footer-tab"
+              :class="{ 'is-active': view === 'sub' }"
+              @click="switchView('sub')"
+      >
+        <v-icon>mdi-database</v-icon>
+        <span>{{ $t('menus.subs') }}</span>
+      </button>
+      <button
+              type="button"
+              class="footer-tab"
+              :class="{ 'is-active': view === 'my' }"
+              @click="switchView('my')"
+              @dblclick="box.usercfgs.isHideBoxIcon = !box.usercfgs.isHideBoxIcon"
+      >
+        <v-avatar v-if="myIcon" size="22"><v-img :src="myIcon" /></v-avatar>
+        <v-icon v-else>mdi-account-circle</v-icon>
+        <span v-if="!isHideMyTitle">{{ $t('menus.profile') }}</span>
+      </button>
+    </nav>
     <v-fab-transition>
       <v-speed-dial
               v-show="!box.usercfgs.isHideBoxIcon && !isWallpaperMode"
@@ -2176,6 +2269,7 @@
             profile: 'Profile'
           },
           drawer: {
+            settingsTitle: 'Settings',
             appearance: 'Appearance',
             home: 'Home',
             navigation: 'Navigation',
@@ -2315,6 +2409,8 @@
             subtitle: 'Your data is safe with us',
             data: 'Data',
             baks: 'Backups',
+            settings: 'Settings',
+            settingsDesc: 'Appearance, navigation, notifications and debug options',
             editor: {
               title: 'Profile',
               name: 'Name',
@@ -2410,6 +2506,7 @@
             profile: '我的'
           },
           drawer: {
+            settingsTitle: '设置',
             appearance: '外观',
             home: '主页',
             navigation: '导航',
@@ -2546,6 +2643,8 @@
             subtitle: '你的数据，我们帮你保管好',
             data: '数据',
             baks: '全局备份',
+            settings: '设置',
+            settingsDesc: '外观、导航、通知与调试选项',
             editor: {
               title: '个人资源',
               name: '昵称',
@@ -2667,6 +2766,7 @@
         },
         boxServerData: null,
         box: null,
+        sortable: null, //首页收藏网格拖拽实例
       }
     },
     computed: {
@@ -2784,6 +2884,8 @@
       },
       // 判断当前是否`暗黑模式`
       isDarkMode() {
+        // box 未加载时跟随系统, 避免 created() 阶段空指针
+        if (!this.box) return this.isSystemDarkMode
         let isDark = true
         const theme = this.box.usercfgs.theme
         if (theme === 'auto') {
@@ -2853,9 +2955,6 @@
         },
         set(val) {
           this.box.usercfgs.isAutoNaviBottom = val === true
-          if (val === false && !this.isHidedNaviBottom) {
-            this.$refs.naviBar.isActive = true
-          }
         }
       },
       // 判断是否有壁纸
@@ -2919,16 +3018,6 @@
       searchBarBind() {
         // 毛玻璃由 CSS 统一处理, 不再强制主题色
         return {}
-      },
-      naviBarBind() {
-        const app = true
-        const grow = true
-        const color = 'primary'
-        const value = this.view
-        const inputValue = !this.isHidedNaviBottom
-        const hideOnScroll = !this.isHidedNaviBottom && this.isAutoNaviBottom
-        const scrollThreshold = 160
-        return { app, grow, color, value, inputValue, hideOnScroll, scrollThreshold }
       },
       // 是否保存用户偏好
       isSaveUserCfgs: {
@@ -3282,6 +3371,7 @@
           if (this.ui.editor) {
             this.ui.editor._themeService.setTheme(this.isDarkMode ? 'vs-dark' : 'vs')
           }
+          this.loadTheme()
         }
       },
       'box.usercfgs.color_dark_primary': {
@@ -3333,10 +3423,16 @@
       if (this.boxServerData) {
         this.box = this.boxServerData
         this.setHttpBackend()
+        this.loadTheme()
       } else {
         axios.get('/query/boxdata').then((resp) => {
           this.box = resp.data
           this.setHttpBackend()
+          // 异步加载完成后再初始化主题/语言/深链, 修复暗黑模式失效
+          this.loadTheme()
+          this.initUserCfg()
+          this.handleDeepLink()
+          this.$nextTick(() => this.initSortable())
         })
       }
 
@@ -3345,39 +3441,53 @@
       this.loadTheme()
     },
     mounted() {
-      const el = document.getElementById('appList')
-      const _this = this
-      const sortable = Sortable.create(el, {
-        animation: 600,
-        delay: 200,
-        onEnd(evt) {
-          const favApps = _this.box.usercfgs.favapps
-          const oldIdx = evt.oldIndex
-          const newIdx = evt.newIndex
-          const moveItem = favApps[oldIdx]
-          favApps.splice(oldIdx, 1)
-          favApps.splice(newIdx, 0, moveItem)
-          _this.box.usercfgs.favapps = favApps.filter(e => !!e)
-        }
-      })
-
-      if (!this.box.usercfgs.lang) {
-        const locale = this.$i18n.locale
-        this.box.usercfgs.lang = locale === 'zh-CN' ? locale : 'en-US'
-        this.saveUserCfgs()
-      } else {
-        this.$i18n.locale = this.box.usercfgs.lang
-      }
-
-      if (this.path.includes('/#/bak/')) {
-        const [, backupId] = this.path.split('/#/bak/')
-        this.loadGlobalBak(backupId)
-      } else if (this.path.includes('/#/sub/add/')) {
-        const [, url] = this.path.split('/#/sub/add/')
-        this.addAppSub(decodeURIComponent(url), true)
-      }
+      this.initSortable()
+      // 数据尚未返回时由 boxdata 回调负责, 避免空指针
+      if (!this.box) return
+      this.initUserCfg()
+      this.handleDeepLink()
     },
     methods: {
+      // 首页收藏网格拖拽排序 (box 渲染完成后调用)
+      initSortable() {
+        if (this.sortable) return
+        const el = document.getElementById('appList')
+        if (!el) return
+        const _this = this
+        this.sortable = Sortable.create(el, {
+          animation: 600,
+          delay: 200,
+          onEnd(evt) {
+            const favApps = _this.box.usercfgs.favapps
+            const oldIdx = evt.oldIndex
+            const newIdx = evt.newIndex
+            const moveItem = favApps[oldIdx]
+            favApps.splice(oldIdx, 1)
+            favApps.splice(newIdx, 0, moveItem)
+            _this.box.usercfgs.favapps = favApps.filter(e => !!e)
+          }
+        })
+      },
+      // 初始化用户语言偏好 (box 加载后调用)
+      initUserCfg() {
+        if (!this.box.usercfgs.lang) {
+          const locale = this.$i18n.locale
+          this.box.usercfgs.lang = locale === 'zh-CN' ? locale : 'en-US'
+          this.saveUserCfgs()
+        } else {
+          this.$i18n.locale = this.box.usercfgs.lang
+        }
+      },
+      // 深链接处理: 备份详情 / 一键订阅
+      handleDeepLink() {
+        if (this.path.includes('/#/bak/')) {
+          const [, backupId] = this.path.split('/#/bak/')
+          this.loadGlobalBak(backupId)
+        } else if (this.path.includes('/#/sub/add/')) {
+          const [, url] = this.path.split('/#/sub/add/')
+          this.addAppSub(decodeURIComponent(url), true)
+        }
+      },
       reload() {
         this.isLoading = true
         window.location.reload()
@@ -3430,6 +3540,16 @@
             this.toggleWaitSearchBar()
           }
         }
+        // 底部浮动导航: 下滑隐藏 / 上滑显示 (仅开启自动隐藏时)
+        if (this.isAutoNaviBottom && !this.isWallpaperMode) {
+          if (currentY > historyY && currentY > 120 && !this.ui.isWaitToggleNaviBottom) {
+            this.ui.isWaitToggleNaviBottom = true
+            this.isHidedNaviBottom = true
+            this.toggleWaitNaviBottom()
+          } else if (currentY < historyY - 4 && this.ui.isWaitToggleNaviBottom) {
+            this.isHidedNaviBottom = false
+          }
+        }
       },
       setWallpaper() {
         let bgimg = ''
@@ -3458,6 +3578,9 @@
       toggleWaitSearchBar: _.debounce(function () {
         this.ui.isWaitToggleSearchBar = false
       }, 1000),
+      toggleWaitNaviBottom: _.debounce(function () {
+        this.ui.isWaitToggleNaviBottom = false
+      }, 800),
       handleHistory(path) {
         const { hash } = window.location.href
         const state = { title: 'BoxJs', url: '/' + (hash ? hash : '#/') }
@@ -3517,6 +3640,8 @@
       // 重载主题
       loadTheme() {
         this.$vuetify.theme.dark = this.isDarkMode
+        // 数据未就绪时只同步明暗开关, 颜色在 box 加载后再应用
+        if (!this.box) return
         this.$vuetify.theme.themes.light.primary = this.box.usercfgs.color_light_primary || '#007AFF'
         this.$vuetify.theme.themes.light.background = '#F2F2F7'
         this.$vuetify.theme.themes.light.surface = '#FFFFFF'
@@ -3937,7 +4062,7 @@
       // 获取版本清单
       getVersions() {
         axios.get('/query/versions').then((resp) => {
-          if (resp.data && resp.data.releases) {
+          if (this.box && resp.data && resp.data.releases) {
             Object.assign(this.box, { versions: resp.data.releases })
             if (this.hasNewVersion) {
               this.ui.versionSheet.show = true
