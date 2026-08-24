@@ -3252,7 +3252,10 @@
       if (window.location.search) {
         const [, baseURL] = /baseURL=(.*?)(&|$)/.exec(window.location.search)
         axios.defaults.baseURL = baseURL || ''
-        this.ui.isCors = true
+        this.ui.isCors = !!baseURL
+      } else {
+        // 默认连接真实后端: boxjs.com 由代理工具(BoxJS 模块)重写到本地后端
+        axios.defaults.baseURL = 'https://boxjs.com'
       }
       // 根据路径跳转视图
       const defview = '/'

@@ -17,6 +17,25 @@ npm install
 （Surge / QuanX / Loon 等）注入的后端 API（`/query/boxdata`、`/api/save` 等），
 **直接用浏览器打开 HTML 文件是空白页**。测试页面有两种方式：
 
+### 默认行为：连接真实后端
+
+前端默认把 axios baseURL 设为 `https://boxjs.com`（无需任何参数），由本机代理工具
+（Surge / Loon / QuanX 等）的 BoxJS 模块把该域名重写到本地后端。因此：
+
+* 浏览器直接打开 http://localhost:8090 即连接**真实后端**，适合日常联调与验收新 UI
+* 需要代理环境已安装 BoxJS 模块且 HTTPS 解密证书已信任（浏览器能正常打开
+  https://boxjs.com 即说明就绪）
+* 保存类操作会写入真实代理环境的数据，联调时注意先备份
+
+后端已开启 CORS（`Access-Control-Allow-Origin: *`），跨域调用无需额外配置。
+快速验证环境（`-k` 用于信任代理工具的自签证书）：
+
+```bash
+curl -k https://boxjs.com/query/boxdata -o /dev/null -w "%{http_code} %{size_download}\n"
+```
+
+返回 `200` 和较大的 `size_download` 即说明真实后端可达。
+
 ### 方案 A：本地模拟后端（不依赖代理环境）
 
 仓库内置了一个本地模拟后端（`scripts/dev-server.mjs`），不依赖 Surge / Loon 等代理工具：
@@ -25,13 +44,19 @@ npm install
 npm run dev
 ```
 
-* 默认地址：http://localhost:8090 （端口被占用时启动命令会提示，可用 `PORT=xxxx npm run dev` 换端口）
-* 浏览器访问 http://localhost:8090 即可看到页面，带有一套固定演示数据：
+* 浏览器访问（**注意：空 `baseURL=` 表示同源模拟**）：
+
+  ```
+  http://localhost:8090/?baseURL=
+  ```
+
+* 页面带有一套固定演示数据：
   * 首页收藏图标（长按拖拽排序、编辑模式）
   * 「应用」页：收藏 / 订阅 / 内置三个分组，演示应用包含 slider、boolean、
     textarea、radios、checkboxes、colorpicker、number、selects 等全部设置控件
   * 「订阅」页：一条演示订阅（可增删、排序、复制、分享）
   * 「我的」页：个人资料、数据统计、全局备份
+* 端口被占用时启动命令会提示，可用 `PORT=xxxx npm run dev` 换端口
 * 数据保存在内存中：
   * 修改偏好、应用设置、会话、订阅、备份都会实时生效
   * **刷新或重启服务后重置为初始演示数据**（不会写真实代理环境）
@@ -58,7 +83,7 @@ npm run dev
 * Surge HTTP-API、真实订阅抓取
 * 真实代理环境的通知（`$.msg`）
 
-### 方案 B：连接真实后端（联调 / 验收新 UI）
+### 方案 B：指定真实后端（等价于默认行为）
 
 需要本机代理工具（Surge / Loon / QuanX 等）已安装 BoxJS 模块并运行，使
 `https://boxjs.com` 被重写到本地后端（HTTPS 解密证书需已安装并信任，浏览器可正常
@@ -74,21 +99,13 @@ npm run dev
 http://localhost:8090/?baseURL=https://boxjs.com
 ```
 
+与默认行为完全等价（不加参数也是连这个后端），只是显式声明了后端地址。
 页面本身由本地提供（走最新 UI 代码），所有数据接口（`/query/boxdata`、`/api/save`、
 `/api/runScript`、订阅刷新、Gist 同步等）都请求真实后端：
 
 * 真实代理环境的所有能力都可用：脚本执行、通知、HTTP-API、订阅抓取
-* **保存类操作会写入真实代理环境的数据**，联调时请注意，必要时先备份
-* 后端已开启 CORS（`Access-Control-Allow-Origin: *`），浏览器可直接跨域调用
-* 原理：页面 `created()` 会读取 `?baseURL=` 并把它设为 axios 的 baseURL
-
-快速验证环境是否就绪（命令行冒烟测试，`-k` 用于信任代理工具的自签证书）：
-
-```bash
-curl -k https://boxjs.com/query/boxdata -o /dev/null -w "%{http_code} %{size_download}\n"
-```
-
-返回 `200` 和较大的 `size_download` 即说明真实后端可达。
+* 原理：页面 `created()` 读取 `?baseURL=` 并设为 axios baseURL；**无参数时默认
+  `https://boxjs.com`**，`?baseURL=`（空值）则回落为同源请求（即本地模拟后端）
 
 ### 手动测试清单（改 UI 后建议逐项验收）
 
