@@ -620,6 +620,13 @@
       border-radius: 13px;
       overflow: hidden;
     }
+    /* 全局圆角: 头像 / 图标 / 图片统一圆角展示 */
+    .v-avatar img,
+    .v-avatar .v-image__image,
+    .v-list-item__avatar img,
+    .v-list-item__avatar .v-image__image {
+      border-radius: inherit;
+    }
     .sub-notebox {
       display: flex;
       align-items: center;
@@ -855,15 +862,17 @@
     .sub-sys-header:hover .group-title {
       color: var(--v-primary-base, #0a84ff);
     }
-    /* 数据页: 按应用分组 */
-    .data-app-group .v-subheader {
+    /* 数据页: 按应用分组 (可折叠) */
+    .data-group-header {
+      display: flex;
+      align-items: center;
       min-height: 46px;
       padding: 8px 14px;
       font-weight: 600;
       color: #1c1c1e;
       cursor: pointer;
     }
-    .theme--dark .data-app-group .v-subheader {
+    .theme--dark .data-group-header {
       color: #f5f5f7;
     }
     .data-key-chip {
@@ -883,7 +892,7 @@
             v-touch="{ up: () => isHidedSearchBar = true }"
     >
       <!-- 搜索条 -->
-      <v-autocomplete v-bind="ui.searchBar" :label="title" @click="ui.searchDialog.show = true" hide-no-data hide-details solo>
+      <v-autocomplete v-bind="ui.searchBar" :label="title" append-icon="" @click="ui.searchDialog.show = true" hide-no-data hide-details solo>
         <template #prepend-inner>
           <!-- 容器切换 Surge、QuanX、Loon -->
           <v-menu bottom left v-if="!isLoading && isMainView">
@@ -904,11 +913,6 @@
             <v-icon>mdi-chevron-left</v-icon>
           </v-btn>
           <v-btn icon class="ml-n3" v-show="isLoading" :loading="isLoading" color="primary"></v-btn>
-        </template>
-        <template #append>
-          <v-btn icon class="mr-n3" @click="ui.naviDrawer.show = true">
-            <v-avatar size="26"><v-icon>mdi-cog-outline</v-icon></v-avatar>
-          </v-btn>
         </template>
       </v-autocomplete>
     </v-app-bar>
@@ -1382,7 +1386,7 @@
         <!-- 空状态 -->
         <template v-if="appSubs.length === 0">
           <v-card class="inset-card welcome-card mt-4">
-            <v-avatar class="welcome-logo" tile size="72"><img :src="box.syscfgs.boxjs.icon" /></v-avatar>
+            <v-avatar class="welcome-logo" size="72"><img :src="box.syscfgs.boxjs.icon" /></v-avatar>
             <h2 class="page-title">{{ $t('subs.emptyTitle') }}</h2>
             <p class="welcome-desc">{{ $t('subs.emptyDesc') }}</p>
             <v-btn color="primary" rounded large block class="mt-6" @click="addAppSubDialog = true">
@@ -1403,7 +1407,7 @@
           <template v-for="(sub, subIdx) in appSubs">
             <v-card class="inset-card sub-capsule" :key="sub.id">
               <div class="sub-capsule-main" @click="toggleSubPanel(sub.id)" :aria-expanded="isSubPanelOpen(sub.id) ? 'true' : 'false'">
-                <v-avatar tile size="46" class="elevation-2 sub-capsule-icon">
+                <v-avatar size="46" class="elevation-2 sub-capsule-icon">
                   <v-img v-if="sub.icon" :src="sub.icon" />
                   <v-icon v-else dark color="primary">mdi-account</v-icon>
                 </v-avatar>
@@ -1444,14 +1448,14 @@
               </div>
               <div class="sub-capsule-actions">
                 <template v-if="sub.onInstall">
-                  <v-btn icon small class="sub-action" color="primary" :aria-label="$t('subs.install')" @click.stop="openInstall(sub.raw.id)">
+                  <v-btn icon small class="sub-action" :aria-label="$t('subs.install')" @click.stop="openInstall(sub.raw.id)">
                     <v-icon>mdi-tray-arrow-down</v-icon>
                   </v-btn>
                 </template>
-                <v-btn icon small class="sub-action" color="primary" :aria-label="$t('base.cmd.update')" @click.stop="reloadAppSub(sub)">
+                <v-btn icon small class="sub-action" :aria-label="$t('base.cmd.update')" @click.stop="reloadAppSub(sub)">
                   <v-icon>mdi-refresh</v-icon>
                 </v-btn>
-                <v-btn icon small class="sub-action" color="primary" :aria-label="$t('subs.repo')" @click.stop="open(sub.repo)">
+                <v-btn icon small class="sub-action" :aria-label="$t('subs.repo')" @click.stop="open(sub.repo)">
                   <v-icon>mdi-open-in-new</v-icon>
                 </v-btn>
                 <v-btn icon small class="sub-action" :aria-label="$t('base.cmd.cp')" @click.stop="copy(sub.url)">
@@ -1485,8 +1489,7 @@
                     @click="toggleSysPanel"
                     :aria-expanded="isSysPanelOpen ? 'true' : 'false'"
             >
-              <span class="group-title"><v-icon small class="mr-1">mdi-apps</v-icon>{{ $t('apps.sysApps') }}</span>
-              <span class="group-count mr-1">{{sysApps.length}}</span>
+              <span class="group-title"><v-icon small class="mr-1">mdi-apps</v-icon>{{ $t('apps.sysApps') }}<span class="sub-count mx-1">· {{sysApps.length}}</span></span>
               <v-icon class="sub-capsule-chevron" :class="{ 'is-open': isSysPanelOpen }">mdi-chevron-down</v-icon>
             </button>
             <div class="inset-card v-card sub-capsule-apps" v-if="isSysPanelOpen">
@@ -1609,7 +1612,7 @@
         <v-card class="inset-card">
           <v-list dense nav class="pa-0">
             <v-list-item dense @click="ui.naviDrawer.show = true">
-              <v-list-item-avatar tile size="38" class="elevation-1"><v-icon color="primary">mdi-cog-outline</v-icon></v-list-item-avatar>
+              <v-list-item-avatar size="38" class="elevation-1"><v-icon color="primary">mdi-cog-outline</v-icon></v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title>{{ $t('profile.settings') }}</v-list-item-title>
                 <v-list-item-subtitle>{{ $t('profile.settingsDesc') }}</v-list-item-subtitle>
@@ -1623,14 +1626,14 @@
         <v-card class="inset-card">
           <v-list dense nav class="pa-0">
             <v-list-item dense @click="switchView('data')">
-              <v-list-item-avatar tile size="38" color="primary" class="elevation-1"><v-icon dark small>mdi-database</v-icon></v-list-item-avatar>
+              <v-list-item-avatar size="38" color="primary" class="elevation-1"><v-icon dark small>mdi-database</v-icon></v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title>{{ $t('profile.dataviewer') }}</v-list-item-title>
               </v-list-item-content>
               <v-list-item-action><v-icon>mdi-chevron-right</v-icon></v-list-item-action>
             </v-list-item>
             <v-list-item dense>
-              <v-list-item-avatar tile size="38" color="primary" class="elevation-1"><v-icon dark small>mdi-download</v-icon></v-list-item-avatar>
+              <v-list-item-avatar size="38" color="primary" class="elevation-1"><v-icon dark small>mdi-download</v-icon></v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title>{{ $t('profile.imp') }}</v-list-item-title>
               </v-list-item-content>
@@ -1663,7 +1666,7 @@
               </v-list-item-action>
             </v-list-item>
             <v-list-item dense @click="saveGlobalBak">
-              <v-list-item-avatar tile size="38" color="primary" class="elevation-1"><v-icon dark small>mdi-upload</v-icon></v-list-item-avatar>
+              <v-list-item-avatar size="38" color="primary" class="elevation-1"><v-icon dark small>mdi-upload</v-icon></v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title>{{ $t('profile.bak') }}</v-list-item-title>
               </v-list-item-content>
@@ -1678,7 +1681,7 @@
             <v-list dense nav class="pa-0">
               <template v-for="(bak, bakIdx) in box.globalbaks">
                 <v-list-item dense @click="switchBakView(bak.id)" :key="bak.id">
-                  <v-list-item-avatar tile size="38" class="elevation-1"><v-icon color="primary">mdi-archive</v-icon></v-list-item-avatar>
+                  <v-list-item-avatar size="38" class="elevation-1"><v-icon color="primary">mdi-archive</v-icon></v-list-item-avatar>
                   <v-list-item-content>
                     <v-list-item-title>{{bak.name}}</v-list-item-title>
                     <v-list-item-subtitle>{{dayjs(bak.createTime).format('YYYY-MM-DD HH:mm:ss')}}</v-list-item-subtitle>
@@ -1697,14 +1700,12 @@
             <v-text-field
                     v-model="ui.dataSearch"
                     :label="$t('viewer.search')"
-                    :hint="$t('viewer.searchHint')"
+                    placeholder="$t('viewer.searchHint')"
                     prepend-inner-icon="mdi-magnify"
-                    persistent-hint
                     clearable
-                    rounded
-                    filled
+                    solo
                     dense
-                    hide-details="auto"
+                    hide-details
             ></v-text-field>
           </v-card-text>
         </v-card>
@@ -1715,18 +1716,21 @@
             <span class="group-count">{{ filteredAppGroups.length }}</span>
           </div>
           <v-card class="inset-card mb-3 data-app-group" v-for="group in filteredAppGroups" :key="group.app.id">
-            <v-subheader @click="switchAppView(group.app.id)">
-              <v-avatar tile size="26" class="mr-2"><v-img :src="group.app.icon" /></v-avatar>
+            <div class="data-group-header" @click="toggleDataPanel(group.app.id)" :aria-expanded="isDataPanelOpen(group.app.id) ? 'true' : 'false'">
+              <v-avatar size="26" class="mr-2"><v-img :src="group.app.icon" /></v-avatar>
               <span class="text-truncate">{{ group.app.name }}</span>
+              <span class="sub-count mx-1">· {{ group.keys.length }}</span>
               <v-spacer></v-spacer>
-              <v-chip x-small>{{ group.keys.length }}</v-chip>
-            </v-subheader>
-            <v-divider v-if="group.keys.length > 0"></v-divider>
-            <v-card-text class="py-2" v-if="group.keys.length > 0">
-              <v-chip small class="ml-1 mb-1" v-for="key in group.keys" :key="key" @click="viewkey(key)">
-                <span class="text-truncate data-key-chip">{{ key }}</span>
-              </v-chip>
-            </v-card-text>
+              <v-icon class="sub-capsule-chevron" :class="{ 'is-open': isDataPanelOpen(group.app.id) }">mdi-chevron-down</v-icon>
+            </div>
+            <template v-if="isDataPanelOpen(group.app.id)">
+              <v-divider v-if="group.keys.length > 0"></v-divider>
+              <v-card-text class="py-2" v-if="group.keys.length > 0">
+                <v-chip small class="ml-1 mb-1" v-for="key in group.keys" :key="key" @click="viewkey(key)">
+                  <span class="text-truncate data-key-chip">{{ key }}</span>
+                </v-chip>
+              </v-card-text>
+            </template>
           </v-card>
         </template>
         <v-card class="inset-card mb-4" v-else-if="appGroups.length > 0">
@@ -1886,7 +1890,7 @@
         </div>
         <!-- 应用 Hero -->
         <v-card class="inset-card app-hero mb-4">
-          <v-avatar tile size="64" class="app-hero-icon elevation-2"><img :src="curapp.icon" alt="" /></v-avatar>
+          <v-avatar size="64" class="app-hero-icon elevation-2"><img :src="curapp.icon" alt="" /></v-avatar>
           <div class="flex-grow-1">
             <h2 class="app-name" :style="appTitleStyle">{{curapp.name}}</h2>
             <p>{{curapp.author || '@anonymous'}}</p>
@@ -1924,7 +1928,7 @@
           <template v-if="curapp.scripts">
             <v-list dense class="pa-0">
               <v-list-item v-for="(script, scriptIdx) in curapp.scripts" :key="scriptIdx">
-                <v-list-item-avatar tile size="38" color="primary" class="elevation-1"><v-icon dark small>mdi-script-text</v-icon></v-list-item-avatar>
+                <v-list-item-avatar size="38" color="primary" class="elevation-1"><v-icon dark small>mdi-script-text</v-icon></v-list-item-avatar>
                 <v-list-item-content>
                   <v-list-item-title>{{script.name}}</v-list-item-title>
                 </v-list-item-content>
@@ -2960,7 +2964,8 @@
         box: null,
         sortable: null, //首页收藏网格拖拽实例
         subPanels: {}, // 订阅页: 已展开的订阅面板 (懒渲染)
-        sysPanelOpen: false // 订阅页: 内置应用分组是否展开
+        sysPanelOpen: false, // 订阅页: 内置应用分组是否展开
+        dataPanels: {} // 数据页: 已展开的应用分组 (懒渲染)
       }
     },
     computed: {
@@ -3862,6 +3867,13 @@
       // 展开/折叠内置应用分组
       toggleSysPanel() {
         this.sysPanelOpen = !this.sysPanelOpen
+      },
+      // 展开/折叠数据页应用分组 (懒渲染)
+      toggleDataPanel(groupId) {
+        this.$set(this.dataPanels, groupId, !this.dataPanels[groupId])
+      },
+      isDataPanelOpen(groupId) {
+        return !!this.dataPanels[groupId]
       },
       // 切换应用视图
       switchAppView(appId) {
