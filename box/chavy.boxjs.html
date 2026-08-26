@@ -222,6 +222,18 @@
       justify-content: space-between;
       margin: 28px 4px 12px;
     }
+    button.group-title-row {
+      width: 100%;
+      padding: 8px 6px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font: inherit;
+      color: inherit;
+    }
+    button.group-title-row:hover .group-title {
+      color: var(--v-primary-base, #0a84ff);
+    }
     .group-title {
       font-size: 13px;
       font-weight: 600;
@@ -862,6 +874,16 @@
     .sub-sys-header:hover .group-title {
       color: var(--v-primary-base, #0a84ff);
     }
+    /* 数据页: 搜索框扁平化 (去除内部矩形/下划线) */
+    .data-search-card .v-input__slot {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+    .data-search-card .v-input__slot::before,
+    .data-search-card .v-input__slot::after {
+      display: none !important;
+    }
     /* 数据页: 按应用分组 (可折叠) */
     .data-group-header {
       display: flex;
@@ -1378,9 +1400,23 @@
             <v-btn icon @click="reloadAppSub()">
               <v-icon>mdi-refresh</v-icon>
             </v-btn>
-            <v-btn color="primary" rounded small class="ml-1 px-4" @click="addAppSubDialog = true">
-              <v-icon small class="mr-1">mdi-plus</v-icon>{{ $t('subs.add') }}
-            </v-btn>
+            <v-menu bottom left>
+              <template #activator="{ on }">
+                <v-btn color="primary" rounded small class="ml-1 px-4" v-on="on">
+                  <v-icon small class="mr-1">mdi-plus</v-icon>{{ $t('subs.add') }}
+                </v-btn>
+              </template>
+              <v-list dense nav>
+                <v-list-item @click="addAppSubDialog = true">
+                  <v-list-item-icon><v-icon small>mdi-link-variant</v-icon></v-list-item-icon>
+                  <v-list-item-title>{{ $t('subs.addByUrl') }}</v-list-item-title>
+                </v-list-item>
+                <v-list-item @click="addAppSubRawDialog = true">
+                  <v-list-item-icon><v-icon small>mdi-code-json</v-icon></v-list-item-icon>
+                  <v-list-item-title>{{ $t('subs.addByPaste') }}</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
           </div>
         </div>
         <!-- 空状态 -->
@@ -1389,9 +1425,23 @@
             <v-avatar class="welcome-logo" size="72"><img :src="box.syscfgs.boxjs.icon" /></v-avatar>
             <h2 class="page-title">{{ $t('subs.emptyTitle') }}</h2>
             <p class="welcome-desc">{{ $t('subs.emptyDesc') }}</p>
-            <v-btn color="primary" rounded large block class="mt-6" @click="addAppSubDialog = true">
-              <v-icon class="mr-2">mdi-plus</v-icon>{{ $t('subs.add') }}
-            </v-btn>
+            <v-menu bottom offset-y>
+              <template #activator="{ on }">
+                <v-btn color="primary" rounded large block class="mt-6" v-on="on">
+                  <v-icon class="mr-2">mdi-plus</v-icon>{{ $t('subs.add') }}
+                </v-btn>
+              </template>
+              <v-list dense nav>
+                <v-list-item @click="addAppSubDialog = true">
+                  <v-list-item-icon><v-icon small>mdi-link-variant</v-icon></v-list-item-icon>
+                  <v-list-item-title>{{ $t('subs.addByUrl') }}</v-list-item-title>
+                </v-list-item>
+                <v-list-item @click="addAppSubRawDialog = true">
+                  <v-list-item-icon><v-icon small>mdi-code-json</v-icon></v-list-item-icon>
+                  <v-list-item-title>{{ $t('subs.addByPaste') }}</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
             <v-btn text rounded block class="mt-2" @click="open('https://chavyleung.gitbook.io/boxjs/awesome/subscriptions')">
               <v-icon class="mr-2">mdi-cloud</v-icon>{{ $t('subs.moreSubs') }}
             </v-btn>
@@ -1540,6 +1590,39 @@
               <v-btn text small color="grey" @click="addAppSubDialog = false"> {{$t('base.dialog.close')}} </v-btn>
               <v-btn text small color="primary" @click="addAppSub(ui.addAppSubDialog.url)" :loading="isLoading">
                 {{$t('base.dialog.save')}}
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <v-dialog v-model="addAppSubRawDialog" scrollable>
+          <v-card>
+            <v-card-title>{{ $t('subs.addRawDialog.title') }}</v-card-title>
+            <v-divider></v-divider>
+            <v-card-text>
+              <v-text-field
+                      :label="$t('subs.addRawDialog.name')"
+                      :hint="$t('subs.addRawDialog.nameDesc')"
+                      clearable
+                      persistent-hint
+                      class="mb-3"
+                      v-model="ui.addAppSubRawDialog.name"
+              ></v-text-field>
+              <v-textarea
+                      :label="$t('subs.addRawDialog.json')"
+                      :hint="$t('subs.addRawDialog.jsonDesc')"
+                      autofocus
+                      clearable
+                      persistent-hint
+                      rows="8"
+                      v-model="ui.addAppSubRawDialog.json"
+              ></v-textarea>
+            </v-card-text>
+            <v-divider></v-divider>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn text small color="grey" @click="addAppSubRawDialog = false">{{ $t('base.dialog.close') }}</v-btn>
+              <v-btn text small color="primary" @click="addAppSubRaw()" :loading="isLoading">
+                {{ $t('base.dialog.save') }}
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -1695,15 +1778,13 @@
       </v-container>
       <!-- 数据页: 全局 key 搜索 + 按应用分组 + 最近查看 + Gist 同步 -->
       <v-container fluid v-show="view === 'data'">
-        <v-card class="inset-card mb-4">
+        <v-card class="inset-card mb-4 data-search-card">
           <v-card-text class="py-1">
             <v-text-field
                     v-model="ui.dataSearch"
-                    :label="$t('viewer.search')"
-                    placeholder="$t('viewer.searchHint')"
+                    :placeholder="$t('viewer.searchHint')"
                     prepend-inner-icon="mdi-magnify"
                     clearable
-                    solo
                     dense
                     hide-details
             ></v-text-field>
@@ -1711,10 +1792,11 @@
         </v-card>
 
         <template v-if="filteredAppGroups.length > 0">
-          <div class="group-title-row page-head">
-            <span class="group-title"><v-icon small class="mr-1">mdi-apps</v-icon>{{ $t('viewer.appData') }}</span>
-            <span class="group-count">{{ filteredAppGroups.length }}</span>
-          </div>
+          <button type="button" class="group-title-row page-head" @click="toggleAppDataPanel" :aria-expanded="appDataPanelOpen ? 'true' : 'false'">
+            <span class="group-title"><v-icon small class="mr-1">mdi-apps</v-icon>{{ $t('viewer.appData') }}<span class="sub-count mx-1">· {{ filteredAppGroups.length }}</span></span>
+            <v-icon class="sub-capsule-chevron" :class="{ 'is-open': appDataPanelOpen }">mdi-chevron-down</v-icon>
+          </button>
+          <template v-if="appDataPanelOpen">
           <v-card class="inset-card mb-3 data-app-group" v-for="group in filteredAppGroups" :key="group.app.id">
             <div class="data-group-header" @click="toggleDataPanel(group.app.id)" :aria-expanded="isDataPanelOpen(group.app.id) ? 'true' : 'false'">
               <v-avatar size="26" class="mr-2"><v-img :src="group.app.icon" /></v-avatar>
@@ -1732,6 +1814,7 @@
               </v-card-text>
             </template>
           </v-card>
+          </template>
         </template>
         <v-card class="inset-card mb-4" v-else-if="appGroups.length > 0">
           <v-card-text class="text-center text-caption">{{ $t('viewer.noMatch') }}</v-card-text>
@@ -1826,46 +1909,12 @@
         </v-dialog>
 
         <v-card class="mb-4">
-          <v-subheader>
-            {{ $t('viewer.dataViewer') }}
-            <v-spacer></v-spacer>
-            <v-btn color="primary" small @click="copy(ui.viewer.key)"> {{ $t('base.cmd.cp') }} </v-btn>
-          </v-subheader>
-          <v-card-text>
-            <v-text-field
-                    :hint="$t('viewer.dataKeyDesc')"
-                    :label="$t('viewer.dataKey')"
-                    clearable
-                    persistent-hint
-                    placeholder="boxjs_host"
-                    v-model="ui.viewer.key"
-            >
-            </v-text-field>
+          <v-card-text class="text-center py-4">
+            <p class="text-caption ma-0 mb-2">{{ $t('viewer.tapKeyHint') }}</p>
+            <v-btn small color="primary" @click="ui.viewerSheet.show = true">
+              <v-icon small class="mr-1">mdi-database-search</v-icon>{{ $t('viewer.dataViewer') }}
+            </v-btn>
           </v-card-text>
-          <v-divider></v-divider>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn small text color="primary" @click="queryData">{{ $t('base.dialog.view') }}</v-btn>
-          </v-card-actions>
-        </v-card>
-        <v-card class="mb-4">
-          <v-subheader>
-            {{ $t('viewer.dataEditor') }}
-            <v-spacer></v-spacer>
-            <v-btn color="primary" small @click="copy(ui.viewer.val)"> {{ $t('base.cmd.cp') }} </v-btn>
-          </v-subheader>
-          <v-card-text>
-            <v-textarea v-if="ui.viewer.val && typeof(ui.viewer.val) != 'string'" :value="JSON.stringify(ui.viewer.val)"
-                        :label="$t('viewer.dataVal')" :row="3" :hint="$t('viewer.dataEditable')" persistent-hint readonly>
-            </v-textarea>
-            <v-textarea v-else v-model="ui.viewer.val" :row="3" :label="$t('viewer.dataVal')"> </v-textarea>
-          </v-card-text>
-          <v-divider></v-divider>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn small text color="primary" :disabled="typeof(ui.viewer.val) != 'string'" @click="saveData">{{
-                $t('base.dialog.save') }}</v-btn>
-          </v-card-actions>
         </v-card>
       </v-container>
       <!-- 代码编辑 -->
@@ -2238,6 +2287,48 @@
         </v-btn>
       </v-fab-transition>
     </v-main>
+    <!-- 全局数据查看器/编辑器 (Bottom Sheet) -->
+    <v-bottom-sheet v-model="ui.viewerSheet.show" scrollable eager>
+      <v-card>
+        <v-card-title v-touch="{ down: () => ui.viewerSheet.show = false }" class="py-3">
+          {{ $t('viewer.dataViewer') }}
+          <v-spacer></v-spacer>
+          <v-btn icon small @click="ui.viewerSheet.show = false">
+            <v-icon>mdi-chevron-double-down</v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-divider></v-divider>
+        <v-card-text>
+          <v-text-field
+                  :hint="$t('viewer.dataKeyDesc')"
+                  :label="$t('viewer.dataKey')"
+                  clearable
+                  persistent-hint
+                  placeholder="boxjs_host"
+                  v-model="ui.viewer.key"
+          ></v-text-field>
+          <v-btn small text color="primary" class="mb-3" @click="queryData">
+            <v-icon small class="mr-1">mdi-magnify</v-icon>{{ $t('base.dialog.view') }}
+          </v-btn>
+          <v-divider class="my-3"></v-divider>
+          <v-btn small text color="primary" class="mb-2" @click="copy(ui.viewer.val)">
+            <v-icon small class="mr-1">mdi-content-copy</v-icon>{{ $t('base.cmd.cp') }}
+          </v-btn>
+          <v-textarea v-if="ui.viewer.val && typeof(ui.viewer.val) != 'string'"
+                      :value="JSON.stringify(ui.viewer.val)"
+                      :label="$t('viewer.dataVal')"
+                      :row="3"
+                      :hint="$t('viewer.dataEditable')"
+                      persistent-hint
+                      readonly
+          ></v-textarea>
+          <v-textarea v-else v-model="ui.viewer.val" :row="3" :label="$t('viewer.dataVal')"></v-textarea>
+          <v-btn small text color="primary" :disabled="typeof(ui.viewer.val) != 'string'" @click="saveData">
+            <v-icon small class="mr-1">mdi-content-save</v-icon>{{ $t('base.dialog.save') }}
+          </v-btn>
+        </v-card-text>
+      </v-card>
+    </v-bottom-sheet>
     <!-- 底部浮动导航 -->
     <nav
             class="footer-tool-nav"
@@ -2522,6 +2613,15 @@
               url: 'Subscription url',
               urlDesc: ''
             },
+            addRawDialog: {
+              title: 'Paste Subscription JSON',
+              name: 'Name (optional)',
+              nameDesc: 'If empty, the name from the JSON is used',
+              json: 'Subscription JSON',
+              jsonDesc: 'Paste the complete subscription JSON content'
+            },
+            addByUrl: 'Add by subscription URL',
+            addByPaste: 'Paste subscription JSON',
 
             sessionEditor: {
               title: 'Modify Session',
@@ -2636,7 +2736,8 @@
             search: 'Search data keys',
             searchHint: 'Search by app name or key, then tap a key to view its value',
             noMatch: 'No matching data keys',
-            appData: 'App Data'
+            appData: 'App Data',
+            tapKeyHint: 'Tap any key in the lists above to view and edit its value'
           },
           gistSync: {
             title: 'Gist Sync (Official)',
@@ -2767,6 +2868,15 @@
               url: '订阅地址',
               urlDesc: ''
             },
+            addRawDialog: {
+              title: '粘贴订阅 JSON',
+              name: '名称 (可选)',
+              nameDesc: '留空则使用 JSON 中的名称',
+              json: '订阅 JSON 内容',
+              jsonDesc: '粘贴完整的订阅 JSON 内容'
+            },
+            addByUrl: '通过订阅地址添加',
+            addByPaste: '粘贴订阅 JSON 内容',
 
             sessionEditor: {
               title: '修改会话',
@@ -2877,7 +2987,8 @@
             search: '搜索数据键',
             searchHint: '按应用名或数据键搜索，点击键即可查看数据',
             noMatch: '没有匹配的数据键',
-            appData: '应用数据'
+            appData: '应用数据',
+            tapKeyHint: '点击上方列表中的任意数据键, 可直接查看和编辑'
           },
           gistSync: {
             title: 'Gist 同步（官方内置）',
@@ -2942,6 +3053,7 @@
             key: '',
             val: ''
           },
+          viewerSheet: { show: false },
           dataSearch: '', // 数据页全局 key 搜索
           searchDialog: { show: false },
           versionSheet: { show: false },
@@ -2954,6 +3066,7 @@
           impGlobalBakDialog: { show: false, impval: '' },
           impAppDatasDialog: { show: false, impval: '' },
           addAppSubDialog: { show: false, url: '' },
+          addAppSubRawDialog: { show: false, name: '', json: '' },
           installConfirmDialog: { show: false, title: '安装确认', message: '是否自动安装外部资源?' },
           defaultIcons: [
             'https://raw.githubusercontent.com/Orz-3/mini/master/Alpha/appstore.png',
@@ -2965,7 +3078,8 @@
         sortable: null, //首页收藏网格拖拽实例
         subPanels: {}, // 订阅页: 已展开的订阅面板 (懒渲染)
         sysPanelOpen: false, // 订阅页: 内置应用分组是否展开
-        dataPanels: {} // 数据页: 已展开的应用分组 (懒渲染)
+        dataPanels: {}, // 数据页: 已展开的应用分组 (懒渲染)
+        appDataPanelOpen: true // 数据页: 应用数据区块是否展开
       }
     },
     computed: {
@@ -3287,6 +3401,15 @@
         },
         set(show) {
           this.ui.addAppSubDialog.show = show
+        }
+      },
+      // 粘贴订阅对话框
+      addAppSubRawDialog: {
+        get() {
+          return this.ui.addAppSubRawDialog.show
+        },
+        set(show) {
+          this.ui.addAppSubRawDialog.show = show
         }
       },
       // 获取持久化数据
@@ -3875,6 +3998,10 @@
       isDataPanelOpen(groupId) {
         return !!this.dataPanels[groupId]
       },
+      // 展开/折叠数据页应用数据区块
+      toggleAppDataPanel() {
+        this.appDataPanelOpen = !this.appDataPanelOpen
+      },
       // 切换应用视图
       switchAppView(appId) {
         // 记录最近使用 (最多保留 8 个)
@@ -4217,6 +4344,43 @@
                 })
                 .finally(() => (this.addAppSubDialog = false))
       },
+      // 粘贴 JSON 添加订阅
+      addAppSubRaw() {
+        const payload = { json: this.ui.addAppSubRawDialog.json }
+        if (this.ui.addAppSubRawDialog.name) payload.name = this.ui.addAppSubRawDialog.name
+        let ok = false
+        axios
+                .post('/api/addAppSubRaw', payload)
+                .then((resp) => {
+                  if (resp.data && resp.data.code !== undefined && resp.data.code !== 0) {
+                    this.ui.snackbar.show = true
+                    this.ui.snackbar.msg = resp.data.message || '添加订阅失败'
+                    this.ui.snackbar.color = 'error'
+                    return
+                  }
+                  this.isSaveUserCfgs = false
+                  if (resp.data && typeof resp.data === 'object' && !resp.data.code) {
+                    Object.assign(this.box, resp.data)
+                  }
+                  ok = true
+                  this.ui.snackbar.show = true
+                  this.ui.snackbar.msg = '添加订阅: 成功!'
+                  this.ui.snackbar.color = 'success'
+                })
+                .catch((err) => {
+                  const msg = (err && err.response && err.response.data && err.response.data.message) || '添加订阅失败'
+                  this.ui.snackbar.show = true
+                  this.ui.snackbar.msg = msg
+                  this.ui.snackbar.color = 'error'
+                })
+                .finally(() => {
+                  if (ok) {
+                    this.addAppSubRawDialog = false
+                    this.ui.addAppSubRawDialog.name = ''
+                    this.ui.addAppSubRawDialog.json = ''
+                  }
+                })
+      },
       // 重载应用订阅
       reloadAppSub(sub) {
         axios.post('/api/reloadAppSub', sub).then((resp) => {
@@ -4328,6 +4492,7 @@
       viewkey(key) {
         this.ui.viewer.key = key
         this.queryData()
+        this.ui.viewerSheet.show = true
       },
 
       delviewkey(key,type) {
