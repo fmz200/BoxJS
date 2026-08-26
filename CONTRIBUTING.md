@@ -170,12 +170,17 @@ npm test
 
 ## 发布流程
 
-1. 修改 `box/chavy.boxjs.js` 的 `$.version`（如 `0.19.31`）。
-2. 在 `box/release/box.release.json` 顶部新增对应版本条目（`version`、`tags`、`msg`、`notes`）。
+正式版与测试版使用独立的版本清单文件，按 `$.versionType` 区分：
+
+- 测试版（`$.versionType = 'beta'`）：`box/release/box.release.beta.json`，模块始终从 `master` 拉取最新代码，推送到 master 即生效。
+- 正式版（`$.versionType = 'release'`）：`box/release/box.release.json`，随 tag 发布锁定版模块（rewrite 模板固定到 `@版本号`）。
+
+1. 修改 `box/chavy.boxjs.js` 的 `$.version`（如 `0.99.99`），按当前通道在对应清单文件顶部新增条目（`version`、`tags`、`msg`、`notes`）。
+2. 改正式版时同步锁定 rewrite 模板：`node scripts/build-pinned-modules.mjs --lock <版本号>`。
 3. 执行 `npm run build`，确认 `npm run check` 与 `npm run check:release` 通过。
-4. 提交并推送，然后打 tag：`git tag 0.19.31 && git push origin 0.19.31`。
+4. 提交并推送；正式版再打 tag：`git tag 0.99.99 && git push origin 0.99.99`。
 5. [Release](https://github.com/fmz200/BoxJS/actions/workflows/release.yml) 工作流会自动校验、
-   生成锁定版模块与 Release notes 并发布。
+   生成锁定版模块与 Release notes 并发布（Release notes 按通道读取对应清单文件）。
 
 ## 注意事项
 

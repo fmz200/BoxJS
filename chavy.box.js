@@ -58,8 +58,10 @@ $.html = $.name // `页面`类请求的响应体
 $.web = `https://cdn.jsdelivr.net/gh/fmz200/BoxJS@${
   $.versionType === 'beta' ? 'master' : $.version
 }/box/chavy.boxjs.html?_=${new Date().getTime()}`
-// 版本说明地址 (Release Note)
-$.ver = `https://raw.githubusercontent.com/fmz200/BoxJS/master/box/release/box.release.json`
+// 版本说明地址: 测试版(beta)读取 box.release.beta.json, 正式版读取 box.release.json
+$.ver = `https://raw.githubusercontent.com/fmz200/BoxJS/master/box/release/${
+  $.versionType === 'beta' ? 'box.release.beta.json' : 'box.release.json'
+}`
 
 !(async () => {
   // 勿扰模式

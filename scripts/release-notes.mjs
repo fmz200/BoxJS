@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-// 从 box/release/box.release.json 生成指定版本的 Markdown Release notes → dist/release-body.md
+// 从当前通道的版本清单 (beta→box.release.beta.json, 正式→box.release.json)
+// 生成指定版本的 Markdown Release notes → dist/release-body.md
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -12,12 +13,16 @@ if (!version) {
   process.exit(1)
 }
 
+const app = fs.readFileSync(path.join(ROOT, 'box', 'chavy.boxjs.js'), 'utf8')
+const file = /^\$\.versionType = 'beta'$/m.test(app)
+  ? 'box.release.beta.json'
+  : 'box.release.json'
 const releases = JSON.parse(
-  fs.readFileSync(path.join(ROOT, 'box', 'release', 'box.release.json'), 'utf8')
+  fs.readFileSync(path.join(ROOT, 'box', 'release', file), 'utf8')
 )
 const entry = releases.releases.find((r) => r.version === version)
 if (!entry) {
-  console.error(`box.release.json 中没有版本 ${version}`)
+  console.error(`${file} 中没有版本 ${version}`)
   process.exit(1)
 }
 

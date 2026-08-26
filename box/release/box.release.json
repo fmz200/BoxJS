@@ -2,7 +2,7 @@
   "releases": [
     {
       "version": "0.99.99",
-      "tags": ["beta", "release"],
+      "tags": ["release"],
       "author": "@fmz200",
       "msg": "feat: 移动端 UI 全新重构 - 订阅/数据页迁移与懒渲染",
       "notes": [
