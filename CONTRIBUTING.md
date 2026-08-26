@@ -170,10 +170,10 @@ npm test
 
 ## 发布流程
 
-正式版与测试版使用独立的版本清单文件，按 `$.versionType` 区分：
+正式版与测试版使用独立的版本清单文件，按 `$.versionType` 区分；只有正式版会创建 GitHub Release：
 
-- 测试版（`$.versionType = 'beta'`）：`box/release/box.release.beta.json`，模块始终从 `master` 拉取最新代码，推送到 master 即生效。
-- 正式版（`$.versionType = 'release'`）：`box/release/box.release.json`，随 tag 发布锁定版模块（rewrite 模板固定到 `@版本号`）。
+- 测试版（`$.versionType = 'beta'`）：`box/release/box.release.beta.json`，模块始终从 `master` 拉取最新代码。推送到 master 即生效，**不发布 tag、不创建 Release**（仅跑 CI 检查）。
+- 正式版（`$.versionType = 'release'`）：`box/release/box.release.json`，随 tag 发布锁定版模块（rewrite 模板固定到 `@版本号`）。只有推送 tag（`0.x`）才会触发 Release 流水线，且 `box.release.json` 中该版本必须标记 `tags: ["release"]`。
 
 1. 修改 `box/chavy.boxjs.js` 的 `$.version`（如 `0.99.99`），按当前通道在对应清单文件顶部新增条目（`version`、`tags`、`msg`、`notes`）。
 2. 改正式版时同步锁定 rewrite 模板：`node scripts/build-pinned-modules.mjs --lock <版本号>`。
