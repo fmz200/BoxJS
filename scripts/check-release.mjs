@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // 发布版本一致性校验：
-//  - box/chavy.boxjs.js 的 $.version 与 box/release/box.release.json 最新条目一致
+//  - 测试版(beta)读取 box/release/box.release.beta.json, 正式版读取 box/release/box.release.json
+//  - 当前通道对应清单的最新条目与 $.version 一致
 //  - CI 中 tag 触发时, tag 名与 $.version 一致
 import fs from 'node:fs'
 import path from 'node:path'
@@ -12,17 +13,23 @@ const app = fs.readFileSync(path.join(ROOT, 'box', 'chavy.boxjs.js'), 'utf8')
 const m = app.match(/^\$\.version = '([^']+)'$/m)
 const version = m ? m[1] : null
 
-const releases = JSON.parse(
-  fs.readFileSync(path.join(ROOT, 'box', 'release', 'box.release.json'), 'utf8')
-)
-const latest = releases.releases && releases.releases[0]
+const isBeta = /^\$\.versionType = 'beta'$/m.test(app)
+const primaryFile = isBeta ? 'box.release.beta.json' : 'box.release.json'
+const releasesFiles = ['box.release.json', 'box.release.beta.json']
 
 const errors = []
 if (!version) errors.push('无法从 box/chavy.boxjs.js 解析 $.version')
-if (!latest || latest.version !== version) {
-  errors.push(
-    `box.release.json 最新版本(${latest && latest.version}) 与 $.version(${version}) 不一致`
-  )
+for (const f of releasesFiles) {
+  const p = path.join(ROOT, 'box', 'release', f)
+  if (!fs.existsSync(p)) {
+    errors.push(`缺少版本清单文件 ${f}`)
+    continue
+  }
+  const releases = JSON.parse(fs.readFileSync(p, 'utf8'))
+  const latest = releases.releases && releases.releases[0]
+  if (f === primaryFile && (!latest || latest.version !== version)) {
+    errors.push(`${f} 最新版本(${latest && latest.version}) 与 $.version(${version}) 不一致`)
+  }
 }
 if (process.env.GITHUB_REF_TYPE === 'tag' && process.env.GITHUB_REF_NAME) {
   if (process.env.GITHUB_REF_NAME !== version) {
@@ -74,4 +81,4 @@ if (errors.length) {
   console.error('check-release 失败:\n' + errors.join('\n'))
   process.exit(1)
 }
-console.log(`OK: $.version=${version}，正式模板已锁定，测试版模块指向 master`)
+console.log(`OK: $.version=${version}（${isBeta ? '测试版' : '正式版'}，主清单 ${primaryFile}），正式模板已锁定，测试版模块指向 master`)
