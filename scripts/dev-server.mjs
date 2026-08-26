@@ -65,7 +65,7 @@ function createDemoSettings() {
 function createDemoBox() {
   return {
     syscfgs: {
-      version: '0.19.31',
+      version: '0.99.99',
       versionType: 'dev',
       env: 'NodeJs',
       isDebugMode: false,
