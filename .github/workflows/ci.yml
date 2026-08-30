@@ -20,7 +20,7 @@ jobs:
           cache: npm
       - name: 安装依赖
         run: npm ci
-      - name: 构建一致性 (Env.min.js / 内嵌 Env / chavy.box.js / SRI 哈希)
+      - name: 构建一致性 (Env.min.js / 内嵌 Env / SRI 哈希)
         run: npm run check
       - name: 版本一致性 ($.version vs release.json / tag)
         env:
@@ -28,7 +28,7 @@ jobs:
           GITHUB_REF_NAME: ${{ github.ref_name }}
         run: npm run check:release
       - name: JS 语法检查
-        run: node --check Env.js && node --check Env.min.js && node --check box/chavy.boxjs.js && node --check chavy.box.js
+        run: node --check Env.js && node --check Env.min.js && node --check box/chavy.boxjs.js
       - name: 单元测试 (sha256 / 一致性 / Env 冒烟)
         run: npm test
       - name: 秘密扫描 (gitleaks)
