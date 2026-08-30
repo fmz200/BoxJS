@@ -93,13 +93,13 @@ npm run dev
 npm run dev
 ```
 
-然后浏览器访问（**关键：加 `baseURL` 参数**）：
+然后浏览器访问：
 
 ```
-http://localhost:8090/?baseURL=https://boxjs.com
+http://localhost:8090
 ```
 
-与默认行为完全等价（不加参数也是连这个后端），只是显式声明了后端地址。
+页面默认已连接 `https://boxjs.com`，无需添加 `baseURL` 参数。
 页面本身由本地提供（走最新 UI 代码），所有数据接口（`/query/boxdata`、`/api/save`、
 `/api/runScript`、订阅刷新、Gist 同步等）都请求真实后端：
 
@@ -123,7 +123,7 @@ http://localhost:8090/?baseURL=https://boxjs.com
 ## 构建与校验
 
 ```bash
-npm run build          # 重建 Env.min.js、同步 box/chavy.boxjs.js 与 chavy.box.js、注入 SRI 哈希
+npm run build          # 重建 Env.min.js、同步 box/chavy.boxjs.js、注入 SRI 哈希
 npm run check          # 一致性校验（Env 三副本 + SRI 哈希）
 npm run check:release  # 版本与发布清单校验
 npm test               # 单元测试（node --test tests/*.test.mjs）
@@ -131,9 +131,8 @@ npm test               # 单元测试（node --test tests/*.test.mjs）
 
 ### 构建产物说明
 
-* `box/chavy.boxjs.js` 是应用源码（含底部内嵌 Env），`chavy.box.js` 是它生成的镜像，
-  **不要直接编辑 `chavy.box.js`**。
-* `Env.js` 是 Env 的可读源码，`Env.min.js` 与两处内嵌副本由 `npm run build` 生成，
+* `box/chavy.boxjs.js` 是应用源码（含底部内嵌 Env）。
+* `Env.js` 是 Env 的可读源码，`Env.min.js` 与 `box/chavy.boxjs.js` 底部内嵌副本由 `npm run build` 生成，
   **不要手工改压缩产物**。
 * 改动页面源码 `box/chavy.boxjs.html` 后**必须重新执行 `npm run build`**，
   否则 SRI 哈希与 CI 的一致性校验会失败。

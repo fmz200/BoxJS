@@ -6,7 +6,7 @@ const $eval_env = {}
 $.version = '0.99.99'
 $.versionType = 'beta'
 // SRI_BEGIN
-$.htmlHash = '7e63566c5f51b9677feaa433819463b1080d968f2c0293c9c86078f054c51328'
+$.htmlHash = '923f05abd2a9783afa253acdea3a105d04ccfe85eef6e3648c92adb4b3e621d5'
 // SRI_SHA256_BEGIN
 function sha256hex(t){const e=[];for(let o=0;o<t.length;o++){let s=t.charCodeAt(o);if(s<128)e.push(s);else if(s<2048)e.push(192|s>>6,128|63&s);else if(s>=55296&&s<56320&&o+1<t.length){s=65536+((1023&s)<<10)+(1023&t.charCodeAt(++o)),e.push(240|s>>18,128|s>>12&63,128|s>>6&63,128|63&s)}else s>=56320&&s<57344?e.push(239,191,189):e.push(224|s>>12,128|s>>6&63,128|63&s)}const o=8*e.length;for(e.push(128);e.length%64!=56;)e.push(0);e.push(0,0,0,0);for(let t=3;t>=0;t--)e.push(o/Math.pow(2,8*t)&255);const s=[1116352408,1899447441,3049323471,3921009573,961987163,1508970993,2453635748,2870763221,3624381080,310598401,607225278,1426881987,1925078388,2162078206,2614888103,3248222580,3835390401,4022224774,264347078,604807628,770255983,1249150122,1555081692,1996064986,2554220882,2821834349,2952996808,3210313671,3336571891,3584528711,113926993,338241895,666307205,773529912,1294757372,1396182291,1695183700,1986661051,2177026350,2456956037,2730485921,2820302411,3259730800,3345764771,3516065817,3600352804,4094571909,275423344,430227734,506948616,659060556,883997877,958139571,1322822218,1537002063,1747873779,1955562222,2024104815,2227730452,2361852424,2428436474,2756734187,3204031479,3329325298];let h=[1779033703,3144134277,1013904242,2773480762,1359893119,2600822924,528734635,1541459225];const n=(t,e)=>t>>>e|t<<32-e;for(let t=0;t<e.length;t+=64){const o=new Array(64);for(let s=0;s<16;s++)o[s]=e[t+4*s]<<24|e[t+4*s+1]<<16|e[t+4*s+2]<<8|e[t+4*s+3];for(let t=16;t<64;t++){const e=n(o[t-15],7)^n(o[t-15],18)^o[t-15]>>>3,s=n(o[t-2],17)^n(o[t-2],19)^o[t-2]>>>10;o[t]=o[t-16]+e+o[t-7]+s|0}let l=h[0],r=h[1],p=h[2],f=h[3],u=h[4],c=h[5],a=h[6],g=h[7];for(let t=0;t<64;t++){const e=g+(n(u,6)^n(u,11)^n(u,25))+(u&c^~u&a)+s[t]+o[t]|0,h=l&r^l&p^r&p;g=a,a=c,c=u,u=f+e|0,f=p,p=r,r=l,l=e+((n(l,2)^n(l,13)^n(l,22))+h|0)|0}h=[h[0]+l|0,h[1]+r|0,h[2]+p|0,h[3]+f|0,h[4]+u|0,h[5]+c|0,h[6]+a|0,h[7]+g|0]}return h.map(t=>(t>>>0).toString(16).padStart(8,"0")).join("")}
 // SRI_SHA256_END
@@ -384,16 +384,12 @@ function getBoxData() {
 
   // 自动收集的未订阅 key → extraDatas（供 Gist 同步，独立属性）
   const knownKeys = getKnownKeys()
-  const excludeKeys = Array.isArray(usercfgs.gist_exclude_keys)
-    ? usercfgs.gist_exclude_keys
-    : []
   const extraDataKeys = []
   knownKeys.forEach((key) => {
     if (
       !key ||
       subscribedKeys.has(key) ||
       extraDatas.includes(key) ||
-      excludeKeys.includes(key) ||
       /^(chavy_boxjs_|#)/.test(key) ||
       key === 'gist'
     ) {
@@ -467,7 +463,11 @@ function getSystemApps() {
     {
       id: 'BoxSetting',
       name: '偏好设置',
-      descs: ['可手动执行一些抹掉数据的脚本', '可设置明暗两种主题下的主色调', '可设置壁纸清单'],
+      descs: [
+        '可手动执行一些抹掉数据的脚本',
+        '可设置明暗两种主题下的主色调',
+        '可设置壁纸清单'
+      ],
       keys: [
         '@chavy_boxjs_userCfgs.httpapi',
         '@chavy_boxjs_userCfgs.bgimg',
@@ -476,41 +476,131 @@ function getSystemApps() {
         '@chavy_boxjs_userCfgs.color_light_primary'
       ],
       settings: [
-        { id: '@chavy_boxjs_userCfgs.httpapis', name: 'HTTP-API (Surge)', val: '', type: 'textarea', placeholder: ',examplekey@127.0.0.1:6166', autoGrow: true, rows: 2, persistentHint:true, desc: '示例: ,examplekey@127.0.0.1:6166! 注意: 以逗号开头, 逗号分隔多个地址, 可加回车' },
-        { id: '@chavy_boxjs_userCfgs.httpapi_timeout', name: 'HTTP-API Timeout (Surge)', val: 20, type: 'number', persistentHint:true, desc: '如果脚本作者指定了超时时间, 会优先使用脚本指定的超时时间.' },
-        { id: '@chavy_boxjs_userCfgs.http_backend', name: 'HTTP Backend (Quantumult X)', val: '', type: 'text',placeholder: 'http://127.0.0.1:9999', persistentHint:true, desc: '示例: http://127.0.0.1:9999 ! 注意: 必须是以 http 开头的完整路径, 不能是 / 结尾' },
-        { id: '@chavy_boxjs_userCfgs.debugger_webs', name: '调试地址', val: 'Dev体验,https://raw.githubusercontent.com/fmz200/BoxJS/boxjs.dev/box/chavy.boxjs.html', type: 'textarea', placeholder: '每行一个配置，用逗号分割每个配置的名字和链接：配置,url', persistentHint:true, autoGrow: true, rows: 2, desc: '逗号分隔名字和链接, 回车分隔多个地址' },
-        { id: '@chavy_boxjs_userCfgs.bgimgs', name: '背景图片清单', val: '无,\n跟随系统,跟随系统\nlight,http://api.btstu.cn/sjbz/zsy.php\ndark,https://uploadbeta.com/api/pictures/random\n妹子,http://api.btstu.cn/sjbz/zsy.php', type: 'textarea', placeholder: '无,{回车} 跟随系统,跟随系统{回车} light,图片地址{回车} dark,图片地址{回车} 妹子,图片地址', persistentHint:true, autoGrow: true, rows: 2, desc: '逗号分隔名字和链接, 回车分隔多个地址' },
-        { id: '@chavy_boxjs_userCfgs.bgimg', name: '背景图片', val: '', type: 'text', placeholder: 'http://api.btstu.cn/sjbz/zsy.php', persistentHint:true, desc: '输入背景图标的在线链接' },
-        { id: '@chavy_boxjs_userCfgs.changeBgImgEnterDefault', name: '手势进入壁纸模式默认背景图片', val: '', type: 'text', placeholder: '填写上面背景图片清单的值', persistentHint:true, desc: '' },
-        { id: '@chavy_boxjs_userCfgs.changeBgImgOutDefault', name: '手势退出壁纸模式默认背景图片', val: '', type: 'text', placeholder: '填写上面背景图片清单的值', persistentHint:true, desc: '' },
-        { id: '@chavy_boxjs_userCfgs.color_light_primary', name: '明亮色调', canvas: true, val: '#F7BB0E', type: 'colorpicker', desc: '' },
-        { id: '@chavy_boxjs_userCfgs.color_dark_primary', name: '暗黑色调', canvas: true, val: '#2196F3', type: 'colorpicker', desc: '' }
+        {
+          id: '@chavy_boxjs_userCfgs.httpapis',
+          name: 'HTTP-API (Surge)',
+          val: '',
+          type: 'textarea',
+          placeholder: ',examplekey@127.0.0.1:6166',
+          autoGrow: true,
+          rows: 2,
+          persistentHint: true,
+          desc: '示例: ,examplekey@127.0.0.1:6166! 注意: 以逗号开头, 逗号分隔多个地址, 可加回车'
+        },
+        {
+          id: '@chavy_boxjs_userCfgs.httpapi_timeout',
+          name: 'HTTP-API Timeout (Surge)',
+          val: 20,
+          type: 'number',
+          persistentHint: true,
+          desc: '如果脚本作者指定了超时时间, 会优先使用脚本指定的超时时间.'
+        },
+        {
+          id: '@chavy_boxjs_userCfgs.http_backend',
+          name: 'HTTP Backend (Quantumult X)',
+          val: '',
+          type: 'text',
+          placeholder: 'http://127.0.0.1:9999',
+          persistentHint: true,
+          desc: '示例: http://127.0.0.1:9999 ! 注意: 必须是以 http 开头的完整路径, 不能是 / 结尾'
+        },
+        {
+          id: '@chavy_boxjs_userCfgs.debugger_webs',
+          name: '调试地址',
+          val: 'Dev体验,https://raw.githubusercontent.com/fmz200/BoxJS/boxjs.dev/box/chavy.boxjs.html',
+          type: 'textarea',
+          placeholder: '每行一个配置，用逗号分割每个配置的名字和链接：配置,url',
+          persistentHint: true,
+          autoGrow: true,
+          rows: 2,
+          desc: '逗号分隔名字和链接, 回车分隔多个地址'
+        },
+        {
+          id: '@chavy_boxjs_userCfgs.bgimgs',
+          name: '背景图片清单',
+          val: '无,\n跟随系统,跟随系统\nlight,http://api.btstu.cn/sjbz/zsy.php\ndark,https://uploadbeta.com/api/pictures/random\n妹子,http://api.btstu.cn/sjbz/zsy.php',
+          type: 'textarea',
+          placeholder:
+            '无,{回车} 跟随系统,跟随系统{回车} light,图片地址{回车} dark,图片地址{回车} 妹子,图片地址',
+          persistentHint: true,
+          autoGrow: true,
+          rows: 2,
+          desc: '逗号分隔名字和链接, 回车分隔多个地址'
+        },
+        {
+          id: '@chavy_boxjs_userCfgs.bgimg',
+          name: '背景图片',
+          val: '',
+          type: 'text',
+          placeholder: 'http://api.btstu.cn/sjbz/zsy.php',
+          persistentHint: true,
+          desc: '输入背景图标的在线链接'
+        },
+        {
+          id: '@chavy_boxjs_userCfgs.changeBgImgEnterDefault',
+          name: '手势进入壁纸模式默认背景图片',
+          val: '',
+          type: 'text',
+          placeholder: '填写上面背景图片清单的值',
+          persistentHint: true,
+          desc: ''
+        },
+        {
+          id: '@chavy_boxjs_userCfgs.changeBgImgOutDefault',
+          name: '手势退出壁纸模式默认背景图片',
+          val: '',
+          type: 'text',
+          placeholder: '填写上面背景图片清单的值',
+          persistentHint: true,
+          desc: ''
+        },
+        {
+          id: '@chavy_boxjs_userCfgs.color_light_primary',
+          name: '明亮色调',
+          canvas: true,
+          val: '#F7BB0E',
+          type: 'colorpicker',
+          desc: ''
+        },
+        {
+          id: '@chavy_boxjs_userCfgs.color_dark_primary',
+          name: '暗黑色调',
+          canvas: true,
+          val: '#2196F3',
+          type: 'colorpicker',
+          desc: ''
+        }
       ],
       scripts: [
         {
-          name: "抹掉：所有缓存",
-          script: "https://raw.githubusercontent.com/fmz200/BoxJS/master/box/scripts/boxjs.revert.caches.js"
+          name: '抹掉：所有缓存',
+          script:
+            'https://raw.githubusercontent.com/fmz200/BoxJS/master/box/scripts/boxjs.revert.caches.js'
         },
         {
-          name: "抹掉：收藏应用",
-          script: "https://raw.githubusercontent.com/fmz200/BoxJS/master/box/scripts/boxjs.revert.usercfgs.favapps.js"
+          name: '抹掉：收藏应用',
+          script:
+            'https://raw.githubusercontent.com/fmz200/BoxJS/master/box/scripts/boxjs.revert.usercfgs.favapps.js'
         },
         {
-          name: "抹掉：用户偏好",
-          script: "https://raw.githubusercontent.com/fmz200/BoxJS/master/box/scripts/boxjs.revert.usercfgs.js"
+          name: '抹掉：用户偏好',
+          script:
+            'https://raw.githubusercontent.com/fmz200/BoxJS/master/box/scripts/boxjs.revert.usercfgs.js'
         },
         {
-          name: "抹掉：所有会话",
-          script: "https://raw.githubusercontent.com/fmz200/BoxJS/master/box/scripts/boxjs.revert.usercfgs.sessions.js"
+          name: '抹掉：所有会话',
+          script:
+            'https://raw.githubusercontent.com/fmz200/BoxJS/master/box/scripts/boxjs.revert.usercfgs.sessions.js'
         },
         {
-          name: "抹掉：所有备份",
-          script: "https://raw.githubusercontent.com/fmz200/BoxJS/master/box/scripts/boxjs.revert.baks.js"
+          name: '抹掉：所有备份',
+          script:
+            'https://raw.githubusercontent.com/fmz200/BoxJS/master/box/scripts/boxjs.revert.baks.js'
         },
         {
-          name: "抹掉：BoxJs (注意备份)",
-          script: "https://raw.githubusercontent.com/fmz200/BoxJS/master/box/scripts/boxjs.revert.boxjs.js"
+          name: '抹掉：BoxJs (注意备份)',
+          script:
+            'https://raw.githubusercontent.com/fmz200/BoxJS/master/box/scripts/boxjs.revert.boxjs.js'
         }
       ],
       author: '@chavyleung',
@@ -525,123 +615,253 @@ function getSystemApps() {
       name: '会话切换',
       desc: '打开静默运行后, 切换会话将不再发出系统通知 \n注: 不影响日志记录',
       keys: [],
-      settings: [{ id: 'CFG_BoxSwitcher_isSilent', name: '静默运行', val: false, type: 'boolean', desc: '切换会话时不发出系统通知!' }],
+      settings: [
+        {
+          id: 'CFG_BoxSwitcher_isSilent',
+          name: '静默运行',
+          val: false,
+          type: 'boolean',
+          desc: '切换会话时不发出系统通知!'
+        }
+      ],
       author: '@chavyleung',
       repo: 'https://github.com/fmz200/BoxJS/blob/master/box/switcher/box.switcher.js',
       icons: [
         'https://raw.githubusercontent.com/fmz200/BoxJS/master/box/icons/BoxSwitcher.mini.png',
         'https://raw.githubusercontent.com/fmz200/BoxJS/master/box/icons/BoxSwitcher.png'
       ],
-      script: 'https://raw.githubusercontent.com/fmz200/BoxJS/master/box/switcher/box.switcher.js'
+      script:
+        'https://raw.githubusercontent.com/fmz200/BoxJS/master/box/switcher/box.switcher.js'
     },
     {
-      id: "BoxGist",
-      name: "Gist备份",
+      id: 'BoxGist',
+      name: 'Gist备份',
       keys: [
-        "@gist.token",
-        "@gist.username",
-        "@gist.split",
-        "@gist.revision_options",
-        "@gist.backup_type"
+        '@gist.token',
+        '@gist.username',
+        '@gist.split',
+        '@gist.revision_options',
+        '@gist.backup_type'
       ],
-      author: "@dompling",
-      repo: "https://github.com/dompling/Script/tree/master/gist",
+      author: '@dompling',
+      repo: 'https://github.com/dompling/Script/tree/master/gist',
       icons: [
-        "https://raw.githubusercontent.com/Former-Years/icon/master/github-bf.png",
-        "https://raw.githubusercontent.com/Former-Years/icon/master/github-bf.png"
+        'https://raw.githubusercontent.com/Former-Years/icon/master/github-bf.png',
+        'https://raw.githubusercontent.com/Former-Years/icon/master/github-bf.png'
       ],
       descs_html: [
-        "<h2>Token的获取方式</h2>",
-        "<ol>头像菜单 -></ol>",
-        "<ol>Settings -></ol>",
-        "<ol>Developer settings -></ol>",
-        "<ol>Personal access tokens -></ol>",
-        "<ol>Generate new token -></ol>",
-        "<ol>在里面找到 gist 勾选提交</ol>",
-        "<h2>Gist Revision Id</h2>",
-        "<ol>打开Gist项目</ol>",
-        "<ol>默认为Code，选择Revisions</ol>",
-        "<ol>找到需要恢复的版本文件</ol>",
-        "<ol>点击右上角【...】>【View file】</ol>",
-        "<ol>浏览器地址最后一串为 RevisionId</ol>"
+        '<h2>Token的获取方式</h2>',
+        '<ol>头像菜单 -></ol>',
+        '<ol>Settings -></ol>',
+        '<ol>Developer settings -></ol>',
+        '<ol>Personal access tokens -></ol>',
+        '<ol>Generate new token -></ol>',
+        '<ol>在里面找到 gist 勾选提交</ol>',
+        '<h2>Gist Revision Id</h2>',
+        '<ol>打开Gist项目</ol>',
+        '<ol>默认为Code，选择Revisions</ol>',
+        '<ol>找到需要恢复的版本文件</ol>',
+        '<ol>点击右上角【...】>【View file】</ol>',
+        '<ol>浏览器地址最后一串为 RevisionId</ol>'
       ],
       scripts: [
         {
-          name: "备份 Gist",
-          script: "https://raw.githubusercontent.com/dompling/Script/master/gist/backup.js"
+          name: '备份 Gist',
+          script:
+            'https://raw.githubusercontent.com/dompling/Script/master/gist/backup.js'
         },
         {
-          name: "从 Gist 恢复",
-          script: "https://raw.githubusercontent.com/dompling/Script/master/gist/restore.js"
+          name: '从 Gist 恢复',
+          script:
+            'https://raw.githubusercontent.com/dompling/Script/master/gist/restore.js'
         },
         {
-          name: "更新历史版本",
-          script: "https://raw.githubusercontent.com/dompling/Script/master/gist/commit.js"
+          name: '更新历史版本',
+          script:
+            'https://raw.githubusercontent.com/dompling/Script/master/gist/commit.js'
         }
       ],
       settings: [
         {
-          id: "@gist.split",
-          name: "用户数据分段",
+          id: '@gist.split',
+          name: '用户数据分段',
           val: null,
-          type: "number",
-          placeholder: "用户数据过大时，请进行拆分防止内存警告⚠️",
-          desc: "值为数字，拆分段数比如 2 就拆分成两个 datas."
+          type: 'number',
+          placeholder: '用户数据过大时，请进行拆分防止内存警告⚠️',
+          desc: '值为数字，拆分段数比如 2 就拆分成两个 datas.'
         },
         {
-          id: "@gist.revision_id",
-          type: "modalSelects",
-          name: "历史版本RevisionId",
-          desc: "不填写时，默认获取最新，恢复后会自动清空。选择无内容时，请运行上方更新历史版本",
-          items: "@gist.revision_options"
+          id: '@gist.revision_id',
+          type: 'modalSelects',
+          name: '历史版本RevisionId',
+          desc: '不填写时，默认获取最新，恢复后会自动清空。选择无内容时，请运行上方更新历史版本',
+          items: '@gist.revision_options'
         },
         {
-          id: "@gist.backup_type",
-          name: "备份/恢复内容",
-          val: "usercfgs,datas,sessions,curSessions,backups,appSubCaches",
-          type: "checkboxes",
+          id: '@gist.backup_type',
+          name: '备份/恢复内容',
+          val: 'usercfgs,datas,sessions,curSessions,backups,appSubCaches',
+          type: 'checkboxes',
           items: [
             {
-              key: "usercfgs",
-              label: "用户偏好"
+              key: 'usercfgs',
+              label: '用户偏好'
             },
             {
-              key: "datas",
-              label: "用户数据"
+              key: 'datas',
+              label: '用户数据'
             },
             {
-              key: "sessions",
-              label: "应用会话"
+              key: 'sessions',
+              label: '应用会话'
             },
             {
-              key: "curSessions",
-              label: "当前会话"
+              key: 'curSessions',
+              label: '当前会话'
             },
             {
-              key: "backups",
-              label: "备份索引"
+              key: 'backups',
+              label: '备份索引'
             },
             {
-              key: "appSubCaches",
-              label: "应用订阅缓存"
+              key: 'appSubCaches',
+              label: '应用订阅缓存'
             }
           ]
         },
         {
-          id: "@gist.username",
-          name: "用户名",
+          id: '@gist.username',
+          name: '用户名',
           val: null,
-          type: "text",
-          placeholder: "github 用户名",
-          desc: "必填"
+          type: 'text',
+          placeholder: 'github 用户名',
+          desc: '必填'
         },
         {
-          id: "@gist.token",
-          name: "Personal access tokens",
+          id: '@gist.token',
+          name: 'Personal access tokens',
           val: null,
-          type: "text",
-          placeholder: "github personal access tokens",
-          desc: "必填"
+          type: 'text',
+          placeholder: 'github personal access tokens',
+          desc: '必填'
+        }
+      ]
+    },
+    {
+      id: 'BoxGistSync',
+      name: 'Gist备份（内置）',
+      keys: [
+        '@gist.token',
+        '@gist.username',
+        '@gist.split',
+        '@gist.revision_options',
+        '@gist.backup_type'
+      ],
+      author: '@fmz200',
+      repo: 'https://github.com/fmz200/BoxJS',
+      icons: [
+        'https://raw.githubusercontent.com/Former-Years/icon/master/github-bf.png',
+        'https://raw.githubusercontent.com/Former-Years/icon/master/github-bf.png'
+      ],
+      descs_html: [
+        '<h2>Token的获取方式</h2>',
+        '<ol>头像菜单 -></ol>',
+        '<ol>Settings -></ol>',
+        '<ol>Developer settings -></ol>',
+        '<ol>Personal access tokens -></ol>',
+        '<ol>Generate new token -></ol>',
+        '<ol>在里面找到 gist 勾选提交</ol>',
+        '<h2>Gist Revision Id</h2>',
+        '<ol>打开Gist项目</ol>',
+        '<ol>默认为Code，选择Revisions</ol>',
+        '<ol>找到需要恢复的版本文件</ol>',
+        '<ol>点击右上角【...】>【View file】</ol>',
+        '<ol>浏览器地址最后一串为 RevisionId</ol>'
+      ],
+      scripts: [
+        {
+          name: '备份 Gist',
+          script:
+            'https://raw.githubusercontent.com/fmz200/BoxJS/master/box/scripts/gist/backup.js'
+        },
+        {
+          name: '从 Gist 恢复',
+          script:
+            'https://raw.githubusercontent.com/fmz200/BoxJS/master/box/scripts/gist/restore.js'
+        },
+        {
+          name: '更新历史版本',
+          script:
+            'https://raw.githubusercontent.com/fmz200/BoxJS/master/box/scripts/gist/commit.js'
+        }
+      ],
+      settings: [
+        {
+          id: '@gist.split',
+          name: '用户数据分段',
+          val: null,
+          type: 'number',
+          placeholder: '用户数据过大时，请进行拆分防止内存警告⚠️',
+          desc: '值为数字，拆分段数比如 2 就拆分成两个 datas.'
+        },
+        {
+          id: '@gist.revision_id',
+          type: 'modalSelects',
+          name: '历史版本RevisionId',
+          desc: '不填写时，默认获取最新，恢复后会自动清空。选择无内容时，请运行上方更新历史版本',
+          items: '@gist.revision_options'
+        },
+        {
+          id: '@gist.backup_type',
+          name: '备份/恢复内容',
+          val: 'usercfgs,datas,sessions,curSessions,backups,appSubCaches,extraDatas',
+          type: 'checkboxes',
+          items: [
+            {
+              key: 'usercfgs',
+              label: '用户偏好'
+            },
+            {
+              key: 'datas',
+              label: '用户数据'
+            },
+            {
+              key: 'sessions',
+              label: '应用会话'
+            },
+            {
+              key: 'curSessions',
+              label: '当前会话'
+            },
+            {
+              key: 'backups',
+              label: '备份索引'
+            },
+            {
+              key: 'appSubCaches',
+              label: '应用订阅缓存'
+            },
+            {
+              key: 'extraDatas',
+              label: '非订阅数据'
+            }
+          ]
+        },
+        {
+          id: '@gist.username',
+          name: '用户名',
+          val: null,
+          type: 'text',
+          placeholder: 'github 用户名',
+          desc: '必填'
+        },
+        {
+          id: '@gist.token',
+          name: 'Personal access tokens',
+          val: null,
+          type: 'text',
+          placeholder: 'github personal access tokens',
+          desc: '必填'
         }
       ]
     }
@@ -656,6 +876,8 @@ function getUserCfgs() {
   const defcfgs = {
     gist_cache_key: [],
     gist_exclude_keys: [],
+    gist_extra_include: [],
+    gist_extra_saved: false,
 
     favapps: [],
     appsubs: [],
@@ -1204,15 +1426,33 @@ async function apiGistBackup() {
       return
     }
     const req = $.toObj($request.body) || {}
-    const excludeKeys = Array.isArray(req.excludeKeys)
+    const hasExcludeKeys = Array.isArray(req.excludeKeys)
+    const excludeKeys = hasExcludeKeys
       ? req.excludeKeys.filter((k) => typeof k === 'string')
       : []
+    const includeExtra = Array.isArray(req.includeExtra)
+      ? req.includeExtra.filter((k) => typeof k === 'string')
+      : null
     // 持久化排除名单，下次预览默认不勾选
     const usercfgs = getUserCfgs()
-    usercfgs.gist_exclude_keys = excludeKeys
+    if (hasExcludeKeys) {
+      usercfgs.gist_exclude_keys = excludeKeys
+    }
+    if (includeExtra !== null) {
+      usercfgs.gist_extra_include = includeExtra
+      usercfgs.gist_extra_saved = true
+    }
     $.setjson(usercfgs, $.KEY_usercfgs)
 
     const boxdata = getBoxData()
+    // 总开关：官方内置「备份/恢复内容」是否勾选「非订阅数据」
+    const backupFlagsStr = $.getdata('@gist.backup_type')
+    const backupFlags = String(backupFlagsStr || '')
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean)
+    const syncExtra =
+      !String(backupFlagsStr || '').trim() || backupFlags.includes('extraDatas')
     const desc = 'BoxJS-Data Backup'
     const split = Math.max(1, Number($.getdata('@gist.split')) || 1)
     const files = {}
@@ -1223,21 +1463,27 @@ async function apiGistBackup() {
     files['appSubCaches.json'] = {
       content: JSON.stringify(boxdata.appSubCaches)
     }
+    // 非订阅数据：总开关关闭则不生成 extraDatas.json
     const extraData = {}
-    (boxdata.extraDatas || []).forEach((k) => {
-      if (excludeKeys.includes(k)) return
-      const val = $.getdata(k)
-      if (
-        val !== null &&
-        val !== undefined &&
-        val !== '' &&
-        val !== 'null' &&
-        val !== 'undefined'
-      ) {
-        extraData[k] = val
-      }
-    })
-    files['extraDatas.json'] = { content: JSON.stringify(extraData) }
+    if (syncExtra) {
+      const includeList = includeExtra !== null ? includeExtra : usercfgs.gist_extra_include
+      const includeAll = includeExtra === null && !usercfgs.gist_extra_saved
+      ;(boxdata.extraDatas || []).forEach((k) => {
+        if (excludeKeys.includes(k)) return
+        if (!includeAll && !includeList.includes(k)) return
+        const val = $.getdata(k)
+        if (
+          val !== null &&
+          val !== undefined &&
+          val !== '' &&
+          val !== 'null' &&
+          val !== 'undefined'
+        ) {
+          extraData[k] = val
+        }
+      })
+      files['extraDatas.json'] = { content: JSON.stringify(extraData) }
+    }
     const chunks = chunkArray(Object.keys(boxdata.datas), split)
     chunks.forEach((keys, index) => {
       const o = {}
@@ -1337,6 +1583,17 @@ async function apiGistRestore() {
       )
       restored.push('appSubCaches.json')
     }
+    // 总开关：官方内置「备份/恢复内容」是否勾选「非订阅数据」
+    const backupFlagsStr = $.getdata('@gist.backup_type')
+    const backupFlags = String(backupFlagsStr || '')
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean)
+    const syncExtra =
+      !String(backupFlagsStr || '').trim() || backupFlags.includes('extraDatas')
+    const usercfgs = getUserCfgs()
+    const includeList = usercfgs.gist_extra_include
+    const includeAll = !usercfgs.gist_extra_saved
     let dataCount = 0
     let extraCount = 0
     Object.keys(files).forEach((name) => {
@@ -1346,10 +1603,12 @@ async function apiGistRestore() {
       if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return
       if (name === 'extraDatas.json') {
         Object.keys(obj).forEach((k) => {
+          if (!syncExtra) return
+          if (!includeAll && !includeList.includes(k)) return
           $.setdata(obj[k], k)
           extraCount++
         })
-        restored.push(name)
+        if (syncExtra) restored.push(name)
       } else if (/^datas/.test(name)) {
         Object.keys(obj).forEach((k) => {
           $.setdata(obj[k], k)

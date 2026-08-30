@@ -82,13 +82,13 @@ A SPA Application for scripts utils
 * BoxJs 页面通过 `jsDelivr` 按版本加载，`box/chavy.boxjs.js` 内置该页面源码的
   SHA-256 哈希（SRI）。加载后先校验哈希，失败自动回退到 GitHub 同版本源再验一次，
   仍不匹配则拒绝渲染并告警，防止 CDN 或上游内容被篡改。
-* 仓库 CI 会校验 `Env.min.js`、内嵌 Env、`chavy.box.js` 与 SRI 哈希的一致性，
+* 仓库 CI 会校验 `Env.min.js`、内嵌 Env 与 SRI 哈希的一致性，
   并运行 gitleaks 秘密扫描。
 * 如需报告安全问题，请参阅 [SECURITY.md](./SECURITY.md)。
 
 ## 🧑‍💻 开发与发布
 参见 [CONTRIBUTING.md](./CONTRIBUTING.md)。核心命令：
-* `npm run build` — 重建 Env.min.js / box/chavy.boxjs.js / chavy.box.js 并注入 SRI 哈希
+* `npm run build` — 重建 Env.min.js / box/chavy.boxjs.js 并注入 SRI 哈希
 * `npm run check` — 一致性校验
 * `npm run check:release` — 版本与 release notes 一致性校验
 * `npm test` — 单元测试
