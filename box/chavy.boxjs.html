@@ -874,31 +874,114 @@
     .sub-sys-header:hover .group-title {
       color: var(--v-primary-base, #0a84ff);
     }
-    /* 数据页: 搜索框扁平化 (去除内部矩形/下划线) */
+    /* 数据页 */
     .data-search-card .v-input__slot {
-      background: transparent !important;
-      border: none !important;
+      background: rgba(0, 0, 0, 0.05) !important;
+      border-radius: 12px !important;
+      padding: 0 4px !important;
       box-shadow: none !important;
+    }
+    .theme--dark .data-search-card .v-input__slot {
+      background: rgba(255, 255, 255, 0.08) !important;
     }
     .data-search-card .v-input__slot::before,
     .data-search-card .v-input__slot::after {
       display: none !important;
     }
-    /* 数据页: 按应用分组 (可折叠) */
-    .data-group-header {
+    .data-filters {
       display: flex;
-      align-items: center;
-      min-height: 46px;
-      padding: 8px 14px;
-      font-weight: 600;
-      color: #1c1c1e;
+      gap: 8px;
+      margin: 0 2px 12px;
+    }
+    .data-filter {
+      border: 0.5px solid rgba(0, 0, 0, 0.1);
+      background: transparent;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font: inherit;
+      font-size: 13px;
+      color: rgba(0, 0, 0, 0.62);
       cursor: pointer;
     }
-    .theme--dark .data-group-header {
+    .data-filter.is-on {
+      background: var(--v-primary-base, #0a84ff);
+      border-color: transparent;
+      color: #fff;
+    }
+    .theme--dark .data-filter {
+      border-color: rgba(255, 255, 255, 0.14);
+      color: rgba(255, 255, 255, 0.7);
+    }
+    .data-section-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 16px 4px 6px;
+      font-size: 13px;
+      font-weight: 650;
+      color: #1c1c1e;
+    }
+    .theme--dark .data-section-head {
       color: #f5f5f7;
     }
-    .data-key-chip {
-      max-width: 220px;
+    .data-key-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      cursor: pointer;
+    }
+    .data-key-row + .data-key-row {
+      border-top: 0.5px solid rgba(0, 0, 0, 0.06);
+    }
+    .theme--dark .data-key-row + .data-key-row {
+      border-top-color: rgba(255, 255, 255, 0.08);
+    }
+    .data-key-main {
+      min-width: 0;
+      flex: 1;
+    }
+    .data-key-name {
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.35;
+      word-break: break-all;
+      color: #1c1c1e;
+    }
+    .theme--dark .data-key-name {
+      color: #f5f5f7;
+    }
+    .data-key-meta {
+      margin-top: 2px;
+      font-size: 12px;
+      line-height: 1.35;
+      color: rgba(0, 0, 0, 0.48);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .theme--dark .data-key-meta {
+      color: rgba(255, 255, 255, 0.5);
+    }
+    .data-key-meta.is-empty,
+    .data-key-meta .is-empty {
+      color: rgba(0, 0, 0, 0.32);
+    }
+    .theme--dark .data-key-meta.is-empty,
+    .theme--dark .data-key-meta .is-empty {
+      color: rgba(255, 255, 255, 0.32);
+    }
+    .data-key-actions {
+      display: flex;
+      align-items: center;
+      flex: none;
+    }
+    .data-key-sync {
+      margin: 0;
+      padding: 0;
+    }
+    .data-key-sync .v-input__slot {
+      margin-bottom: 0;
     }
   </style>
 </head>
@@ -1776,10 +1859,10 @@
           </v-card>
         </template>
       </v-container>
-      <!-- 数据页: 全局 key 搜索 + 按应用分组 + 最近查看 + Gist 同步 -->
+      <!-- 数据页: 搜索 + 分组列表。点行打开编辑器，未订阅键在行尾直接同步 -->
       <v-container fluid v-show="view === 'data'">
-        <v-card class="inset-card mb-4 data-search-card">
-          <v-card-text class="py-1">
+        <v-card class="inset-card mb-3 data-search-card">
+          <v-card-text class="py-2">
             <v-text-field
                     v-model="ui.dataSearch"
                     :placeholder="$t('viewer.searchHint')"
@@ -1787,104 +1870,79 @@
                     clearable
                     dense
                     hide-details
+                    solo
+                    flat
             ></v-text-field>
           </v-card-text>
         </v-card>
+        <div class="data-filters">
+          <button type="button" class="data-filter" :class="{ 'is-on': !dataOnlyExtra }" @click="dataOnlyExtra = false">{{ $t('viewer.allData') }}</button>
+          <button type="button" class="data-filter" :class="{ 'is-on': dataOnlyExtra }" @click="dataOnlyExtra = true">{{ $t('viewer.onlyExtra') }}</button>
+        </div>
 
-        <template v-if="filteredAppGroups.length > 0">
-          <button type="button" class="group-title-row page-head" @click="toggleAppDataPanel" :aria-expanded="appDataPanelOpen ? 'true' : 'false'">
-            <span class="group-title"><v-icon small class="mr-1">mdi-apps</v-icon>{{ $t('viewer.appData') }}<span class="sub-count mx-1">· {{ filteredAppGroups.length }}</span></span>
-            <v-icon class="sub-capsule-chevron" :class="{ 'is-open': appDataPanelOpen }">mdi-chevron-down</v-icon>
-          </button>
-          <template v-if="appDataPanelOpen">
-          <v-card class="inset-card mb-3 data-app-group" v-for="group in filteredAppGroups" :key="group.app.id">
-            <div class="data-group-header" @click="toggleDataPanel(group.app.id)" :aria-expanded="isDataPanelOpen(group.app.id) ? 'true' : 'false'">
-              <v-avatar size="26" class="mr-2"><v-img :src="group.app.icon" /></v-avatar>
-              <span class="text-truncate">{{ group.app.name }}</span>
-              <span class="sub-count mx-1">· {{ group.keys.length }}</span>
-              <v-spacer></v-spacer>
-              <v-icon class="sub-capsule-chevron" :class="{ 'is-open': isDataPanelOpen(group.app.id) }">mdi-chevron-down</v-icon>
-            </div>
-            <template v-if="isDataPanelOpen(group.app.id)">
-              <v-divider v-if="group.keys.length > 0"></v-divider>
-              <v-card-text class="py-2" v-if="group.keys.length > 0">
-                <v-chip small class="ml-1 mb-1" v-for="key in group.keys" :key="key" @click="viewkey(key)">
-                  <span class="text-truncate data-key-chip">{{ key }}</span>
-                </v-chip>
-              </v-card-text>
-            </template>
-          </v-card>
-          </template>
-        </template>
-        <v-card class="inset-card mb-4" v-else-if="appGroups.length > 0">
-          <v-card-text class="text-center text-caption">{{ $t('viewer.noMatch') }}</v-card-text>
-        </v-card>
-
-        <v-card class="mb-4">
-          <v-expansion-panels multiple v-if="sysApps.length > 0" v-model="box.usercfgs.gitcachespanel">
-            <v-expansion-panel>
-              <v-expansion-panel-header style="padding: 16px"> {{ $t('viewer.dataUnsubscribed') }} ({{gistExtraKeys.length}}) </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <p class="text-caption pa-3 pb-0 mb-0">{{ $t('gistSync.extraIntro') }}</p>
-                <v-checkbox
-                        dense
-                        class="mt-0"
-                        :label="$t('gistSync.selectAll')"
-                        :input-value="gistExtraAllChecked"
-                        @change="toggleGistExtraAll"
-                ></v-checkbox>
-                <v-divider></v-divider>
-                <div style="max-height: 40vh; overflow-y: auto" class="pa-2">
-                  <template v-for="(key, keyIdx) in gistExtraKeys">
-                    <v-checkbox
-                            dense
-                            hide-details
-                            class="mt-0"
-                            :key="keyIdx"
-                            :label="key"
-                            :input-value="gistExtraSelection(key)"
-                            @change="toggleGistExtra(key)"
-                    ></v-checkbox>
-                  </template>
-                  <p v-if="gistExtraKeys.length === 0" class="text-caption ma-0 pa-3">{{ $t('gistSync.noExtra') }}</p>
+        <template v-if="dataSearchHits !== null">
+          <v-card class="inset-card mb-4" v-if="dataSearchHits.length > 0">
+            <div class="data-key-row" v-for="row in dataSearchHits" :key="'s-' + row.key" @click="viewkey(row.key)">
+              <div class="data-key-main">
+                <div class="data-key-name">{{ row.key }}</div>
+                <div class="data-key-meta">
+                  <span>{{ row.appName }}</span>
+                  <span> · </span>
+                  <span :class="{ 'is-empty': !dataValuePreview(row.key) }">{{ dataValuePreview(row.key) || $t('viewer.emptyValue') }}</span>
                 </div>
-                <v-divider></v-divider>
-                <v-card-actions>
-                  <span class="text-caption grey--text">{{ $t('gistSync.extraSaveHint') }}</span>
-                  <v-spacer></v-spacer>
-                  <v-btn small color="primary" :loading="isLoading" @click="saveGistExtra">
-                    <v-icon small class="mr-1">mdi-content-save</v-icon>{{ $t('base.dialog.save') }}
-                  </v-btn>
-                </v-card-actions>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-          </v-expansion-panels>
-        </v-card>
-
-        <v-card class="mb-4">
-          <v-expansion-panels multiple v-if="sysApps.length > 0" v-model="box.usercfgs.viewkeyspanel">
-            <v-expansion-panel>
-              <v-expansion-panel-header style="padding: 16px"> {{ $t('viewer.dataRecentlyViewed') }} ({{filteredViewKeys.length}}) </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <template v-for="(key, keyIdx) in filteredViewKeys">
-                  <v-chip small class="ml-1 mb-1" style="max-width: 60%" close @click="viewkey(key)" @click:close="delviewkey(key,'viewkeys')">
-                    <span class="text-truncate">{{ key }}</span>
-                  </v-chip>
-                </template>
-                <p v-if="filteredViewKeys.length === 0" class="text-caption ma-0 pa-3">{{ $t('viewer.noMatch') }}</p>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-          </v-expansion-panels>
-        </v-card>
-
-        <v-card class="mb-4">
-          <v-card-text class="text-center py-4">
-            <p class="text-caption ma-0 mb-2">{{ $t('viewer.tapKeyHint') }}</p>
-            <v-btn small color="primary" @click="ui.viewerSheet.show = true">
-              <v-icon small class="mr-1">mdi-database-search</v-icon>{{ $t('viewer.dataViewer') }}
-            </v-btn>
-          </v-card-text>
-        </v-card>
+              </div>
+              <div class="data-key-actions" @click.stop>
+                <v-btn icon small :aria-label="$t('base.cmd.cp')" @click="copyDataValue(row.key)"><v-icon small>mdi-content-copy</v-icon></v-btn>
+                <v-switch v-if="row.extra" class="data-key-sync" dense hide-details :input-value="gistExtraSelection(row.key)" :aria-label="$t('viewer.syncGist')" @change="setGistExtra(row.key, $event)"></v-switch>
+              </div>
+            </div>
+          </v-card>
+          <v-card class="inset-card mb-4" v-else>
+            <v-card-text class="text-center text-caption">{{ $t('viewer.noMatch') }}</v-card-text>
+          </v-card>
+        </template>
+        <template v-else>
+          <template v-if="recentDataRows.length > 0">
+            <div class="data-section-head">{{ $t('viewer.dataRecentlyViewed') }}<span class="sub-count mx-1">· {{ recentDataRows.length }}</span></div>
+            <v-card class="inset-card">
+              <div class="data-key-row" v-for="row in recentDataRows" :key="'r-' + row.key" @click="viewkey(row.key)">
+                <div class="data-key-main">
+                  <div class="data-key-name">{{ row.key }}</div>
+                  <div class="data-key-meta">
+                    <span v-if="row.appName">{{ row.appName }} · </span>
+                    <span :class="{ 'is-empty': !dataValuePreview(row.key) }">{{ dataValuePreview(row.key) || $t('viewer.emptyValue') }}</span>
+                  </div>
+                </div>
+                <div class="data-key-actions" @click.stop>
+                  <v-btn icon small :aria-label="$t('base.cmd.cp')" @click="copyDataValue(row.key)"><v-icon small>mdi-content-copy</v-icon></v-btn>
+                  <v-switch v-if="row.extra" class="data-key-sync" dense hide-details :input-value="gistExtraSelection(row.key)" :aria-label="$t('viewer.syncGist')" @change="setGistExtra(row.key, $event)"></v-switch>
+                </div>
+              </div>
+            </v-card>
+          </template>
+          <template v-for="section in dataSections" :key="section.id">
+            <div class="data-section-head">
+              <v-avatar v-if="section.icon" size="22"><v-img :src="section.icon" /></v-avatar>
+              <span>{{ section.name }}</span>
+              <span class="sub-count">· {{ section.rows.length }}</span>
+            </div>
+            <v-card class="inset-card">
+              <div class="data-key-row" v-for="row in section.rows" :key="section.id + '-' + row.key" @click="viewkey(row.key)">
+                <div class="data-key-main">
+                  <div class="data-key-name">{{ row.key }}</div>
+                  <div class="data-key-meta" :class="{ 'is-empty': !dataValuePreview(row.key) }">{{ dataValuePreview(row.key) || $t('viewer.emptyValue') }}</div>
+                </div>
+                <div class="data-key-actions" @click.stop>
+                  <v-btn icon small :aria-label="$t('base.cmd.cp')" @click="copyDataValue(row.key)"><v-icon small>mdi-content-copy</v-icon></v-btn>
+                  <v-switch v-if="row.extra" class="data-key-sync" dense hide-details :input-value="gistExtraSelection(row.key)" :aria-label="$t('viewer.syncGist')" @change="setGistExtra(row.key, $event)"></v-switch>
+                </div>
+              </div>
+            </v-card>
+          </template>
+          <v-card class="inset-card mt-4" v-if="dataSections.length === 0">
+            <v-card-text class="text-center text-caption">{{ dataOnlyExtra ? $t('gistSync.noExtra') : $t('viewer.noMatch') }}</v-card-text>
+          </v-card>
+        </template>
       </v-container>
       <!-- 代码编辑 -->
       <v-container fluid v-show="view === 'coding'">
@@ -2703,10 +2761,14 @@
             dataRecentlyViewed: 'Recently viewed',
             dataUnsubscribed:"Unsubscribed data",
             search: 'Search data keys',
-            searchHint: 'Search by app name or key, then tap a key to view its value',
+            searchHint: 'Search apps or keys',
             noMatch: 'No matching data keys',
             appData: 'App Data',
-            tapKeyHint: 'Tap any key in the lists above to view and edit its value'
+            tapKeyHint: 'Tap any key in the lists above to view and edit its value',
+            emptyValue: 'Empty',
+            allData: 'All',
+            onlyExtra: 'Unsubscribed only',
+            syncGist: 'Sync'
           },
           gistSync: {
             title: 'Gist Sync (Official)',
@@ -2958,10 +3020,14 @@
             dataRecentlyViewed: '近期查看',
             dataUnsubscribed: '非订阅数据',
             search: '搜索数据键',
-            searchHint: '按应用名或数据键搜索，点击键即可查看数据',
+            searchHint: '搜索应用或数据键',
             noMatch: '没有匹配的数据键',
             appData: '应用数据',
-            tapKeyHint: '点击上方列表中的任意数据键, 可直接查看和编辑'
+            tapKeyHint: '点击上方列表中的任意数据键, 可直接查看和编辑',
+            emptyValue: '空',
+            allData: '全部',
+            onlyExtra: '只看未订阅',
+            syncGist: '同步'
           },
           gistSync: {
             title: 'Gist 同步（官方内置）',
@@ -3055,6 +3121,7 @@
         subPanels: {}, // 订阅页: 已展开的订阅面板 (懒渲染)
         sysPanelOpen: false, // 订阅页: 内置应用分组是否展开
         dataPanels: {}, // 数据页: 已展开的应用分组 (懒渲染)
+        dataOnlyExtra: false, // 数据页: 只看未订阅
         appDataPanelOpen: true // 数据页: 应用数据区块是否展开
       }
     },
@@ -3562,6 +3629,69 @@
       filteredViewKeys() {
         const q = (this.ui.dataSearch || '').trim().toLowerCase()
         return q ? this.viewkeys.filter((key) => key.toLowerCase().includes(q)) : this.viewkeys
+      },
+      // 数据页扁平行: 订阅键按应用，未订阅键单独成组
+      dataKeyRows() {
+        const rows = []
+        const seen = new Set()
+        this.appGroups.forEach((group) => {
+          if (!group.keys.length) return
+          group.keys.forEach((key) => {
+            if (!key || seen.has(key)) return
+            seen.add(key)
+            rows.push({
+              key,
+              appId: group.app.id,
+              appName: group.app.name,
+              appIcon: group.app.icon,
+              extra: false
+            })
+          })
+        })
+        const extraName = this.$t('viewer.dataUnsubscribed')
+        const extras = Array.isArray(this.gistExtraKeys) ? this.gistExtraKeys : []
+        extras.forEach((key) => {
+          if (!key || seen.has(key)) return
+          seen.add(key)
+          rows.push({ key, appId: '__extra', appName: extraName, appIcon: '', extra: true })
+        })
+        return rows
+      },
+      dataSections() {
+        if ((this.ui.dataSearch || '').trim()) return []
+        const sections = []
+        const byApp = new Map()
+        this.dataKeyRows.forEach((row) => {
+          if (this.dataOnlyExtra && !row.extra) return
+          if (!byApp.has(row.appId)) {
+            byApp.set(row.appId, { id: row.appId, name: row.appName, icon: row.appIcon, rows: [] })
+          }
+          byApp.get(row.appId).rows.push(row)
+        })
+        return Array.from(byApp.values())
+      },
+      dataSearchHits() {
+        const q = (this.ui.dataSearch || '').trim().toLowerCase()
+        if (!q) return null
+        return this.dataKeyRows.filter((row) => {
+          if (this.dataOnlyExtra && !row.extra) return false
+          return row.key.toLowerCase().includes(q) || String(row.appName || '').toLowerCase().includes(q)
+        })
+      },
+      recentDataRows() {
+        if ((this.ui.dataSearch || '').trim() || this.dataOnlyExtra) return []
+        const index = new Map(this.dataKeyRows.map((row) => [row.key, row]))
+        return this.viewkeys.slice(0, 5).map((key) => {
+          return (
+            index.get(key) || {
+              key,
+              appId: '',
+              appName: '',
+              appIcon: '',
+              extra: Array.isArray(this.gistExtraKeys) && this.gistExtraKeys.includes(key)
+            }
+          )
+        })
       },
       gistExtraKeys() {
         return this.box.extraDatas || []
@@ -4509,6 +4639,36 @@
       },
       toggleGistExtra(key) {
         this.ui.gistExtraSel[key] = !this.gistExtraSelection(key)
+      },
+      // 行尾开关立即写入同步名单
+      setGistExtra(key, on) {
+        this.$set(this.ui.gistExtraSel, key, !!on)
+        this.saveGistExtra()
+      },
+      dataValuePreview(key) {
+        let val
+        if (this.datas && Object.prototype.hasOwnProperty.call(this.datas, key)) val = this.datas[key]
+        if (val == null || val === '') {
+          for (const app of this.apps) {
+            const setting = (app.settings || []).find((item) => item && item.id === key)
+            if (setting && setting.val != null && setting.val !== '') {
+              val = setting.val
+              break
+            }
+          }
+        }
+        if (val == null || val === '') return ''
+        if (typeof val === 'object') {
+          try {
+            val = JSON.stringify(val)
+          } catch (e) {
+            return ''
+          }
+        }
+        return String(val).replace(/\s+/g, ' ')
+      },
+      copyDataValue(key) {
+        this.copy(this.dataValuePreview(key))
       },
       toggleGistExtraAll(val) {
         this.gistExtraKeys.forEach((k) => {

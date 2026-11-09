@@ -114,7 +114,7 @@ function createDemoBox() {
       httpapis: '',
       name: '本地测试',
       icon: '',
-      viewkeys: [],
+      viewkeys: ['boxjs_host', 'demo_text', 'cookie_nubia_session'],
       gist_cache_key: [],
       gist_exclude_keys: [],
       color_light_primary: '',
@@ -131,7 +131,7 @@ function createDemoBox() {
         icons: ICONS,
         desc: '这是本地模拟的演示应用，覆盖全部设置控件类型。',
         descs: ['支持 descs 多段描述。', '修改设置后点击「保存」即可写入内存数据。'],
-        keys: ['boxjs_host', 'boxjs_demo_key'],
+        keys: ['boxjs_host', 'boxjs_demo_key', 'cookie_nubia_session'],
         script: '',
         script_timeout: 10,
         scripts: [
@@ -175,13 +175,19 @@ function createDemoBox() {
         ]
       }
     },
-    datas: { boxjs_host: 'localhost:8090', boxjs_demo_key: '演示数据' },
+    datas: {
+      boxjs_host: 'localhost:8090',
+      boxjs_demo_key: '演示数据',
+      demo_text: 'hello boxjs',
+      cookie_nubia_session: 'sid=8f3a91c2; path=/; HttpOnly',
+      script_token: ''
+    },
     sessions: [],
     curSessions: {},
     globalbaks: [],
     versions: { releases: [] },
-    knownKeys: [],
-    extraDatas: {}
+    knownKeys: ['cookie_nubia_session', 'script_token'],
+    extraDatas: ['script_token']
   }
 }
 
