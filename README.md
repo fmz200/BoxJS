@@ -41,7 +41,7 @@ Telegram群组：[奶思🍒资源分享|频道](https://t.me/inaisi)
 
 # 🧰BoxJs
 
-<video src="https://github.com/fmz200/BoxJS/raw/master/BoxJS.mp4" width="30%" height="55%" controls></video>
+<video src="https://github.com/fmz200/BoxJS/raw/main/BoxJS.mp4" width="30%" height="55%" controls></video>
 
 ## 简介
 A SPA Application for scripts utils
@@ -55,24 +55,24 @@ A SPA Application for scripts utils
 正式版模块在每次发版时自动锁定到最新版本号（内部引用 `@版本号`），安装链接永久有效；
 重新安装（或代理工具自动拉取）即升级到最新正式版。
 
-  * Shadowrocket: [boxjs.rewrite.surge.sgmodule](https://github.com/fmz200/BoxJS/raw/master/box/rewrite/boxjs.rewrite.surge.sgmodule "BoxJs")
-  * Loon: [boxjs.rewrite.loon.plugin](https://github.com/fmz200/BoxJS/raw/master/box/rewrite/boxjs.rewrite.loon.plugin "BoxJs")
-  * Quantumult X: [boxjs.rewrite.quanx.conf](https://github.com/fmz200/BoxJS/raw/master/box/rewrite/boxjs.rewrite.quanx.conf "BoxJs")
-  * Surge: [boxjs.rewrite.surge.sgmodule](https://github.com/fmz200/BoxJS/raw/master/box/rewrite/boxjs.rewrite.surge.sgmodule "BoxJs")
-  * Stash: [boxjs.rewrite.stash.stoverride](https://github.com/fmz200/BoxJS/raw/master/box/rewrite/boxjs.rewrite.stash.stoverride "BoxJs")
+  * Shadowrocket: [boxjs.rewrite.surge.sgmodule](https://github.com/fmz200/BoxJS/raw/main/box/rewrite/boxjs.rewrite.surge.sgmodule "BoxJs")
+  * Loon: [boxjs.rewrite.loon.plugin](https://github.com/fmz200/BoxJS/raw/main/box/rewrite/boxjs.rewrite.loon.plugin "BoxJs")
+  * Quantumult X: [boxjs.rewrite.quanx.conf](https://github.com/fmz200/BoxJS/raw/main/box/rewrite/boxjs.rewrite.quanx.conf "BoxJs")
+  * Surge: [boxjs.rewrite.surge.sgmodule](https://github.com/fmz200/BoxJS/raw/main/box/rewrite/boxjs.rewrite.surge.sgmodule "BoxJs")
+  * Stash: [boxjs.rewrite.stash.stoverride](https://github.com/fmz200/BoxJS/raw/main/box/rewrite/boxjs.rewrite.stash.stoverride "BoxJs")
 
 ### 🧪 测试版
-测试版模块始终引用 master 最新代码，随开发即时更新，适合尝鲜与反馈
+测试版模块始终引用 main 最新代码，随开发即时更新，适合尝鲜与反馈
 （无版本锁定，可能出现未完成功能）。
 
-  * Shadowrocket: [boxjs.rewrite.surge.beta.sgmodule](https://github.com/fmz200/BoxJS/raw/master/box/rewrite/boxjs.rewrite.surge.beta.sgmodule "BoxJs(β)")
-  * Loon: [boxjs.rewrite.loon.beta.plugin](https://github.com/fmz200/BoxJS/raw/master/box/rewrite/boxjs.rewrite.loon.beta.plugin "BoxJs(β)")
-  * Quantumult X: [boxjs.rewrite.quanx.beta.conf](https://github.com/fmz200/BoxJS/raw/master/box/rewrite/boxjs.rewrite.quanx.beta.conf "BoxJs(β)")
-  * Surge: [boxjs.rewrite.surge.beta.sgmodule](https://github.com/fmz200/BoxJS/raw/master/box/rewrite/boxjs.rewrite.surge.beta.sgmodule "BoxJs(β)")
-  * Stash: [boxjs.rewrite.stash.beta.stoverride](https://github.com/fmz200/BoxJS/raw/master/box/rewrite/boxjs.rewrite.stash.beta.stoverride "BoxJs(β)")
+  * Shadowrocket: [boxjs.rewrite.surge.beta.sgmodule](https://github.com/fmz200/BoxJS/raw/main/box/rewrite/boxjs.rewrite.surge.beta.sgmodule "BoxJs(β)")
+  * Loon: [boxjs.rewrite.loon.beta.plugin](https://github.com/fmz200/BoxJS/raw/main/box/rewrite/boxjs.rewrite.loon.beta.plugin "BoxJs(β)")
+  * Quantumult X: [boxjs.rewrite.quanx.beta.conf](https://github.com/fmz200/BoxJS/raw/main/box/rewrite/boxjs.rewrite.quanx.beta.conf "BoxJs(β)")
+  * Surge: [boxjs.rewrite.surge.beta.sgmodule](https://github.com/fmz200/BoxJS/raw/main/box/rewrite/boxjs.rewrite.surge.beta.sgmodule "BoxJs(β)")
+  * Stash: [boxjs.rewrite.stash.beta.stoverride](https://github.com/fmz200/BoxJS/raw/main/box/rewrite/boxjs.rewrite.stash.beta.stoverride "BoxJs(β)")
 
 ### 🔒 版本锁定
-每次 Release 会附带锁定到对应版本号的 rewrite 模块（`master` 已替换为 `@版本号`），
+每次 Release 会附带锁定到对应版本号的 rewrite 模块（`main` 已替换为 `@版本号`），
 适合追求稳定的用户；更新需手动安装新版本资产。
 
   * [最新 Release 资产](https://github.com/fmz200/BoxJS/releases/latest)
@@ -153,4 +153,4 @@ A SPA Application for scripts utils
 1. [CloudFlare](https://www.cloudflare.com/)
 
 # 📃LICENSE
-Copyright © 2019-present chavyleung. This project is [GPL](https://github.com/fmz200/BoxJS/blob/master/LICENSE) licensed.
+Copyright © 2019-present chavyleung. This project is [GPL](https://github.com/fmz200/BoxJS/blob/main/LICENSE) licensed.

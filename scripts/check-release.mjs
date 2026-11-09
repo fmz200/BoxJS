@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // 发布版本一致性校验：
 //  - 测试版(beta)读取 box/release/box.release.beta.json；正式版读取 box/release/box.release.json
-//  - 仅 tag 推送才走正式版发布流水线；测试版(master)不创建任何发布
+//  - 仅 tag 推送才走正式版发布流水线；测试版(main)不创建任何发布
 //  - 当前通道对应清单的最新条目与 $.version 一致
 //  - CI 中 tag 触发时, tag 名与 $.version 一致
 import fs from 'node:fs'
@@ -89,9 +89,9 @@ for (const f of betaModules) {
   }
   const src = fs.readFileSync(p, 'utf8')
   const refs = [...src.matchAll(refRe)].map((x) => x[1])
-  const bad = refs.filter((r) => r !== 'master')
+  const bad = refs.filter((r) => r !== 'main')
   if (!refs.length) errors.push(`${f} 中未找到 fmz200/BoxJS 引用`)
-  else if (bad.length) errors.push(`${f} 引用 ${bad.join(',')}，测试版模块应指向 master`)
+  else if (bad.length) errors.push(`${f} 引用 ${bad.join(',')}，测试版模块应指向 main`)
 }
 
 if (errors.length) {
@@ -99,5 +99,5 @@ if (errors.length) {
   process.exit(1)
 }
 console.log(
-  `OK: $.version=${version}（${isTagRun ? '正式版(tag)' : isBeta ? '测试版' : '正式版'}，主清单 ${primaryFile}），正式模板已锁定，测试版模块指向 master`
+  `OK: $.version=${version}（${isTagRun ? '正式版(tag)' : isBeta ? '测试版' : '正式版'}，主清单 ${primaryFile}），正式模板已锁定，测试版模块指向 main`
 )

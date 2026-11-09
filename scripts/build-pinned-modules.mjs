@@ -31,7 +31,7 @@ const files = [
   'boxjs.rewrite.quanx.conf',
   'boxjs.rewrite.stash.stoverride'
 ]
-const REF_RE = /fmz200\/BoxJS\/(?:master|@\d+\.\d+\.\d+)\//g
+const REF_RE = /fmz200\/BoxJS\/(?:master|main|@\d+\.\d+\.\d+)\//g
 
 if (LOCK) {
   for (const f of files) {

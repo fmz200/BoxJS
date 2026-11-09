@@ -18,5 +18,5 @@
 ## 用户建议
 
 * 优先使用 [版本锁定资产](https://github.com/fmz200/BoxJS/releases/latest)，
-  避免 master 移动指针带来的不可预期更新。
+  避免 main 移动指针带来的不可预期更新。
 * 如发现页面加载失败并提示 SRI 校验告警，请勿继续使用，并立即报告。

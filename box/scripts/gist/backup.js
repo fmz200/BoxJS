@@ -373,34 +373,34 @@ function getSystemApps() {
       scripts: [
         {
           name: '抹掉：所有缓存',
-          script: 'https://raw.githubusercontent.com/fmz200/BoxJS/refs/heads/master/box/scripts/boxjs.revert.caches.js',
+          script: 'https://raw.githubusercontent.com/fmz200/BoxJS/refs/heads/main/box/scripts/boxjs.revert.caches.js',
         },
         {
           name: '抹掉：收藏应用',
-          script: 'https://raw.githubusercontent.com/fmz200/BoxJS/refs/heads/master/box/scripts/boxjs.revert.usercfgs.favapps.js',
+          script: 'https://raw.githubusercontent.com/fmz200/BoxJS/refs/heads/main/box/scripts/boxjs.revert.usercfgs.favapps.js',
         },
         {
           name: '抹掉：用户偏好',
-          script: 'https://raw.githubusercontent.com/fmz200/BoxJS/refs/heads/master/box/scripts/boxjs.revert.usercfgs.js',
+          script: 'https://raw.githubusercontent.com/fmz200/BoxJS/refs/heads/main/box/scripts/boxjs.revert.usercfgs.js',
         },
         {
           name: '抹掉：所有会话',
-          script: 'https://raw.githubusercontent.com/fmz200/BoxJS/refs/heads/master/box/scripts/boxjs.revert.usercfgs.sessions.js',
+          script: 'https://raw.githubusercontent.com/fmz200/BoxJS/refs/heads/main/box/scripts/boxjs.revert.usercfgs.sessions.js',
         },
         {
           name: '抹掉：所有备份',
-          script: 'https://raw.githubusercontent.com/fmz200/BoxJS/refs/heads/master/box/scripts/boxjs.revert.baks.js',
+          script: 'https://raw.githubusercontent.com/fmz200/BoxJS/refs/heads/main/box/scripts/boxjs.revert.baks.js',
         },
         {
           name: '抹掉：BoxJs (注意备份)',
-          script: 'https://raw.githubusercontent.com/fmz200/BoxJS/refs/heads/master/box/scripts/boxjs.revert.boxjs.js',
+          script: 'https://raw.githubusercontent.com/fmz200/BoxJS/refs/heads/main/box/scripts/boxjs.revert.boxjs.js',
         },
       ],
       author: '@chavyleung',
       repo: 'https://github.com/chavyleung/scripts/blob/master/box/switcher/box.switcher.js',
       icons: [
-        'https://raw.githubusercontent.com/fmz200/BoxJS/refs/heads/master/box/icons/BoxSetting.mini.png',
-        'https://raw.githubusercontent.com/fmz200/BoxJS/refs/heads/master/box/icons/BoxSetting.png',
+        'https://raw.githubusercontent.com/fmz200/BoxJS/refs/heads/main/box/icons/BoxSetting.mini.png',
+        'https://raw.githubusercontent.com/fmz200/BoxJS/refs/heads/main/box/icons/BoxSetting.png',
       ],
     },
     {
@@ -420,10 +420,10 @@ function getSystemApps() {
       author: '@chavyleung',
       repo: 'https://github.com/chavyleung/scripts/blob/master/box/switcher/box.switcher.js',
       icons: [
-        'https://raw.githubusercontent.com/fmz200/BoxJS/refs/heads/master/box/icons/BoxSwitcher.mini.png',
-        'https://raw.githubusercontent.com/fmz200/BoxJS/refs/heads/master/box/icons/BoxSwitcher.png',
+        'https://raw.githubusercontent.com/fmz200/BoxJS/refs/heads/main/box/icons/BoxSwitcher.mini.png',
+        'https://raw.githubusercontent.com/fmz200/BoxJS/refs/heads/main/box/icons/BoxSwitcher.png',
       ],
-      script: 'https://raw.githubusercontent.com/fmz200/BoxJS/refs/heads/master/box/switcher/box.switcher.js',
+      script: 'https://raw.githubusercontent.com/fmz200/BoxJS/refs/heads/main/box/switcher/box.switcher.js',
     },
   ];
   return sysapps;

@@ -6,7 +6,7 @@ const $eval_env = {}
 $.version = '0.99.99'
 $.versionType = 'beta'
 // SRI_BEGIN
-$.htmlHash = '923f05abd2a9783afa253acdea3a105d04ccfe85eef6e3648c92adb4b3e621d5'
+$.htmlHash = '7ad43c8d2a54e5c77fb1b255efa2a8a1fede580483ed68a9b9ddb3cd0505e16b'
 // SRI_SHA256_BEGIN
 function sha256hex(t){const e=[];for(let o=0;o<t.length;o++){let s=t.charCodeAt(o);if(s<128)e.push(s);else if(s<2048)e.push(192|s>>6,128|63&s);else if(s>=55296&&s<56320&&o+1<t.length){s=65536+((1023&s)<<10)+(1023&t.charCodeAt(++o)),e.push(240|s>>18,128|s>>12&63,128|s>>6&63,128|63&s)}else s>=56320&&s<57344?e.push(239,191,189):e.push(224|s>>12,128|s>>6&63,128|63&s)}const o=8*e.length;for(e.push(128);e.length%64!=56;)e.push(0);e.push(0,0,0,0);for(let t=3;t>=0;t--)e.push(o/Math.pow(2,8*t)&255);const s=[1116352408,1899447441,3049323471,3921009573,961987163,1508970993,2453635748,2870763221,3624381080,310598401,607225278,1426881987,1925078388,2162078206,2614888103,3248222580,3835390401,4022224774,264347078,604807628,770255983,1249150122,1555081692,1996064986,2554220882,2821834349,2952996808,3210313671,3336571891,3584528711,113926993,338241895,666307205,773529912,1294757372,1396182291,1695183700,1986661051,2177026350,2456956037,2730485921,2820302411,3259730800,3345764771,3516065817,3600352804,4094571909,275423344,430227734,506948616,659060556,883997877,958139571,1322822218,1537002063,1747873779,1955562222,2024104815,2227730452,2361852424,2428436474,2756734187,3204031479,3329325298];let h=[1779033703,3144134277,1013904242,2773480762,1359893119,2600822924,528734635,1541459225];const n=(t,e)=>t>>>e|t<<32-e;for(let t=0;t<e.length;t+=64){const o=new Array(64);for(let s=0;s<16;s++)o[s]=e[t+4*s]<<24|e[t+4*s+1]<<16|e[t+4*s+2]<<8|e[t+4*s+3];for(let t=16;t<64;t++){const e=n(o[t-15],7)^n(o[t-15],18)^o[t-15]>>>3,s=n(o[t-2],17)^n(o[t-2],19)^o[t-2]>>>10;o[t]=o[t-16]+e+o[t-7]+s|0}let l=h[0],r=h[1],p=h[2],f=h[3],u=h[4],c=h[5],a=h[6],g=h[7];for(let t=0;t<64;t++){const e=g+(n(u,6)^n(u,11)^n(u,25))+(u&c^~u&a)+s[t]+o[t]|0,h=l&r^l&p^r&p;g=a,a=c,c=u,u=f+e|0,f=p,p=r,r=l,l=e+((n(l,2)^n(l,13)^n(l,22))+h|0)|0}h=[h[0]+l|0,h[1]+r|0,h[2]+p|0,h[3]+f|0,h[4]+u|0,h[5]+c|0,h[6]+a|0,h[7]+g|0]}return h.map(t=>(t>>>0).toString(16).padStart(8,"0")).join("")}
 // SRI_SHA256_END
@@ -53,12 +53,12 @@ $.KEY_boxjs_host = 'boxjs_host'
 $.json = $.name // `接口`类请求的响应体
 $.html = $.name // `页面`类请求的响应体
 
-// 页面源码地址: 测试版(beta)始终取 master 最新代码, 正式版锁定到版本 tag
+// 页面源码地址: 测试版(beta)始终取 main 最新代码, 正式版锁定到版本 tag
 $.web = `https://cdn.jsdelivr.net/gh/fmz200/BoxJS@${
-  $.versionType === 'beta' ? 'master' : $.version
+  $.versionType === 'beta' ? 'main' : $.version
 }/box/chavy.boxjs.html?_=${new Date().getTime()}`
 // 版本说明地址: 测试版(beta)读取 box.release.beta.json, 正式版读取 box.release.json
-$.ver = `https://raw.githubusercontent.com/fmz200/BoxJS/master/box/release/${
+$.ver = `https://raw.githubusercontent.com/fmz200/BoxJS/main/box/release/${
   $.versionType === 'beta' ? 'box.release.beta.json' : 'box.release.json'
 }`
 
@@ -203,15 +203,15 @@ async function handlePage() {
       }
       return null
     }
-    // 测试版(beta): master 没有对应版本 tag, 必须从 master 分支实时获取
+    // 测试版(beta): main 没有对应版本 tag, 必须从 main 分支实时获取
     // 正式版(release): 优先 jsDelivr @版本, raw @版本 兜底
     const isBeta = $.versionType === 'beta'
     const urls = isDebugWeb && debugger_web
       ? [$.web]
       : isBeta
         ? [
-            `https://raw.githubusercontent.com/fmz200/BoxJS/master/box/chavy.boxjs.html?_=${new Date().getTime()}`,
-            `https://cdn.jsdelivr.net/gh/fmz200/BoxJS@master/box/chavy.boxjs.html?_=${new Date().getTime()}`
+            `https://raw.githubusercontent.com/fmz200/BoxJS/main/box/chavy.boxjs.html?_=${new Date().getTime()}`,
+            `https://cdn.jsdelivr.net/gh/fmz200/BoxJS@main/box/chavy.boxjs.html?_=${new Date().getTime()}`
           ]
         : [
             $.web,
@@ -575,39 +575,39 @@ function getSystemApps() {
         {
           name: '抹掉：所有缓存',
           script:
-            'https://raw.githubusercontent.com/fmz200/BoxJS/master/box/scripts/boxjs.revert.caches.js'
+            'https://raw.githubusercontent.com/fmz200/BoxJS/main/box/scripts/boxjs.revert.caches.js'
         },
         {
           name: '抹掉：收藏应用',
           script:
-            'https://raw.githubusercontent.com/fmz200/BoxJS/master/box/scripts/boxjs.revert.usercfgs.favapps.js'
+            'https://raw.githubusercontent.com/fmz200/BoxJS/main/box/scripts/boxjs.revert.usercfgs.favapps.js'
         },
         {
           name: '抹掉：用户偏好',
           script:
-            'https://raw.githubusercontent.com/fmz200/BoxJS/master/box/scripts/boxjs.revert.usercfgs.js'
+            'https://raw.githubusercontent.com/fmz200/BoxJS/main/box/scripts/boxjs.revert.usercfgs.js'
         },
         {
           name: '抹掉：所有会话',
           script:
-            'https://raw.githubusercontent.com/fmz200/BoxJS/master/box/scripts/boxjs.revert.usercfgs.sessions.js'
+            'https://raw.githubusercontent.com/fmz200/BoxJS/main/box/scripts/boxjs.revert.usercfgs.sessions.js'
         },
         {
           name: '抹掉：所有备份',
           script:
-            'https://raw.githubusercontent.com/fmz200/BoxJS/master/box/scripts/boxjs.revert.baks.js'
+            'https://raw.githubusercontent.com/fmz200/BoxJS/main/box/scripts/boxjs.revert.baks.js'
         },
         {
           name: '抹掉：BoxJs (注意备份)',
           script:
-            'https://raw.githubusercontent.com/fmz200/BoxJS/master/box/scripts/boxjs.revert.boxjs.js'
+            'https://raw.githubusercontent.com/fmz200/BoxJS/main/box/scripts/boxjs.revert.boxjs.js'
         }
       ],
       author: '@chavyleung',
-      repo: 'https://github.com/fmz200/BoxJS/blob/master/box/switcher/box.switcher.js',
+      repo: 'https://github.com/fmz200/BoxJS/blob/main/box/switcher/box.switcher.js',
       icons: [
-        'https://raw.githubusercontent.com/fmz200/BoxJS/master/box/icons/BoxSetting.mini.png',
-        'https://raw.githubusercontent.com/fmz200/BoxJS/master/box/icons/BoxSetting.png'
+        'https://raw.githubusercontent.com/fmz200/BoxJS/main/box/icons/BoxSetting.mini.png',
+        'https://raw.githubusercontent.com/fmz200/BoxJS/main/box/icons/BoxSetting.png'
       ]
     },
     {
@@ -625,13 +625,13 @@ function getSystemApps() {
         }
       ],
       author: '@chavyleung',
-      repo: 'https://github.com/fmz200/BoxJS/blob/master/box/switcher/box.switcher.js',
+      repo: 'https://github.com/fmz200/BoxJS/blob/main/box/switcher/box.switcher.js',
       icons: [
-        'https://raw.githubusercontent.com/fmz200/BoxJS/master/box/icons/BoxSwitcher.mini.png',
-        'https://raw.githubusercontent.com/fmz200/BoxJS/master/box/icons/BoxSwitcher.png'
+        'https://raw.githubusercontent.com/fmz200/BoxJS/main/box/icons/BoxSwitcher.mini.png',
+        'https://raw.githubusercontent.com/fmz200/BoxJS/main/box/icons/BoxSwitcher.png'
       ],
       script:
-        'https://raw.githubusercontent.com/fmz200/BoxJS/master/box/switcher/box.switcher.js'
+        'https://raw.githubusercontent.com/fmz200/BoxJS/main/box/switcher/box.switcher.js'
     },
     {
       id: 'BoxGist',
@@ -782,17 +782,17 @@ function getSystemApps() {
         {
           name: '备份 Gist',
           script:
-            'https://raw.githubusercontent.com/fmz200/BoxJS/master/box/scripts/gist/backup.js'
+            'https://raw.githubusercontent.com/fmz200/BoxJS/main/box/scripts/gist/backup.js'
         },
         {
           name: '从 Gist 恢复',
           script:
-            'https://raw.githubusercontent.com/fmz200/BoxJS/master/box/scripts/gist/restore.js'
+            'https://raw.githubusercontent.com/fmz200/BoxJS/main/box/scripts/gist/restore.js'
         },
         {
           name: '更新历史版本',
           script:
-            'https://raw.githubusercontent.com/fmz200/BoxJS/master/box/scripts/gist/commit.js'
+            'https://raw.githubusercontent.com/fmz200/BoxJS/main/box/scripts/gist/commit.js'
         }
       ],
       settings: [
